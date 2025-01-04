@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { supabase } from '../../../utils/supabaseClient'
+// @ts-ignore
 import ReactMarkdown from 'react-markdown'
 import Image from 'next/image'
 import { Chapterinvester } from '../../../components/chapter/invester/chapter_invester'
@@ -87,12 +88,13 @@ export default function ArticlePage() {
   const ArticleContent = () => (
     <div className="w-full">
       {article?.image_url && (
-        <div className="relative w-full h-[300px] mb-8">
+        <div className="w-full h-[300px] mb-8">
           <Image
             src={article.image_url}
             alt={article.title}
-            fill
-            className="object-cover"
+            width={1200}
+            height={300}
+            className="object-cover w-full h-full"
             priority
           />
         </div>

@@ -196,8 +196,8 @@ function ChapterTemplate({ title, backLink, sections }) {
         title: 'EA',
         icon: <Target className="h-5 w-5 mr-3" />,
         subsections: [
-          { title: 'EA1(MACD・Moving Average)', slug: 'ea-macd-ma' },
-          { title: 'EA2(一目均衡表システム)', slug: 'ea-ichimoku' },
+          { title: 'EA1(MACD・Moving Average)', slug: 'ea_macd_ma' },
+          { title: 'EA2(一目均衡表システム)', slug: 'ea_ichimoku' },
           { title: 'EA3', slug: 'ea3' },
           { title: 'EA4(平均足システム・NY_Box)', slug: 'ea4' },
           { title: 'EA5(「早起きは5ピップの得」システム)', slug: 'ea5' },

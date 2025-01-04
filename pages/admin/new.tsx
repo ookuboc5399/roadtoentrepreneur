@@ -57,7 +57,14 @@ export const categories = [
     subsections: [
       { title: 'システムトレードの基礎', slug: 'system-basic' },
       { title: '自動売買の仕組み', slug: 'system-auto' },
-      { title: '戦略の構築', slug: 'system-strategy' }
+      { title: '戦略の構築', slug: 'system-strategy' },
+      { title: 'EA1(MACD・Moving Average)', slug: 'ea_macd_ma' },
+      { title: 'EA2(一目均衡表システム)', slug: 'ea_ichimoku' },
+      { title: 'EA3', slug: 'ea3' },
+      { title: 'EA4(平均足システム・NY_Box)', slug: 'ea4' },
+      { title: 'EA5(「早起きは5ピップの得」システム)', slug: 'ea5' },
+      { title: 'EA6(ボリンジャーバンドシステム)', slug: 'ea6' },
+      { title: 'EA7(定型文)', slug: 'ea7' }
     ]
   },
   {
@@ -153,15 +160,15 @@ async function generateUniqueSlug(title: string): Promise<string> {
   return slug
 }
 
-interface ContentBlock {
-  type: 'text' | 'link-card' | 'image';
-  content: string;
+type ContentBlock = {
+  type: 'text' | 'link-card' | 'image' | 'code'  // codeを追加、imageを維持
+  content: string
   metadata?: {
-    title?: string;
-    url?: string;
-    description?: string;
-    icon?: string;
-  };
+    title?: string
+    url?: string
+    description?: string
+    language?: string  // コードの言語を指定
+  }
 }
 
 export default function NewArticle() {
@@ -386,15 +393,16 @@ export default function NewArticle() {
             {blocks.map((block, index) => (
               <div key={index} className="bg-blue-800/30 p-4 rounded-lg">
                 <div className="flex justify-between mb-4">
-                  <select
-                    value={block.type}
-                    onChange={(e) => updateBlock(index, { type: e.target.value as ContentBlock['type'] })}
-                    className="bg-blue-800/50 border border-blue-700 rounded px-3 py-1"
-                  >
-                    <option value="text">テキスト</option>
-                    <option value="link-card">リンクカード</option>
-                    <option value="image">画像</option>
-                  </select>
+                <select
+  value={block.type}
+  onChange={(e) => updateBlock(index, { type: e.target.value as ContentBlock['type'] })}
+  className="bg-blue-800/50 border border-blue-700 rounded px-3 py-1"
+>
+  <option value="text">テキスト</option>
+  <option value="link-card">リンクカード</option>
+  <option value="image">画像</option>
+  <option value="code">コード</option>
+</select>
                   <button
                     type="button"
                     onClick={() => {
@@ -448,6 +456,32 @@ export default function NewArticle() {
                     />
                   </div>
                 )}
+
+                {block.type === 'code' && (
+                  <div className="space-y-3">
+                    <select
+                      value={block.metadata?.language || 'javascript'}
+                      onChange={(e) => updateBlock(index, {
+                        metadata: { ...block.metadata, language: e.target.value }
+                      })}
+                      className="w-full p-2 rounded bg-blue-800/50 border border-blue-700"
+                    >
+                      <option value="javascript">JavaScript</option>
+                      <option value="typescript">TypeScript</option>
+                      <option value="python">Python</option>
+                      <option value="java">Java</option>
+                      <option value="cpp">C++</option>
+                      <option value="sql">SQL</option>
+                    </select>
+                    <textarea
+                      value={block.content}
+                      onChange={(e) => updateBlock(index, { content: e.target.value })}
+                      className="w-full p-2 rounded bg-blue-800/50 border border-blue-700 font-mono"
+                      rows={8}
+                      placeholder="ここにコードを入力"
+                    />
+                  </div>
+                )}
               </div>
             ))}
 
@@ -465,6 +499,13 @@ export default function NewArticle() {
                 className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
               >
                 リンクカードを追加
+              </button>
+              <button
+                type="button"
+                onClick={() => addBlock('code')}
+                className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
+              >
+                コードを追加
               </button>
             </div>
           </div>

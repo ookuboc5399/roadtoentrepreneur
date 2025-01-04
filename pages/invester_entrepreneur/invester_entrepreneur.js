@@ -1,31 +1,31 @@
-import Layout from '../../components/Layout';
-import Link from 'next/link';
-import Image from 'next/image';
-import React from 'react';
-import { Invester } from '../../components/layout/invester/invester';
+import { Header } from '../../components/header/header'
+import { Chapterinvester } from '../../components/chapter/invester/chapter_invester'
+import { useState, useEffect } from 'react'
 
+export default function InvesterEntrepreneur() {
+  const [mounted, setMounted] = useState(false)
 
-export default function Home() {
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   return (
-    <Invester>
-      <div>
-        <Link href="./plusultra">
-          <div>
-            <Image
-              className="relative w-1/4 mt-1"
-              src="/images/perpetualtraveler.png"
-              alt="top"
-              width={760}
-              height={428}
-            />
+    <div className="min-h-screen">
+      <Header />
+      <div className="flex">
+        <div className="w-64 flex-shrink-0">
+          {mounted && <Chapterinvester />}
+        </div>
+        <div className="flex-1 p-8">
+          <h1 className="text-3xl font-bold mb-8">投資家・起業家へようこそ</h1>
+          <div className="prose max-w-none">
+            <p>
+              このセクションでは、投資や起業に関する重要な知識や
+              実践的なアプローチについて探求します。
+            </p>
           </div>
-        </Link>
+        </div>
       </div>
-    </Invester>
-
-
-
-
-
+    </div>
   )
 }

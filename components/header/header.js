@@ -71,16 +71,6 @@ export function Header() {
                             </div>
                           </Link>
                         </li>
-                        <li>
-                          <Link href="./wisdom_library/wisdom_library" className="group">
-                            <div className='flex items-center text-gray-600 hover:text-blue-600 transition-colors whitespace-nowrap'>
-                              <svg className="mr-3 w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4z" />
-                              </svg>
-                              <span className="font-medium">知識の図書館</span>
-                            </div>
-                          </Link>
-                        </li>
                       </ul>
                     </div>
                   </div>
