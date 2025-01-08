@@ -131,12 +131,7 @@ export function ChapterFuture() {
   
   return <ChapterTemplate 
     title="未来の世界"
-    backLink="/future_world/future_world"
+    backLink="/future_world"
     sections={sections}
   />
 }
-
-
-    
-
-

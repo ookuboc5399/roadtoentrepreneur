@@ -135,7 +135,7 @@ function ChapterTemplate({ title, backLink, sections }) {
         icon: <LineChart className="h-5 w-5 mr-3" />,
         subsections: [
           { title: '株式投資とは', slug: 'stock-detail' },
-          { title: '株式投資の始め方', slug: 'stock-start' },
+          { title: 'MT4の準備', slug: 'fx-start' },
           { title: '銘柄の選び方', slug: 'stock-pick' },
           { title: 'トレードサポート', slug: 'trade-support' }
         ]
@@ -203,6 +203,15 @@ function ChapterTemplate({ title, backLink, sections }) {
           { title: 'EA5(「早起きは5ピップの得」システム)', slug: 'ea5' },
           { title: 'EA6(ボリンジャーバンドシステム)', slug: 'ea6' },
           { title: 'EA7(定型文)', slug: 'ea7' }
+        ]
+      },
+      {
+        id: 'tool',
+        title: 'tool',
+        icon: <Target className="h-5 w-5 mr-3" />,
+        subsections: [
+          { title: '経済指標', slug: 'ecnomic_indicators' },
+          { title: '自動売買', slug: 'auto_fx' },
         ]
       }
     ]

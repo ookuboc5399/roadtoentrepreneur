@@ -1,29 +1,4 @@
-import { useRouter } from 'next/router'
-import React from 'react';
-import { Child } from '../../../../components/layout/invester/mind/mind';
 
-const Post = () => {
-  const router = useRouter()
-  const { id } = router.query
-
-  return (
-    <div>
-      {
-        id == "fx_detail" ? (
-          <Fx>
-          <div className="text-center w-2/4">
-            <div className="text-3xl m-4">
-              FXとは
-            </div>
-            <div className="flex justify-center">
-              <iframe width="560" height="315" src="https://www.youtube.com/embed/k57V9FVvtho" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div>
-    
-            </div>
-    
-          </div>
-        </Fx>
         ) : id == "bank" ? (
           <Fx>
           <div className="text-center w-2/4">
@@ -79,15 +54,4 @@ const Post = () => {
             </div>
             <div className="flex justify-center">
               <iframe width="560" height="315" src="https://www.youtube.com/embed/k57V9FVvtho" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-  
-          </div>
-   </Fx>
-        ) : (
-          <></>
-        )}
-    </div>
-  )
-}
 
-export default Post

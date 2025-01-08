@@ -3,8 +3,8 @@ import { supabase } from '../../utils/supabaseClient'
 import { useRouter } from 'next/router'
 import { BookOpen, LineChart, PieChart, Brain, Target, Rocket } from 'lucide-react'
 
-// カテゴリの定義を export する
-export const categories = [
+// 投資・起業のカテゴリー
+export const investerCategories = [
   { 
     id: 'stock', 
     name: '株式投資',
@@ -22,7 +22,7 @@ export const categories = [
     icon: <LineChart className="h-5 w-5 mr-3" />,
     subsections: [
       { title: '株式投資とは', slug: 'stock-detail' },
-      { title: '株式投資の始め方', slug: 'stock-start' },
+      { title: 'MT4の準備', slug: 'fx-start' },
       { title: '銘柄の選び方', slug: 'stock-pick' },
       { title: 'トレードサポート', slug: 'trade-support'  }
     ]
@@ -102,11 +102,11 @@ export const categories = [
     name: 'Web3.0',
     icon: <Rocket className="h-5 w-5 mr-3" />,
     subsections: [
-        { title: 'ブロックチェーン基礎', slug: 'blockchain-basics' },
-        { title: 'DeFi入門', slug: 'defi-intro' },
-        { title: 'NFTの世界', slug: 'nft-world' },
-        { title: 'DAOについて', slug: 'dao-intro' },
-        { title: 'Fintech', slug: 'fintech' },
+      { title: 'ブロックチェーン基礎', slug: 'blockchain-basics' },
+      { title: 'DeFi入門', slug: 'defi-intro' },
+      { title: 'NFTの世界', slug: 'nft-world' },
+      { title: 'DAOについて', slug: 'dao-intro' },
+      { title: 'Fintech', slug: 'fintech' },
     ]
   },
   {
@@ -129,35 +129,129 @@ export const categories = [
   }
 ]
 
+// サイドビジネスのカテゴリー
+export const sidebusinessCategories = [
+  {
+    id: 'movie',
+    name: '動画',
+    icon: <Target className="h-5 w-5 mr-3" />,
+    subsections: [
+      { title: '動画編集について', slug: 'movie-detail' },
+      { title: 'サムネイル', slug: 'thumbnail' }
+    ]
+  },
+  {
+    id: 'blog',
+    name: 'ブログ',
+    icon: <Target className="h-5 w-5 mr-3" />,
+    subsections: [
+      { title: 'キーワード調査', slug: 'blog-detail' },
+      { title: 'SEO対策', slug: 'blog-seo' },
+      { title: 'ライティング', slug: 'blog-writing' },
+      { title: '推敲', slug: 'blog-revision' },
+      { title: '考え方', slug: 'blog-think' },
+      { title: 'WordPress', slug: 'wordpress' }
+    ]
+  },
+  {
+    id: 'buppan',
+    name: '物販',
+    icon: <Target className="h-5 w-5 mr-3" />,
+    subsections: [
+      { title: '国内転売', slug: 'domestic-resale' },
+      { title: 'eBay', slug: 'ebay' },
+      { title: 'Shopify', slug: 'shopify' }
+    ]
+  },
+  {
+    id: 'excel',
+    name: 'Excel',
+    icon: <Target className="h-5 w-5 mr-3" />,
+    subsections: [
+      { title: '実務の表示形式', slug: 'excel-format' },
+      { title: '日付や時刻を表す関数', slug: 'excel-date' },
+      { title: '縦棒グラフ', slug: 'excel-bar-chart' },
+      { title: '折れ線グラフ', slug: 'excel-line-chart' }
+    ]
+  },
+  {
+    id: 'design',
+    name: 'デザイン',
+    icon: <Target className="h-5 w-5 mr-3" />,
+    subsections: [
+      { title: 'デザインの基礎', slug: 'design-basics' },
+      { title: 'カラー', slug: 'design-color' },
+      { title: 'レイアウト', slug: 'design-layout' }
+    ]
+  },
+  {
+    id: 'marketing',
+    name: 'マーケティング',
+    icon: <Target className="h-5 w-5 mr-3" />,
+    subsections: [
+      { title: 'SNSマーケティング', slug: 'sns-marketing' },
+      { title: 'Twitter', slug: 'twitter' },
+      { title: '進化論マーケティング', slug: 'evolution' }
+    ]
+  },
+  {
+    id: 'real_estate',
+    name: '不動産',
+    icon: <Target className="h-5 w-5 mr-3" />,
+    subsections: [
+      { title: '不動産投資', slug: 'real-estate-investment' },
+      { title: '収益物件', slug: 'income-property' }
+    ]
+  }
+]
+
 // スラッグ生成関数を修正
-async function generateUniqueSlug(title: string): Promise<string> {
-  let baseSlug = title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '')
+async function generateUniqueSlug(category: string, subCategory: string, section: string): Promise<string> {
+  // セクションに基づいてカテゴリーリストを選択
+  const categories = section === 'invester' ? investerCategories : sidebusinessCategories;
+  
+  // 選択されたカテゴリーを見つける
+  const selectedCategory = categories.find(cat => cat.id === category);
+  if (!selectedCategory) {
+    throw new Error('カテゴリーが見つかりません');
+  }
+
+  // 選択されたサブカテゴリーを見つける
+  const selectedSubCategory = selectedCategory.subsections.find(sub => sub.title === subCategory);
+  if (!selectedSubCategory) {
+    throw new Error('サブカテゴリーが見つかりません');
+  }
+
+  // 定義されたスラグを使用
+  const baseSlug = selectedSubCategory.slug;
 
   // 既存のスラグをチェック
-  let slug = baseSlug
-  let counter = 1
-  let exists = true
+  let slug = baseSlug;
+  let counter = 1;
+  let exists = true;
 
   while (exists) {
     const { data, error } = await supabase
       .from('articles')
       .select('slug')
       .eq('slug', slug)
-      .single()
+      .single();
 
     if (error || !data) {
-      exists = false
+      exists = false;
     } else {
       // スラグが存在する場合、数字を追加
-      slug = `${baseSlug}-${counter}`
-      counter++
+      slug = `${baseSlug}-${counter}`;
+      counter++;
     }
   }
 
-  return slug
+  return slug;
+}
+
+interface Reference {
+  title: string;
+  url: string;
 }
 
 type ContentBlock = {
@@ -175,8 +269,23 @@ export default function NewArticle() {
   const router = useRouter()
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
+  const [section, setSection] = useState('invester') // 'invester' or 'sidebusiness'
   const [category, setCategory] = useState('stock')
   const [subCategory, setSubCategory] = useState('')
+
+  // 現在のセクションに基づいてカテゴリを取得
+  const getCurrentCategories = () => {
+    return section === 'invester' ? investerCategories : sidebusinessCategories
+  }
+
+  // セクション変更時の処理
+  const handleSectionChange = (newSection: string) => {
+    setSection(newSection)
+    const categories = newSection === 'invester' ? investerCategories : sidebusinessCategories
+    setCategory(categories[0].id)
+    setSubCategory('')
+  }
+
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [references, setReferences] = useState<Reference[]>([])
@@ -215,6 +324,7 @@ export default function NewArticle() {
       }
 
       // 選択されたサブカテゴリからslugを取得
+      const categories = section === 'invester' ? investerCategories : sidebusinessCategories
       const selectedCategory = categories.find(cat => cat.id === category)
       const selectedSubCategory = selectedCategory?.subsections.find(sub => sub.title === subCategory)
       const slug = selectedSubCategory?.slug
@@ -231,8 +341,8 @@ export default function NewArticle() {
         imageUrl
       })
 
-      // ユニークなスラグを生成
-      const uniqueSlug = await generateUniqueSlug(title)
+      // カテゴリーとセクションに基づいてスラグを生成
+      const uniqueSlug = await generateUniqueSlug(category, subCategory, section)
       
       const { data: articleData, error: insertError } = await supabase
         .from('articles')
@@ -244,7 +354,8 @@ export default function NewArticle() {
             sub_category: subCategory,
             image_url: imageUrl,
             slug: uniqueSlug,
-            blocks: blocks
+            blocks: blocks,
+            section: section
           }
         ])
         .select()
@@ -252,7 +363,8 @@ export default function NewArticle() {
       if (insertError) throw insertError
 
       alert('記事が正常に作成されました')
-      router.push('/admin')
+      // セクションに応じて遷移先を変更
+      router.push(section === 'invester' ? '/invester_entrepreneur' : '/sidebusiness')
     } catch (error: any) {
       console.error('Error details:', error) // デバッグ用
       alert(error.message || '記事の作成中にエラーが発生しました')
@@ -286,9 +398,39 @@ export default function NewArticle() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-900 to-blue-950 text-white">
+    <div className={`min-h-screen text-white ${
+      section === 'invester'
+        ? 'bg-gradient-to-b from-blue-900 to-blue-950'
+        : 'bg-gradient-to-b from-green-900 to-green-950'
+    }`}>
       <div className="max-w-4xl mx-auto p-6">
-        <h1 className="text-2xl font-bold mb-8">新規記事作成</h1>
+        <h1 className="text-2xl font-bold mb-4">新規記事作成</h1>
+        
+        {/* セクション切り替えボタン */}
+        <div className="flex space-x-4 mb-8">
+          <button
+            type="button"
+            onClick={() => handleSectionChange('invester')}
+            className={`px-6 py-3 rounded-lg transition-colors ${
+              section === 'invester'
+                ? 'bg-blue-600 text-white'
+                : 'bg-blue-800/30 text-white/70 hover:bg-blue-800/50 hover:text-white'
+            }`}
+          >
+            投資・起業
+          </button>
+          <button
+            type="button"
+            onClick={() => handleSectionChange('sidebusiness')}
+            className={`px-6 py-3 rounded-lg transition-colors ${
+              section === 'sidebusiness'
+                ? 'bg-green-600 text-white'
+                : 'bg-green-800/30 text-white/70 hover:bg-green-800/50 hover:text-white'
+            }`}
+          >
+            サイドビジネス
+          </button>
+        </div>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -299,9 +441,13 @@ export default function NewArticle() {
                 setCategory(e.target.value)
                 setSubCategory('')
               }}
-              className="w-full p-2 rounded bg-blue-800/50 border border-blue-700"
+              className={`w-full p-2 rounded ${
+                section === 'invester' 
+                  ? 'bg-blue-800/50 border border-blue-700'
+                  : 'bg-green-800/50 border border-green-700'
+              }`}
             >
-              {categories.map((cat) => (
+              {getCurrentCategories().map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
                 </option>
@@ -314,10 +460,14 @@ export default function NewArticle() {
             <select
               value={subCategory}
               onChange={(e) => setSubCategory(e.target.value)}
-              className="w-full p-2 rounded bg-blue-800/50 border border-blue-700"
+              className={`w-full p-2 rounded ${
+                section === 'invester' 
+                  ? 'bg-blue-800/50 border border-blue-700'
+                  : 'bg-green-800/50 border border-green-700'
+              }`}
             >
               <option value="">選択してください</option>
-              {categories.find(cat => cat.id === category)?.subsections.map((sub) => (
+              {getCurrentCategories().find(cat => cat.id === category)?.subsections.map((sub) => (
                 <option key={sub.slug} value={sub.title}>
                   {sub.title}
                 </option>
@@ -331,7 +481,11 @@ export default function NewArticle() {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full p-2 rounded bg-blue-800/50 border border-blue-700"
+              className={`w-full p-2 rounded ${
+                section === 'invester' 
+                  ? 'bg-blue-800/50 border border-blue-700'
+                  : 'bg-green-800/50 border border-green-700'
+              }`}
               required
             />
           </div>
@@ -342,7 +496,11 @@ export default function NewArticle() {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               rows={15}
-              className="w-full p-2 rounded bg-blue-800/50 border border-blue-700 font-mono"
+              className={`w-full p-2 rounded font-mono ${
+                section === 'invester' 
+                  ? 'bg-blue-800/50 border border-blue-700'
+                  : 'bg-green-800/50 border border-green-700'
+              }`}
               required
             />
           </div>
@@ -391,12 +549,20 @@ export default function NewArticle() {
 
           <div className="space-y-6">
             {blocks.map((block, index) => (
-              <div key={index} className="bg-blue-800/30 p-4 rounded-lg">
+              <div key={index} className={`p-4 rounded-lg ${
+                section === 'invester' 
+                  ? 'bg-blue-800/30'
+                  : 'bg-green-800/30'
+              }`}>
                 <div className="flex justify-between mb-4">
                 <select
   value={block.type}
   onChange={(e) => updateBlock(index, { type: e.target.value as ContentBlock['type'] })}
-  className="bg-blue-800/50 border border-blue-700 rounded px-3 py-1"
+  className={`rounded px-3 py-1 ${
+    section === 'invester'
+      ? 'bg-blue-800/50 border border-blue-700'
+      : 'bg-green-800/50 border border-green-700'
+  }`}
 >
   <option value="text">テキスト</option>
   <option value="link-card">リンクカード</option>
@@ -420,7 +586,11 @@ export default function NewArticle() {
                   <textarea
                     value={block.content}
                     onChange={(e) => updateBlock(index, { content: e.target.value })}
-                    className="w-full p-2 rounded bg-blue-800/50 border border-blue-700"
+                    className={`w-full p-2 rounded ${
+                      section === 'invester'
+                        ? 'bg-blue-800/50 border border-blue-700'
+                        : 'bg-green-800/50 border border-green-700'
+                    }`}
                     rows={4}
                   />
                 )}
@@ -434,7 +604,11 @@ export default function NewArticle() {
                       onChange={(e) => updateBlock(index, {
                         metadata: { ...block.metadata, title: e.target.value }
                       })}
-                      className="w-full p-2 rounded bg-blue-800/50 border border-blue-700"
+                      className={`w-full p-2 rounded ${
+                        section === 'invester'
+                          ? 'bg-blue-800/50 border border-blue-700'
+                          : 'bg-green-800/50 border border-green-700'
+                      }`}
                     />
                     <input
                       type="url"
@@ -443,7 +617,11 @@ export default function NewArticle() {
                       onChange={(e) => updateBlock(index, {
                         metadata: { ...block.metadata, url: e.target.value }
                       })}
-                      className="w-full p-2 rounded bg-blue-800/50 border border-blue-700"
+                      className={`w-full p-2 rounded ${
+                        section === 'invester'
+                          ? 'bg-blue-800/50 border border-blue-700'
+                          : 'bg-green-800/50 border border-green-700'
+                      }`}
                     />
                     <textarea
                       placeholder="説明"
@@ -451,7 +629,11 @@ export default function NewArticle() {
                       onChange={(e) => updateBlock(index, {
                         metadata: { ...block.metadata, description: e.target.value }
                       })}
-                      className="w-full p-2 rounded bg-blue-800/50 border border-blue-700"
+                      className={`w-full p-2 rounded ${
+                        section === 'invester'
+                          ? 'bg-blue-800/50 border border-blue-700'
+                          : 'bg-green-800/50 border border-green-700'
+                      }`}
                       rows={2}
                     />
                   </div>
@@ -464,7 +646,11 @@ export default function NewArticle() {
                       onChange={(e) => updateBlock(index, {
                         metadata: { ...block.metadata, language: e.target.value }
                       })}
-                      className="w-full p-2 rounded bg-blue-800/50 border border-blue-700"
+                      className={`w-full p-2 rounded ${
+                        section === 'invester'
+                          ? 'bg-blue-800/50 border border-blue-700'
+                          : 'bg-green-800/50 border border-green-700'
+                      }`}
                     >
                       <option value="javascript">JavaScript</option>
                       <option value="typescript">TypeScript</option>
@@ -476,7 +662,11 @@ export default function NewArticle() {
                     <textarea
                       value={block.content}
                       onChange={(e) => updateBlock(index, { content: e.target.value })}
-                      className="w-full p-2 rounded bg-blue-800/50 border border-blue-700 font-mono"
+                      className={`w-full p-2 rounded font-mono ${
+                        section === 'invester'
+                          ? 'bg-blue-800/50 border border-blue-700'
+                          : 'bg-green-800/50 border border-green-700'
+                      }`}
                       rows={8}
                       placeholder="ここにコードを入力"
                     />
@@ -489,21 +679,33 @@ export default function NewArticle() {
               <button
                 type="button"
                 onClick={() => addBlock('text')}
-                className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
+                className={`px-4 py-2 rounded ${
+                  section === 'invester'
+                    ? 'bg-blue-600 hover:bg-blue-700'
+                    : 'bg-green-600 hover:bg-green-700'
+                }`}
               >
                 テキストを追加
               </button>
               <button
                 type="button"
                 onClick={() => addBlock('link-card')}
-                className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
+                className={`px-4 py-2 rounded ${
+                  section === 'invester'
+                    ? 'bg-blue-600 hover:bg-blue-700'
+                    : 'bg-green-600 hover:bg-green-700'
+                }`}
               >
                 リンクカードを追加
               </button>
               <button
                 type="button"
                 onClick={() => addBlock('code')}
-                className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
+                className={`px-4 py-2 rounded ${
+                  section === 'invester'
+                    ? 'bg-blue-600 hover:bg-blue-700'
+                    : 'bg-green-600 hover:bg-green-700'
+                }`}
               >
                 コードを追加
               </button>
@@ -513,7 +715,11 @@ export default function NewArticle() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 rounded transition-colors disabled:opacity-50"
+              className={`w-full py-2 px-4 rounded transition-colors disabled:opacity-50 ${
+                section === 'invester'
+                  ? 'bg-blue-600 hover:bg-blue-700'
+                  : 'bg-green-600 hover:bg-green-700'
+              }`}
           >
             {loading ? '作成中...' : '記事を作成'}
           </button>
@@ -521,4 +727,4 @@ export default function NewArticle() {
       </div>
     </div>
   )
-} 
+}
