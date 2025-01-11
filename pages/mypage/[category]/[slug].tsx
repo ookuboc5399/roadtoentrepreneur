@@ -28,6 +28,7 @@ function MypageContent() {
   const [mounted, setMounted] = useState(false)
   const router = useRouter()
   const { category, slug } = router.query
+  const { user, updateProfile } = useAuth()
 
   useEffect(() => {
     setMounted(true)
@@ -361,8 +362,6 @@ function MypageContent() {
         icon: <UserCog className="h-6 w-6" />,
         description: 'プロフィール情報の確認と編集ができます。',
         content: (() => {
-          const { user, updateProfile } = useAuth();
-
           const handleSubmit = async (profile: any) => {
             const result = await updateProfile({
               firstName: profile.firstName,

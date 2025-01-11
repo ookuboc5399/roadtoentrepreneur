@@ -1,6 +1,6 @@
 import cookie from 'cookie'
 
-export default async (req, res) => {
+export const getUser = async (req, res) => {
   if (req.method === 'GET') {
     const cookies = cookie.parse(req.headers.cookie ?? '')
     const access = cookies.access ?? false

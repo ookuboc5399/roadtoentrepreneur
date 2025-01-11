@@ -72,8 +72,8 @@ export default function EditArticle() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (id) fetchArticle()
-  }, [id])
+    if (id) fetchArticle();
+  }, [id, fetchArticle]); // Added fetchArticle as a dependency
 
   async function fetchArticle() {
     try {
@@ -305,4 +305,4 @@ export default function EditArticle() {
       </form>
     </div>
   )
-} 
+}

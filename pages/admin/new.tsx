@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { supabase } from '../../utils/supabaseClient'
 import { useRouter } from 'next/router'
-import { BookOpen, LineChart, PieChart, Brain, Target, Rocket } from 'lucide-react'
+import { BookOpen, LineChart, PieChart, Brain, Target, Rocket, Bot, Globe, Headphones } from 'lucide-react'
 
 // 投資・起業のカテゴリー
 export const investerCategories = [
@@ -84,48 +84,6 @@ export const investerCategories = [
       { title: 'やってのける', slug: 'getting-it-done' },
       { title: '資金管理とリスクリワード', slug: 'fund-management-risk-reward' }
     ]
-  },
-  { 
-    id: 'future_world',
-    name: '未来の世界',
-    icon: <Rocket className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: '世界の変遷', slug: 'history' },
-      { title: 'AIの基礎知識', slug: 'ai-basics' },
-      { title: '機械学習入門', slug: 'machine-learning' },
-      { title: 'ディープラーニング', slug: 'deep-learning' },
-      { title: 'AIと倫理', slug: 'ai-ethics' },
-    ]
-  },
-  { 
-    id: 'web3',
-    name: 'Web3.0',
-    icon: <Rocket className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: 'ブロックチェーン基礎', slug: 'blockchain-basics' },
-      { title: 'DeFi入門', slug: 'defi-intro' },
-      { title: 'NFTの世界', slug: 'nft-world' },
-      { title: 'DAOについて', slug: 'dao-intro' },
-      { title: 'Fintech', slug: 'fintech' },
-    ]
-  },
-  {
-    id: 'metaverse',
-    name: 'メタバース',
-    icon: <Rocket className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: 'メタバースとは', slug: 'metaverse-intro' },
-      { title: '仮想空間経済', slug: 'virtual-economy' },
-      { title: 'アバターと身分証明', slug: 'avatar-identity' }
-    ]
-  },
-  { 
-    id: 'new_tecnology',
-    name: '新しい技術',
-    icon: <Rocket className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: 'Fintech', slug: 'fintech' },
-    ]
   }
 ]
 
@@ -205,10 +163,63 @@ export const sidebusinessCategories = [
   }
 ]
 
+// 未来の世界のカテゴリー
+export const futureCategories = [
+  {
+    id: 'history',
+    name: '世界の変遷',
+    icon: <Bot className="h-5 w-5 mr-3" />,
+    subsections: [
+      { title: '世界の変遷', slug: 'history' }
+    ]
+  },
+  {
+    id: 'ai',
+    name: 'AI・人工知能',
+    icon: <Bot className="h-5 w-5 mr-3" />,
+    subsections: [
+      { title: 'AIの基礎知識', slug: 'ai-basics' },
+      { title: '機械学習入門', slug: 'machine-learning' },
+      { title: 'ディープラーニング', slug: 'deep-learning' },
+      { title: 'AIと倫理', slug: 'ai-ethics' }
+    ]
+  },
+  {
+    id: 'web3',
+    name: 'Web3.0',
+    icon: <Globe className="h-5 w-5 mr-3" />,
+    subsections: [
+      { title: 'ブロックチェーン基礎', slug: 'blockchain-basics' },
+      { title: 'DeFi入門', slug: 'defi-intro' },
+      { title: 'NFTの世界', slug: 'nft-world' },
+      { title: 'DAOについて', slug: 'dao-intro' },
+      { title: 'Fintech', slug: 'fintech' },
+      { title: 'Saas', slug: 'saas' }
+    ]
+  },
+  {
+    id: 'metaverse',
+    name: 'メタバース',
+    icon: <Headphones className="h-5 w-5 mr-3" />,
+    subsections: [
+      { title: 'メタバースとは', slug: 'metaverse-intro' },
+      { title: '仮想空間経済', slug: 'virtual-economy' },
+      { title: 'アバターと身分証明', slug: 'avatar-identity' }
+    ]
+  }
+]
+
 // スラッグ生成関数を修正
 async function generateUniqueSlug(category: string, subCategory: string, section: string): Promise<string> {
   // セクションに基づいてカテゴリーリストを選択
-  const categories = section === 'invester' ? investerCategories : sidebusinessCategories;
+  let categories;
+  if (section === 'invester') {
+    categories = investerCategories;
+  } else if (section === 'sidebusiness') {
+    categories = sidebusinessCategories;
+  } else {
+    categories = futureCategories;
+  }
   
   // 選択されたカテゴリーを見つける
   const selectedCategory = categories.find(cat => cat.id === category);
@@ -255,13 +266,13 @@ interface Reference {
 }
 
 type ContentBlock = {
-  type: 'text' | 'link-card' | 'image' | 'code'  // codeを追加、imageを維持
+  type: 'text' | 'link-card' | 'image' | 'code'
   content: string
   metadata?: {
     title?: string
     url?: string
     description?: string
-    language?: string  // コードの言語を指定
+    language?: string
   }
 }
 
@@ -269,20 +280,45 @@ export default function NewArticle() {
   const router = useRouter()
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
-  const [section, setSection] = useState('invester') // 'invester' or 'sidebusiness'
+  const [section, setSection] = useState('invester') // 'invester', 'sidebusiness', or 'future'
   const [category, setCategory] = useState('stock')
   const [subCategory, setSubCategory] = useState('')
 
   // 現在のセクションに基づいてカテゴリを取得
   const getCurrentCategories = () => {
-    return section === 'invester' ? investerCategories : sidebusinessCategories
+    switch (section) {
+      case 'invester':
+        return investerCategories;
+      case 'sidebusiness':
+        return sidebusinessCategories;
+      case 'future':
+        return futureCategories;
+      default:
+        return investerCategories;
+    }
   }
 
   // セクション変更時の処理
   const handleSectionChange = (newSection: string) => {
     setSection(newSection)
-    const categories = newSection === 'invester' ? investerCategories : sidebusinessCategories
-    setCategory(categories[0].id)
+    
+    // セクションごとの初期カテゴリを設定
+    let initialCategory;
+    switch (newSection) {
+      case 'invester':
+        initialCategory = 'stock';
+        break;
+      case 'sidebusiness':
+        initialCategory = 'movie';
+        break;
+      case 'future':
+        initialCategory = 'ai';
+        break;
+      default:
+        initialCategory = 'stock';
+    }
+    
+    setCategory(initialCategory)
     setSubCategory('')
   }
 
@@ -293,80 +329,146 @@ export default function NewArticle() {
     { type: 'text', content: '' }
   ]);
 
+  // Get background color based on section
+  const getBackgroundColor = () => {
+    switch (section) {
+      case 'invester':
+        return 'bg-gradient-to-b from-blue-900 to-blue-950';
+      case 'sidebusiness':
+        return 'bg-gradient-to-b from-green-900 to-green-950';
+      case 'future':
+        return 'bg-gradient-to-b from-purple-900 to-purple-950';
+      default:
+        return 'bg-gradient-to-b from-blue-900 to-blue-950';
+    }
+  }
+
+  // Get form element colors based on section
+  const getFormColors = () => {
+    switch (section) {
+      case 'invester':
+        return 'bg-blue-800/50 border border-blue-700';
+      case 'sidebusiness':
+        return 'bg-green-800/50 border border-green-700';
+      case 'future':
+        return 'bg-purple-800/50 border border-purple-700';
+      default:
+        return 'bg-blue-800/50 border border-blue-700';
+    }
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
 
     try {
+      console.log('Starting article creation process...')
+      console.log('Current section:', section)
+      console.log('Selected category:', category)
+      console.log('Selected subCategory:', subCategory)
+
       // セッションチェック
       const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-      if (sessionError) throw new Error('認証エラー: ' + sessionError.message)
-      if (!session) throw new Error('ログインが必要です')
+      if (sessionError) {
+        console.error('Session error:', sessionError)
+        throw new Error('認証エラー: ' + sessionError.message)
+      }
+      if (!session) {
+        throw new Error('ログインが必要です')
+      }
+      console.log('Session check passed')
 
       let imageUrl = ''
       
       // 画像のアップロード
       if (imageFile) {
+        console.log('Starting image upload...')
         const fileExt = imageFile.name.split('.').pop()
         const fileName = `${Date.now()}.${fileExt}`
         
-        console.log('Uploading image...') // デバッグ用
         const { error: uploadError, data } = await supabase.storage
           .from('article-images')
           .upload(fileName, imageFile)
 
         if (uploadError) {
-          console.error('Image upload error:', uploadError) // デバッグ用
+          console.error('Image upload error:', uploadError)
           throw new Error('画像のアップロードに失敗しました: ' + uploadError.message)
         }
 
         imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/article-images/${fileName}`
+        console.log('Image uploaded successfully:', imageUrl)
       }
-
-      // 選択されたサブカテゴリからslugを取得
-      const categories = section === 'invester' ? investerCategories : sidebusinessCategories
-      const selectedCategory = categories.find(cat => cat.id === category)
-      const selectedSubCategory = selectedCategory?.subsections.find(sub => sub.title === subCategory)
-      const slug = selectedSubCategory?.slug
-
-      if (!slug) {
-        throw new Error('無効なカテゴリまたはサブカテゴリです')
-      }
-
-      console.log('Inserting article...', { // デバッグ用
-        title,
-        category,
-        sub_category: subCategory,
-        slug,
-        imageUrl
-      })
 
       // カテゴリーとセクションに基づいてスラグを生成
+      console.log('Generating unique slug...')
       const uniqueSlug = await generateUniqueSlug(category, subCategory, section)
+      console.log('Generated slug:', uniqueSlug)
       
-      const { data: articleData, error: insertError } = await supabase
+      // 記事データの作成
+      const articleData = {
+        title,
+        content,
+        category,
+        sub_category: subCategory,
+        image_url: imageUrl,
+        slug: uniqueSlug,
+        blocks: blocks,
+        section: section
+      }
+      console.log('Preparing to insert article:', articleData)
+
+      console.log('Inserting article into database...')
+      const insertResult = await supabase
         .from('articles')
-        .insert([
-          {
-            title,
-            content,
-            category,
-            sub_category: subCategory,
-            image_url: imageUrl,
-            slug: uniqueSlug,
-            blocks: blocks,
-            section: section
-          }
-        ])
+        .insert([articleData])
         .select()
+        .single()
 
-      if (insertError) throw insertError
+      if (insertResult.error) {
+        console.error('Article insertion error:', insertResult.error)
+        throw new Error('記事の作成に失敗しました: ' + insertResult.error.message)
+      }
 
-      alert('記事が正常に作成されました')
-      // セクションに応じて遷移先を変更
-      router.push(section === 'invester' ? '/invester_entrepreneur' : '/sidebusiness')
+      const insertedData = insertResult.data
+      if (!insertedData) {
+        console.error('No data returned after insertion')
+        throw new Error('記事の作成に失敗しました: データが返されませんでした')
+      }
+
+      console.log('Article created successfully:', insertedData)
+      
+      try {
+        // セクションに応じて遷移先を変更
+        let redirectPath = '/'
+        switch (section) {
+          case 'invester':
+            redirectPath = '/invester_entrepreneur'
+            break
+          case 'sidebusiness':
+            redirectPath = '/sidebusiness'
+            break
+          case 'future':
+            redirectPath = '/future_world'
+            break
+        }
+
+        console.log('Preparing to redirect to:', redirectPath)
+        
+        // 成功メッセージを表示
+        alert('記事が正常に作成されました！')
+        
+        // リダイレクト前にローディング状態を解除
+        setLoading(false)
+        
+        // リダイレクトを実行
+        window.location.href = redirectPath
+      } catch (redirectError) {
+        console.error('Redirect error:', redirectError)
+        // リダイレクトに失敗した場合でも、記事は作成されているのでエラーメッセージは表示しない
+        setLoading(false)
+      }
     } catch (error: any) {
-      console.error('Error details:', error) // デバッグ用
+      console.error('Error in handleSubmit:', error)
       alert(error.message || '記事の作成中にエラーが発生しました')
     } finally {
       setLoading(false)
@@ -398,11 +500,7 @@ export default function NewArticle() {
   };
 
   return (
-    <div className={`min-h-screen text-white ${
-      section === 'invester'
-        ? 'bg-gradient-to-b from-blue-900 to-blue-950'
-        : 'bg-gradient-to-b from-green-900 to-green-950'
-    }`}>
+    <div className={`min-h-screen text-white ${getBackgroundColor()}`}>
       <div className="max-w-4xl mx-auto p-6">
         <h1 className="text-2xl font-bold mb-4">新規記事作成</h1>
         
@@ -430,6 +528,17 @@ export default function NewArticle() {
           >
             サイドビジネス
           </button>
+          <button
+            type="button"
+            onClick={() => handleSectionChange('future')}
+            className={`px-6 py-3 rounded-lg transition-colors ${
+              section === 'future'
+                ? 'bg-purple-600 text-white'
+                : 'bg-purple-800/30 text-white/70 hover:bg-purple-800/50 hover:text-white'
+            }`}
+          >
+            未来の世界
+          </button>
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -441,11 +550,7 @@ export default function NewArticle() {
                 setCategory(e.target.value)
                 setSubCategory('')
               }}
-              className={`w-full p-2 rounded ${
-                section === 'invester' 
-                  ? 'bg-blue-800/50 border border-blue-700'
-                  : 'bg-green-800/50 border border-green-700'
-              }`}
+              className={`w-full p-2 rounded ${getFormColors()}`}
             >
               {getCurrentCategories().map((cat) => (
                 <option key={cat.id} value={cat.id}>
@@ -460,11 +565,7 @@ export default function NewArticle() {
             <select
               value={subCategory}
               onChange={(e) => setSubCategory(e.target.value)}
-              className={`w-full p-2 rounded ${
-                section === 'invester' 
-                  ? 'bg-blue-800/50 border border-blue-700'
-                  : 'bg-green-800/50 border border-green-700'
-              }`}
+              className={`w-full p-2 rounded ${getFormColors()}`}
             >
               <option value="">選択してください</option>
               {getCurrentCategories().find(cat => cat.id === category)?.subsections.map((sub) => (
@@ -481,11 +582,7 @@ export default function NewArticle() {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className={`w-full p-2 rounded ${
-                section === 'invester' 
-                  ? 'bg-blue-800/50 border border-blue-700'
-                  : 'bg-green-800/50 border border-green-700'
-              }`}
+              className={`w-full p-2 rounded ${getFormColors()}`}
               required
             />
           </div>
@@ -496,11 +593,7 @@ export default function NewArticle() {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               rows={15}
-              className={`w-full p-2 rounded font-mono ${
-                section === 'invester' 
-                  ? 'bg-blue-800/50 border border-blue-700'
-                  : 'bg-green-800/50 border border-green-700'
-              }`}
+              className={`w-full p-2 rounded font-mono ${getFormColors()}`}
               required
             />
           </div>
@@ -552,23 +645,21 @@ export default function NewArticle() {
               <div key={index} className={`p-4 rounded-lg ${
                 section === 'invester' 
                   ? 'bg-blue-800/30'
-                  : 'bg-green-800/30'
+                  : section === 'sidebusiness'
+                  ? 'bg-green-800/30'
+                  : 'bg-purple-800/30'
               }`}>
                 <div className="flex justify-between mb-4">
-                <select
-  value={block.type}
-  onChange={(e) => updateBlock(index, { type: e.target.value as ContentBlock['type'] })}
-  className={`rounded px-3 py-1 ${
-    section === 'invester'
-      ? 'bg-blue-800/50 border border-blue-700'
-      : 'bg-green-800/50 border border-green-700'
-  }`}
->
-  <option value="text">テキスト</option>
-  <option value="link-card">リンクカード</option>
-  <option value="image">画像</option>
-  <option value="code">コード</option>
-</select>
+                  <select
+                    value={block.type}
+                    onChange={(e) => updateBlock(index, { type: e.target.value as ContentBlock['type'] })}
+                    className={`rounded px-3 py-1 ${getFormColors()}`}
+                  >
+                    <option value="text">テキスト</option>
+                    <option value="link-card">リンクカード</option>
+                    <option value="image">画像</option>
+                    <option value="code">コード</option>
+                  </select>
                   <button
                     type="button"
                     onClick={() => {
@@ -586,11 +677,7 @@ export default function NewArticle() {
                   <textarea
                     value={block.content}
                     onChange={(e) => updateBlock(index, { content: e.target.value })}
-                    className={`w-full p-2 rounded ${
-                      section === 'invester'
-                        ? 'bg-blue-800/50 border border-blue-700'
-                        : 'bg-green-800/50 border border-green-700'
-                    }`}
+                    className={`w-full p-2 rounded ${getFormColors()}`}
                     rows={4}
                   />
                 )}
@@ -604,11 +691,7 @@ export default function NewArticle() {
                       onChange={(e) => updateBlock(index, {
                         metadata: { ...block.metadata, title: e.target.value }
                       })}
-                      className={`w-full p-2 rounded ${
-                        section === 'invester'
-                          ? 'bg-blue-800/50 border border-blue-700'
-                          : 'bg-green-800/50 border border-green-700'
-                      }`}
+                      className={`w-full p-2 rounded ${getFormColors()}`}
                     />
                     <input
                       type="url"
@@ -617,11 +700,7 @@ export default function NewArticle() {
                       onChange={(e) => updateBlock(index, {
                         metadata: { ...block.metadata, url: e.target.value }
                       })}
-                      className={`w-full p-2 rounded ${
-                        section === 'invester'
-                          ? 'bg-blue-800/50 border border-blue-700'
-                          : 'bg-green-800/50 border border-green-700'
-                      }`}
+                      className={`w-full p-2 rounded ${getFormColors()}`}
                     />
                     <textarea
                       placeholder="説明"
@@ -629,11 +708,7 @@ export default function NewArticle() {
                       onChange={(e) => updateBlock(index, {
                         metadata: { ...block.metadata, description: e.target.value }
                       })}
-                      className={`w-full p-2 rounded ${
-                        section === 'invester'
-                          ? 'bg-blue-800/50 border border-blue-700'
-                          : 'bg-green-800/50 border border-green-700'
-                      }`}
+                      className={`w-full p-2 rounded ${getFormColors()}`}
                       rows={2}
                     />
                   </div>
@@ -646,11 +721,7 @@ export default function NewArticle() {
                       onChange={(e) => updateBlock(index, {
                         metadata: { ...block.metadata, language: e.target.value }
                       })}
-                      className={`w-full p-2 rounded ${
-                        section === 'invester'
-                          ? 'bg-blue-800/50 border border-blue-700'
-                          : 'bg-green-800/50 border border-green-700'
-                      }`}
+                      className={`w-full p-2 rounded ${getFormColors()}`}
                     >
                       <option value="javascript">JavaScript</option>
                       <option value="typescript">TypeScript</option>
@@ -662,11 +733,7 @@ export default function NewArticle() {
                     <textarea
                       value={block.content}
                       onChange={(e) => updateBlock(index, { content: e.target.value })}
-                      className={`w-full p-2 rounded font-mono ${
-                        section === 'invester'
-                          ? 'bg-blue-800/50 border border-blue-700'
-                          : 'bg-green-800/50 border border-green-700'
-                      }`}
+                      className={`w-full p-2 rounded font-mono ${getFormColors()}`}
                       rows={8}
                       placeholder="ここにコードを入力"
                     />
@@ -682,7 +749,9 @@ export default function NewArticle() {
                 className={`px-4 py-2 rounded ${
                   section === 'invester'
                     ? 'bg-blue-600 hover:bg-blue-700'
-                    : 'bg-green-600 hover:bg-green-700'
+                    : section === 'sidebusiness'
+                    ? 'bg-green-600 hover:bg-green-700'
+                    : 'bg-purple-600 hover:bg-purple-700'
                 }`}
               >
                 テキストを追加
@@ -693,7 +762,9 @@ export default function NewArticle() {
                 className={`px-4 py-2 rounded ${
                   section === 'invester'
                     ? 'bg-blue-600 hover:bg-blue-700'
-                    : 'bg-green-600 hover:bg-green-700'
+                    : section === 'sidebusiness'
+                    ? 'bg-green-600 hover:bg-green-700'
+                    : 'bg-purple-600 hover:bg-purple-700'
                 }`}
               >
                 リンクカードを追加
@@ -704,7 +775,9 @@ export default function NewArticle() {
                 className={`px-4 py-2 rounded ${
                   section === 'invester'
                     ? 'bg-blue-600 hover:bg-blue-700'
-                    : 'bg-green-600 hover:bg-green-700'
+                    : section === 'sidebusiness'
+                    ? 'bg-green-600 hover:bg-green-700'
+                    : 'bg-purple-600 hover:bg-purple-700'
                 }`}
               >
                 コードを追加
@@ -715,11 +788,13 @@ export default function NewArticle() {
           <button
             type="submit"
             disabled={loading}
-              className={`w-full py-2 px-4 rounded transition-colors disabled:opacity-50 ${
-                section === 'invester'
-                  ? 'bg-blue-600 hover:bg-blue-700'
-                  : 'bg-green-600 hover:bg-green-700'
-              }`}
+            className={`w-full py-2 px-4 rounded transition-colors disabled:opacity-50 ${
+              section === 'invester'
+                ? 'bg-blue-600 hover:bg-blue-700'
+                : section === 'sidebusiness'
+                ? 'bg-green-600 hover:bg-green-700'
+                : 'bg-purple-600 hover:bg-purple-700'
+            }`}
           >
             {loading ? '作成中...' : '記事を作成'}
           </button>

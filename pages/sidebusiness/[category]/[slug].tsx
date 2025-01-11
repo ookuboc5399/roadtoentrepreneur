@@ -74,8 +74,17 @@ export default function SideBusinessContent() {
 
   const fetchWordPressPost = async () => {
     try {
+      type PostSlug = 
+        | 'movie-detail' | 'thumbnail'
+        | 'blog-detail' | 'blog-seo' | 'blog-writing' | 'blog-revision' | 'blog-think' | 'wordpress'
+        | 'domestic-resale' | 'ebay' | 'shopify'
+        | 'excel-format' | 'excel-date' | 'excel-bar-chart' | 'excel-line-chart'
+        | 'design-basics' | 'design-color' | 'design-layout'
+        | 'sns-marketing' | 'twitter' | 'evolution'
+        | 'real-estate-investment' | 'income-property';
+
       // 各slugに対応するWordPressの記事IDをマッピング
-      const postIdMap = {
+      const postIdMap: Record<PostSlug, string> = {
         // 動画カテゴリ
         'movie-detail': '501',
         'thumbnail': '502',
@@ -114,7 +123,12 @@ export default function SideBusinessContent() {
         'income-property': '523'
       }
 
-      const postId = typeof slug === 'string' ? postIdMap[slug] : undefined
+      // Type guard function to check if a string is a valid PostSlug
+      const isValidPostSlug = (slug: string): slug is PostSlug => {
+        return Object.keys(postIdMap).includes(slug);
+      }
+
+      const postId = typeof slug === 'string' && isValidPostSlug(slug) ? postIdMap[slug] : undefined
 
       if (postId) {
         const response = await axios.get<WordPressPost>(

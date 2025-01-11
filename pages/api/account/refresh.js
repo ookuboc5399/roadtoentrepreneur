@@ -1,6 +1,6 @@
 import cookie from 'cookie'
 
-export default async (req, res) => {
+export const refresh = async (req, res) => {
   if (req.method === 'GET') {
     const cookies = cookie.parse(req.headers.cookie ?? '')
     const refresh = cookies.refresh ?? false

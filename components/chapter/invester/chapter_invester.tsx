@@ -26,14 +26,32 @@ const back_start = "/invester_entrepreneur/engel_investment_chapter"
 
 
 
-function ChapterTemplate({ title, backLink, sections }) {
+interface Subsection {
+  title: string;
+  slug: string;
+}
+
+interface Section {
+  id: string;
+  title: string;
+  icon: React.ReactNode;
+  subsections?: Subsection[];  // Make subsections optional since some sections don't have them
+}
+
+interface ChapterTemplateProps {
+  title: string;
+  backLink: string;
+  sections: Section[];
+}
+
+function ChapterTemplate({ title, backLink, sections }: ChapterTemplateProps) {
     const router = useRouter()
-    const [openSection, setOpenSection] = useState(null)
+    const [openSection, setOpenSection] = useState<string | null>(null)
   
     // URLからカテゴリを取得して初期値を設定
     useEffect(() => {
       const category = router.query.category
-      if (category) {
+      if (typeof category === 'string') {
         setOpenSection(category)
       }
     }, [router.query.category])
@@ -222,8 +240,3 @@ function ChapterTemplate({ title, backLink, sections }) {
       sections={sections}
     />
   }
-
-
-    
-
-

@@ -1,0 +1,583 @@
+ <p>IMFが公表している購買力平価ベースの1人あたりGDPで日本は2018年に韓国に抜かれてしまった。それ以降差は年々拡大して2021年は日本4万1507ドル、韓国4万3780ドル、2022年は日本4万2730ドル、韓国4万4981ドルになると予想されている</p>
+                        <p>厚生労働省の「賃金構造基本統計調査」によると日本の一般労働者の2020年の平均月給は30万7700円で2001年の30万5800円から1900円しか上がっていない。しかも2008年から2013年までは29万円台に下がってしまっている。
+
+                        </p>
+                        <ol class="relative border-l border-gray-200 dark:border-gray-700">
+                            <li class="mb-10 ml-6">
+                                <span class="flex absolute -left-3 justify-center items-center w-6 h-6 bg-blue-200 rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
+                                    <svg class="w-3 h-3 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                </span>
+                                <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">安倍晋三 <span class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">Latest</span></h3>
+                                <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Released on January 13th, 2022</time>
+                                <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">Get access to over 20+ pages including a dashboard layout, charts, kanban board, calendar, and pre-order E-commerce & Marketing pages.</p>
+                                <a href="#" class="inline-flex items-center py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">記事へ</a>
+                            </li>
+                            <li class="mb-10 ml-6">
+                                <span class="flex absolute -left-3 justify-center items-center w-6 h-6 bg-blue-200 rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
+                                    <svg class="w-3 h-3 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                </span>
+                                <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">菅義偉</h3>
+                                <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Released on December 7th, 2021</time>
+                                <p class="text-base font-normal text-gray-500 dark:text-gray-400">All of the pages and components are first designed in Figma and we keep a parity between the two versions even as we update the project.</p>
+                            </li>
+                            <li class="mb-10 ml-6">
+                                <span class="flex absolute -left-3 justify-center items-center w-6 h-6 bg-blue-200 rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
+                                    <svg class="w-3 h-3 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                </span>
+                                <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">岸田</h3>
+                                <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Released on December 2nd, 2021</time>
+                                <p class="text-base font-normal text-gray-500 dark:text-gray-400">Get started with dozens of web components and interactive elements built on top of Tailwind CSS.</p>
+                                <a href="https://perpetualtravelerchoja.com/%e5%b2%b8%e7%94%b0%e6%96%87%e9%9b%84/1446/" class="inline-flex items-center py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">記事へ</a>
+
+                            </li>
+                        </ol>
+                        <p>日本は規制撤廃と構造改革を断行し個人も企業も自由に動けるようにすること以外に経済が前進する力は生まれてこない。</p>
+                        <p>成長しないと分配を増やすことはできない</p>
+                        <p>日本は全国銀行データ通信システムとCAFISというガラパゴス連合の呪縛があるためBNPLやオンライン決済はなかなか普及しない</p>
+                        <p>人間が処理している定型作業をロボットで自動化するRPAツールや最新のパッケージソフトを導入して間接業務改革を実行すれば労働生産性が飛躍的に高まって企業の競争力は大幅に向上する</p>
+                        <p>しかし、その結果9割のホワイトカラーが不要になって失業するので多くの日本企業はDXのメリットを享受できない</p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                    </Future_japan>
+                ) : id == "sight" ? (
+                    <Future_japan>
+                        <p>。</p>
+                        <p>日本における合計特殊出生率は2019年の統計で「1.36」</p>
+
+                        <p>2020年は84万人、2021年(推計)は75万人と新型コロナの影響もあって出生数が激減しました。</p>
+                        <p>もともと人口問題研究所の推計では出生数が75万人になるのは2039年ごろと考えられていました。したがって18年も前倒しで出生数が減ってしまったことになります</p>
+                        <p>この少子化がもたらす影響というのはまず経済的な影響としては国内市場が小さくなる。それから労働供給、働き手が減少します。</p>
+                        <p>さらに社会保障の負担をしなくてはいけない現役世代が減って代わりに高齢者が増えるので現役世代の負担が非常に増えます</p>
+                        <p>そして経済成長率は当然低下して税収も減少しますから国債の乱発、ハイパーインフレのリスクが高まる。</p>
+
+                    </Future_japan>
+                ) : id == "edu" ? (
+                    <Future_japan>
+                        <p>韓国は1997年の「IMF危機」の屈辱をきっかけに1998年に就任した金大中大統領が英語教育とIT教育を強化して人材のグローバル化を推し進めた。それがその後の労働生産性向上と経済成長の原動力になった</p>
+                        <p>日本における合計特殊出生率は2019年の統計で「1.36」</p>
+
+                        <p>2020年は84万人、2021年(推計)は75万人と新型コロナの影響もあって出生数が激減しました。</p>
+                        <p>もともと人口問題研究所の推計では出生数が75万人になるのは2039年ごろと考えられていました。したがって18年も前倒しで出生数が減ってしまったことになります</p>
+                        <p>この少子化がもたらす影響というのはまず経済的な影響としては国内市場が小さくなる。それから労働供給、働き手が減少します。</p>
+                        <p>さらに社会保障の負担をしなくてはいけない現役世代が減って代わりに高齢者が増えるので現役世代の負担が非常に増えます</p>
+                        <p>そして経済成長率は当然低下して税収も減少しますから国債の乱発、ハイパーインフレのリスクが高まる。</p>
+                        <div className='text-2xl text-center m-4 border-b-4 border-blue-400'>少子化対策海外事例</div>
+                        <p>少子化問題に対して各国がどれくらいお金を使っているかOECD平均は2.34%。それに対して日本は1.79%</p>
+                        <p>世界各国の少子化対策は大きく分けて4つあります。</p>
+                        <p>1つは外国から来た移民の流入によって人口が増加している</p>
+                        <p>2つは少子化が起きたが政策によって転換した国でフランス、スウェーデン,オランダ、ハンガリーなどが相当します。</p>
+                        <p>3つめは少子化が起きたものの移民でしのいでいる国。ドイツ、イタリア、スペイン、カナダ</p>
+                        <p>4つめの少子化が起きて現在も進行している国にはアジアの日本、中国、韓国、台湾、タイ</p>
+                        <p></p>
+                        <p>フランスの「N分N乗方式」は子だくさんな世帯ほど税金が優遇される仕組み
+                        </p>
+                        <p>ドイツの場合はドイツ人女性の合計特殊出生率は1.43と非常に低いのですが外国からの移民を受け入れることで人口減少に歯止めをかけました</p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                    </Future_japan>
+                ) : id == "birthrate" ? (
+                    <Future_japan>
+                        <p>日本の少子化はものすごい勢いで加速している。</p>
+                        <p>日本における合計特殊出生率は2019年の統計で「1.36」</p>
+
+                        <p>2020年は84万人、2021年(推計)は75万人と新型コロナの影響もあって出生数が激減しました。</p>
+                        <p>もともと人口問題研究所の推計では出生数が75万人になるのは2039年ごろと考えられていました。したがって18年も前倒しで出生数が減ってしまったことになります</p>
+                        <p>この少子化がもたらす影響というのはまず経済的な影響としては国内市場が小さくなる。それから労働供給、働き手が減少します。</p>
+                        <p>さらに社会保障の負担をしなくてはいけない現役世代が減って代わりに高齢者が増えるので現役世代の負担が非常に増えます</p>
+                        <p>そして経済成長率は当然低下して税収も減少しますから国債の乱発、ハイパーインフレのリスクが高まる。</p>
+                        <div className='text-2xl text-center m-4 border-b-4 border-blue-400'>少子化対策海外事例</div>
+                        <p>少子化問題に対して各国がどれくらいお金を使っているかOECD平均は2.34%。それに対して日本は1.79%</p>
+                        <p>世界各国の少子化対策は大きく分けて4つあります。</p>
+                        <p>1つは外国から来た移民の流入によって人口が増加している</p>
+                        <p>2つは少子化が起きたが政策によって転換した国でフランス、スウェーデン,オランダ、ハンガリーなどが相当します。</p>
+                        <p>3つめは少子化が起きたものの移民でしのいでいる国。ドイツ、イタリア、スペイン、カナダ</p>
+                        <p>4つめの少子化が起きて現在も進行している国にはアジアの日本、中国、韓国、台湾、タイ</p>
+                        <p></p>
+                        <p>フランスの「N分N乗方式」は子だくさんな世帯ほど税金が優遇される仕組み
+                        </p>
+                        <p>ドイツの場合はドイツ人女性の合計特殊出生率は1.43と非常に低いのですが外国からの移民を受け入れることで人口減少に歯止めをかけました</p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                    </Future_japan>
+                ) : id == "birthrate" ? (
+                    <Future>
+                    <div className="text-center text-3xl m-4">
+                        アフリカ
+                    </div>
+                    アフリカ大陸の面積はインドの10倍ある
+                    ルワンダの首都キガリやケニアの首都ナイロビは高地なのでとても過ごしやすい
+                    1年じゅう夏の軽井沢状態。
+                    アフリカの全人口は現在約13億人。日本の中位年齢は48.4歳、最も人口の多いナイジェリアは18.1歳。他にもケニア20.1歳、エチオピア19.5歳、タンザニア18.0歳、コンゴは17.0歳
+
+                    現在(2019)約13億人の人口が2050年にはほぼ2倍の約25億人になると予測されている
+                    <div className='text-2xl'>
+                        生産年齢人口比率
+                    </div>
+                    全人口のうち15歳から64歳までの働ける人口がどれだけいるかというのが生産年齢人口比率。
+                    日本は1960年代から1980年代の終わりくらいまで70%前後だった
+                    今、まさにピークを迎えているのが中国。2000年ごろから70%を超えて下落に転じている
+                    これからピークを迎えるのがインドや中東です。インドは2040年くらいにピークを打って落ちていくことになる
+                    そしてその後ピークを迎えるのがアフリカ
+                    生産年齢人口とその国の経済のピークはリンクすると言われている
+                    <div className='text-2xl'>
+                        生活環境
+                    </div>
+                    アフリカの成人は全員といっても過言ではないほどにみんなスマホやケータイをすでに持っている
+                    プリペイド方式が中心でパパママショップやコンビニ、M-PESAショップでお金をチャージする
+                    <div className='text-2xl'>
+                        社会・地域・経済
+                    </div>
+                    eコマースの発達と新型コロナウイルスの流行で人々が実店舗で買い物をしなくなり外食からも距離を置くようになった
+                    <div className='text-2xl'>
+                        地政学・外交・貿易
+                    </div>
+
+                    親米でスンニ派のアラブ諸国にはイスラエルによって占領されたパレスチナの解放とパレスチナ難民の帰還というアラブの大義がある
+                    2020年9月にイスラエルとUAEの国交正常化
+                    この後バーレーンもイスラエルとの国交正常化に合意した。
+                    シーア派のイランはおもしろくない
+                    同じシーア派のシリアは旧ソ連時代にロシアと友好協力条約を締結しており
+
+
+                    新型コロナウイルスの感染流行によって世界経済は2008年のリーマンショック以来のマイナス成長となり、2009年が-0.1%で2020年賀-4.4%
+
+                    コロナによる景気の悪化に対処するため世界各国で大規模な財政出動と金融緩和が行われている。
+                    先進国の公的債務の対GDP日は123%と第二次世界大戦のころとほぼ同じ水準。
+                    新興国は63%
+                    緩和マネーの行き先が株式市場だ
+                    コロナ禍における企業の業績は右肩上がりの上昇組と下降組の2つに分かれている。
+                    その割合は前者が1に対し、後者が2で悪くなっている企業の方が多いのだ。しかし主要国株式指数は軒並み上昇。
+                    本来株価は企業が将来生み出すであろう富の現在価値である。ところが生み出す富がこの先減るのはほぼ確実だというのに今は反対に株価が上昇している
+                    完全に実体経済と乖離している
+
+
+
+                    <div className="text-center text-3xl m-4">
+                        中国
+                    </div>
+                    政府シンクタンクの中国情報通信研究所の試算によれば中国のデジタルエコノミー規模は2002年の約19兆円から2018年に500兆円にまで増加し、その後も拡大し続けている
+                    さらにGDPに占めるデジタルエコノミーの割合は2018年の3割弱から2030年には8割に達すると予測されている
+                    <div className='text-2xl'>
+
+                    </div>
+                    1970年代までの中国は人民公社の建設を中核とする計画経済政策を推し進めていましたが、1978年の鄧小平の登場で「改革・開放」
+                    計画経済から社会主義市場経済
+                    <div className='text-2xl'>
+
+                    </div>
+                    2010年には米国に次ぐ世界第2位の経済規模に登りつめ、2000年にはわずか960ドルに過ぎなかった中国の国民一人当たりのGDPは2019年には10倍以上の10000ドル超に達した
+                    <div className='text-2xl'>
+                        チャイナイノベーション
+                    </div>
+                    「グランドデザイン」と「地域間競争」「民間活力」によって1990年代以降の高度成長を実現させた
+                    グランドデザインとは中央政府による長期的な成長戦略と推進政策、規制政策の策定
+                    地域間競争により地域間で繰り広げられた競争が中国の経済成長をけん引してきた
+                    そして最も重視されているのが民間活力の活用です。
+                    民営経済は税収の50%超、GDPの60%以上、科学技術の成果の70%以上を占め、さらには都市部の雇用の80%以上を提供し、企業数の90%以上を占める
+                    <div className='text-2xl'>
+
+                    </div>
+                    ビットコインに代表差される仮想通貨で活用されるブロックチェーン技術関連の特許の75%を生活用品などあらゆるものに小型デジタルデバイスを搭載し相互をインターネットでつなぐことで情報を共有するIoT
+                    への投資の半分を、クラウドコンピューティング市場規模の75%以上を、プラットフォーマー上位70社の株式時価総額の約9割を米中が占有しています。
+                    <table className='border-collapse'>
+                        <tr>
+                            <th>項目</th> <th>米中の割合</th><th>米国</th><th>中国</th><th>その他</th>
+                        </tr>
+                        <tr>
+                            <th>ブロックチェーン技術関連の特許</th> <td>75%</td> <td>25%</td> <td>25%</td> <td>25%</td>
+                        </tr>
+                        <tr>
+                            <th>IoT(モノのインターネット)への投資額</th> <td>50%</td> <td>26%</td> <td>24%</td> <td>50%</td>
+                        </tr>
+                        <tr>
+                            <th>クラウドコンピューティング市場</th> <td>＞75%</td> <td>66%</td> <td>9%</td> <td>＜25%</td>
+                        </tr>
+                        <tr>
+                            <th>上位70社のプラットフォーマーの時価総額</th> <td>90%</td> <td>-</td> <td>-</td> <td>10%</td>
+                        </tr>
+
+
+                    </table>
+                    <div className='text-2xl'>
+
+                    </div>
+                    ユニコーン企業とは評価額が10億米ドル以上で設立10年以内の未上場の企業のことでその多くはデジタルエコノミーに関連するテクノロジー企業です。
+                    米国の調査会社CBInsights社が公表するデータによると2020年6月16日現在で世界には473社のユニコーン企業があり、総評価額は1兆3950億ドルに及んでいます。
+                    うち、米国発の企業は225社、中国発の企業は124社で米中が全体の約74%を占めています。
+
+
+
+                    <div className="text-center text-3xl m-4">
+                        日本
+                    </div>
+                    コロナウイルスの影響で人々の生活様式は根本的に変わってしまった。
+                    どこの会社でもオフィスから離れた場所で仕事を行うテレワークが常態化し、「通勤から解放されたビジネスパーソンが都心を離れて地方に移住しはじめる」という現象が起こっている。
+                    世界の株価は連日のように最高値を更新。2021年2月16日に日経平均株価は3万467円を記録し、バブル期以来30年ぶりに3万円台をつけた。
+                    これは各国政府が傷ついた自国の実体経済を救うために補助金などの財政支出を増やしているのが原因である。その資金が行き場がなくなって株式市場に流れ込んできた結果「企業実績が落ちているのに株価が上がる」という官製バブル相場の様相を呈している
+                    アメリカ国内のトランプ氏が富裕層を優遇し、白人至上主義を煽った結果二極化と分断がかつてないほど進んでしまった。
+
+                    2019年11月に中国の湖北省武漢市で検出された新型コロナウイルスは瞬く間に全世界に感染が広がり、翌2020年3月には世界保健機関(WHO)がパンデミックを宣言
+                    2021年4月15日現在のアメリカ国内における新型コロナウイルスによる死亡者数は約56万4000人にものぼる。これは第二次世界大戦期間中の戦闘による死者数29万1557人の2倍に迫っている。
+
+                    今回の新型コロナウイルスのようなパンデミックは100年前にも起こっている。
+                    スペイン風邪だ
+                    1918年3月にアメリカとスペインで感染が始まり、1920年に収束するまでの3年間に3度の流行を繰り返し、世界中で約5億人が感染。5000万人以上の命が奪われた。
+                    <div className='text-2xl'>
+                        産業構造
+                    </div>
+                    既存体制の保護規制が少ない中国とアメリカが様々な分野でトップに躍り出た
+                    反対に旧産業を保護するための仕掛けが出来上がっているEUや日本はその仕掛けが新しいことに挑戦する足かせとなり先の両大国に完全においていかれてしまっている
+                    <div className='text-2xl'>
+                        生活環境
+                    </div>
+                    今後は通勤という概念すらなくなっていくだろう
+                    毎日会社に行かなくてもいいのであればもっと環境のいい場所に引っ越そうと考える人々が増えているのだ
+                    仕事を終えたら同僚と一杯飲みに行くという文化も早晩消えていくに違いない
+                    <div className='text-2xl'>
+                        社会・地域・経済
+                    </div>
+                    eコマースの発達と新型コロナウイルスの流行で人々が実店舗で買い物をしなくなり外食からも距離を置くようになった
+                    <div className='text-2xl'>
+                        地政学・外交・貿易
+                    </div>
+
+                    親米でスンニ派のアラブ諸国にはイスラエルによって占領されたパレスチナの解放とパレスチナ難民の帰還というアラブの大義がある
+                    2020年9月にイスラエルとUAEの国交正常化
+                    この後バーレーンもイスラエルとの国交正常化に合意した。
+                    シーア派のイランはおもしろくない
+                    同じシーア派のシリアは旧ソ連時代にロシアと友好協力条約を締結しており
+
+
+                    新型コロナウイルスの感染流行によって世界経済は2008年のリーマンショック以来のマイナス成長となり、2009年が-0.1%で2020年賀-4.4%
+
+                    コロナによる景気の悪化に対処するため世界各国で大規模な財政出動と金融緩和が行われている。
+                    先進国の公的債務の対GDP日は123%と第二次世界大戦のころとほぼ同じ水準。
+                    新興国は63%
+                    緩和マネーの行き先が株式市場だ
+                    コロナ禍における企業の業績は右肩上がりの上昇組と下降組の2つに分かれている。
+                    その割合は前者が1に対し、後者が2で悪くなっている企業の方が多いのだ。しかし主要国株式指数は軒並み上昇。
+                    本来株価は企業が将来生み出すであろう富の現在価値である。ところが生み出す富がこの先減るのはほぼ確実だというのに今は反対に株価が上昇している
+                    完全に実体経済と乖離している
+
+
+
+
+
+
+
+
+
+
+
+future.js
+  <h3 className="vertical-timeline-element-title">Creative Director</h3>
+                    <h4 className="vertical-timeline-element-subtitle">Miami, FL</h4>
+                    <p>
+                        西ドイツが急速に復興した要因は何かというと「そもそもドイツはもともとのポテンシャルが非常に高かった
+                    </p>
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--work"
+                    contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+                    contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
+                    date="1937"
+                    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faAvocado} />}
+                >
+                    <h3 className="vertical-timeline-element-title">ウォール街大暴落</h3>
+                    <h4 className="vertical-timeline-element-subtitle">Miami, FL</h4>
+                    <p>24日にゼネラルモーターズの株価が値下がりし、それを皮切りに市場は売り一色になった</p>
+                    <p>  この暴落を受け、銀行による組織的な買い支えが行われたため、売りが売りを呼ぶ、という負の連鎖は一時的に免れました。しかし28日、29日にさらなる大暴落が起き、1929年11月13日には198.60の底値を付けることになったのです。</p>
+                    <p>  1930年4月17日には294.07という高値を付けるところまで急速に回復しましたが、相場は再び下がり、1954年11月23日まで大暴落前の水準まで戻ることはありませんでした。                    </p>
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--work"
+                    contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+                    contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
+                    date=""
+                    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faAvocado} />}
+                >
+                    <h3 className="vertical-timeline-element-title">住宅バブル</h3>
+                    <h4 className="vertical-timeline-element-subtitle">Miami, FL</h4>
+                    <p> 住宅に対する新しい需要の増加が住宅価格を押し上げるという「正のフィードバック」のループを作り上げた。負債レバレッジのなし崩し的な上昇は融資基準の劣化をもたらし、レバレッジはさらに高まっていった。バブルが膨らむにつれて個人も金融機関もどんどん破滅の淵に近づいていったのだ</p>
+                    <p>   そしてバブルがはじけた途端にこれまで膨張を推進してきたループが逆回転し始める。住宅価格は急落し、多くの国民の財産価値は急激に減少に転じて気がつけば住宅の価値は抱えているローンの残高を大幅に下回っていたのだ。ローンの負担が重くのしかかり、財布のひもは固くならざるを得ない。</p>
+                    <p> 過大な負債を抱え込んだ金融機関はレバレッジを正常な水準に戻そうと業務を急速に縮小し始める。それがもたらす信用収縮によって実体経済活動は一層冷え込んだ。こうした負のフィードバック・ループが働いて経済は深刻なリセッションに落ち込んでいくのだ。</p>
+                    <p> こうして信用バブルがはじけるとその実体経済へのダメージは非常に深刻なものになる</p>
+
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--work"
+                    date="2010 - 2011"
+                    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faFlagUsa} />}
+                >
+                    <h3 className="vertical-timeline-element-title">Art Director</h3>
+                    <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
+                    <p>日清、日露戦争ではどちらも朝鮮半島が戦場になっている。  </p>
+                    <p>中国と日本それぞれに朝鮮半島での利権を与え、そのうち両国が対立し戦争を始める。  </p>
+                    <p>日本が勝つと朝鮮は今度はロシアに近寄り、今度は日本とロシアが対立することになり、日ロで戦争をすることになった  </p>
+                    <p>戦後の韓国経済は日本の支援で成り立ってきたもの。国交回復時の請求権協定の支援金が韓国の奇跡の経済成長の一因になっている。  </p>
+                    <p>それ以上に日本の技術支援が韓国経済を大きく成長させた。</p>
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--work"
+                    date="2010 - 2011"
+                    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faFlagUsa} />}
+                >
+                    <h3 className="vertical-timeline-element-title">Art Director</h3>
+                    <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
+                    <p>1945年以降、アメリカは韓国に対して年間2億~3億ドル、総額にして31億ドルという莫大な経済支援を行っている。  </p>
+                    <p>戦後の韓国経済は完全にアメリカの支援に頼り切った体質になっていた。 </p>
+                    <p>日本と韓国は1965年に国交を回復 </p>
+                    <p>1960年代から韓国経済は急激に発展する。「漢江の奇跡」  </p>
+
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--work"
+                    date="1987"
+                    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faFlagUsa} />}
+                >
+                    <h3 className="vertical-timeline-element-title">ブラックマンデー</h3>
+                    <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
+                    <p>  1987年10月19日の月曜日に、ニューヨーク証券取引所を発端に起こった史上最大規模の世界的株価の大暴落 </p>
+                    <p>  NYダウ平均株価の終値が前週末より508ドルも暴落し、下落率は1929年のウォール街大暴落の12.8%を上回る22.6% </p>
+                    <p>  1989年のバブルの悪が出たのが1997年北海道拓殖銀行の倒産 </p>
+                    <p>相場の悪は金融機関にある。  </p>
+
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--work"
+                    date="2008 - 2010"
+                    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faPersonRunning} size="5x" style={{ color: 'red' }} />}
+                >
+                    <h3 className="vertical-timeline-element-title">ギリシャ危機</h3>
+                    <h4 className="vertical-timeline-element-subtitle">Los Angeles, CA</h4>
+                    <p>EUの中には経済基盤の弱い国もあります。ユーロはそういう国をカバーしていかなければならない。</p>
+                    <p>EUはEU内の危機に際して自分たちだけでは対応できず、アメリカに助力を求めた。</p>
+                    <p>このギリシャ危機の後は世界の外貨準備におけるユーロのシェアは下がった</p>
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--work"
+                    date="2006 - 2008"
+                    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faPersonRunning} size="5x" style={{ color: 'red' }} />}
+                >
+                    <h3 className="vertical-timeline-element-title">Web Designer</h3>
+                    <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
+                    <p>
+                        User Experience, Visual Design
+                    </p>
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--education"
+                    date="April 2013"
+                    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faPersonRunning} size="5x" style={{ color: 'red' }} />}
+                >
+                    <h3 className="vertical-timeline-element-title">Content Marketing for Web, Mobile and Social Media</h3>
+                    <h4 className="vertical-timeline-element-subtitle">Online Course</h4>
+                    <p>                    2013年11月にFRBのバーナンキ議長(当時)がそれまで非公式な存在だったビットコインを認める発言をしたことでビットコイン価格が跳ね上がりました。 </p>
+                    <p>2021年9月には中国国内における仮想通貨関連事業の全面禁止が発表されました。 </p>
+                    <p>また同月に中米のエルサルバドルが国家として初めてビットコインを法定通貨として認めました。 </p>
+                    <p>これによりエルサルバドル国内の事業者はビットコインでの支払いを受け付ける義務が生じ、国民は納税を含む全ての支払いをビットコインで行えるようになります。 </p>
+                    <p>国内の7割が銀行口座もクレジットカードも持たず、主にアメリカへの出稼ぎ組からの仕送りがGDPの2割を占めるとされる同国では稼いだ米ドルを母国に送金するときの手数料の高さがネックでした </p>
+                    <p>そこで同国のブケレ大統領は銀行を通さずに送金でき、手数料も破格に安いビットコインに目を付けた </p>
+                    <p>各証券会社の手数料                    </p>
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--education"
+                    date="November 2012"
+                    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faPersonRunning} size="5x" style={{ color: 'red' }} />}
+                >
+                    <h3 className="vertical-timeline-element-title">Agile Development Scrum Master</h3>
+                    <h4 className="vertical-timeline-element-subtitle">Certification</h4>
+                    <p>
+                        Creative Direction, User Experience, Visual Design
+                    </p>
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--education"
+                    date="2025"
+                    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faPersonRunning} size="5x" style={{ color: 'red' }} />}
+                >
+                    <h3 className="vertical-timeline-element-title">Bachelor of Science in Interactive Digital Media Visual Imaging</h3>
+                    <h4 className="vertical-timeline-element-subtitle">Bachelor Degree</h4>
+                    <p>
+                        Creative Direction, Visual Design
+                    </p>
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--education"
+                    date="2025"
+                    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faPersonRunning} size="5x" style={{ color: 'red' }} />}
+                >
+                    <h3 className="vertical-timeline-element-title">Bachelor of Science in Interactive Digital Media Visual Imaging</h3>
+                    <h4 className="vertical-timeline-element-subtitle">Bachelor Degree</h4>
+                    <p>
+                        製造業における技術変化による雇用のミスマッチが拡大
+                    </p>
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--education"
+                    date="2027"
+                    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faPersonRunning} size="5x" style={{ color: 'red' }} />}
+                >
+                    <h3 className="vertical-timeline-element-title">Bachelor of Science in Interactive Digital Media Visual Imaging</h3>
+                    <h4 className="vertical-timeline-element-subtitle">Bachelor Degree</h4>
+                    <p>
+                        リスキリング　学びなおしブーム</p>
+                    <p> 今後のデジタル化の流れで雇用が伸びてくるデータアナリスト、AI技術者、デジタルマーケティング専門職、ITセキュリティー専門職</p>
+                    <p>  特定の分野をやってきた技術者であれば、その分野と関連のある分野の技術を学んでいくのが、全く新しいものを学ぶよりも効果が上がりやすい</p>
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--education"
+                    date="2029"
+                    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faPersonRunning} size="5x" style={{ color: 'red' }} />}
+                >
+                    <h3 className="vertical-timeline-element-title">Bachelor of Science in Interactive Digital Media Visual Imaging</h3>
+                    <h4 className="vertical-timeline-element-subtitle">Bachelor Degree</h4>
+                    <p>
+                    </p>
+
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--education"
+                    date="2031"
+                    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faPersonRunning} size="5x" style={{ color: 'red' }} />}
+                >
+                    <h3 className="vertical-timeline-element-title">Bachelor of Science in Interactive Digital Media Visual Imaging</h3>
+                    <h4 className="vertical-timeline-element-subtitle">Bachelor Degree</h4>
+                    <p>
+                        サラリーマンが誰しも同じような給与をもらい、同じような生活をしてきた時代は終わる</p>
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--education"
+                    date="2037"
+                    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faPersonRunning} size="5x" style={{ color: 'red' }} />}
+                >
+                    <h3 className="vertical-timeline-element-title">Bachelor of Science in Interactive Digital Media Visual Imaging</h3>
+                    <h4 className="vertical-timeline-element-subtitle">Bachelor Degree</h4>
+                    <p>
+                        GDPランキングはi位中国、インド、アメリカ、インドネシア、ブラジル、ロシア、メキシコ</p>
+                    <p>  2000年から20年の間に平均賃金の上昇率はアメリカ25.3% 韓国43.5%</p>
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--education"
+                    date="2039"
+                    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faPersonRunning} size="5x" style={{ color: 'red' }} />}
+                >
+                    <h3 className="vertical-timeline-element-title">Bachelor of Science in Interactive Digital Media Visual Imaging</h3>
+                    <h4 className="vertical-timeline-element-subtitle">Bachelor Degree</h4>
+                    <p>
+                        日本政府の政府債務比率(対GDP比)は2020年末には264% 債務残高は1216兆円</p>
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                    className="vertical-timeline-element--education"
+                    date="2039"
+                    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+                    icon={<FontAwesomeIcon icon={faPersonRunning} size="5x" style={{ color: 'red' }} />}
+                >
+                    <h3 className="vertical-timeline-element-title">Bachelor of Science in Interactive Digital Media Visual Imaging</h3>
+                    <h4 className="vertical-timeline-element-subtitle">Bachelor Degree</h4>
+                    <p>
+                        開業率は1960年代まで10%を超えていた　80年代からは5%前後</p>
+                    <p>   日本人が相応に豊かになりあえて自ら起業してリスクをとらなくなったことが理由
+
+
+
+
+
+
+
+<p>最初のCはインターネットでクルマを外部につなぐconnectedのC。続いてAは自動運転を意味するautonomousのA。Sはみんなで共有するシェアリング中心に多様なサービスを意味するShared&Services。最後のEは電気を意味するElectric</p>
+<p>2016年に閣議決定された「第五期科学技術基本計画」では「超スマート社会」の実現が目標とされた。</p>
+<p>超スマート社会としてSociety 5.0</p>
+<p>必要なもの・サービスを必要な人に必要な時に必要なだけ提供し、社会の様々なニーズにきめ細かに対応でき、あらゆる人が質の高いサービスを受けられ、年齢、性別、地域、言語といった様々な違いを乗り越え、活き活きと快適に暮らすことのできる社会</p>
+<p>IoTですべての人とモノがつながり、一般に「人口知能」であるAIにより必要な情報が必要な時に提供されるようになる。</p>
+<p>政府は第五期の研究開発への投資額をITやソフトウェア関連の技術開発を中心に5年間で26兆円と見込んでいる
+
+<p>MaasとはMobikity as a Serviseの略で「サービスとしての移動」を意味する</p>
+            <p>2016年に閣議決定された「第五期科学技術基本計画」では「超スマート社会」の実現が目標とされた。</p>
+            <p>超スマート社会としてSociety 5.0</p>
+            <p>必要なもの・サービスを必要な人に必要な時に必要なだけ提供し、社会の様々なニーズにきめ細かに対応でき、あらゆる人が質の高いサービスを受けられ、年齢、性別、地域、言語といった様々な違いを乗り越え、活き活きと快適に暮らすことのできる社会</p>
+            <p>IoTですべての人とモノがつながり、一般に「人口知能」であるAIにより必要な情報が必要な時に提供されるようになる。</p>
+            <p>政府は第五期の研究開発への投資額をITやソフトウェア関連の技術開発を中心に5年間で26兆円と見込んでいる</p>
+            </Saas>
+
+
+      <p>インターネットの急速な進展に伴い企業は製品をというものを販売するのではなくモノの本質であるサービスそのものを提供することができるようになってきた</p>
+      <p>数年前だったらコンピューター関係のソフトウェアはCDやDVDなどのディスク媒体に記録された製品がパッケージとして販売され、私たちはそのソフトウェアをパソコンにインストールして利用するのが一般的だった。</p>
+      <p>ところがインターネットの高速化に伴いクラウドを利用することでパソコンにソフトウェアをインストールすることなしにサービスを必要な時に必要なだけ利用することが可能となった</p>
+      <p></p>
+
+
+
+
+
+
+cloud/[id].js
+新しいコンピューティング・パラダイムをリードしているのは実はこれまでのコンピュータ業界をリードしてきたマイクロソフト、オラクル、IBM、ヒューレッド・パッカード<br />
+サンマイクロシステムズなどではない。グーグル、アマゾン、セールスフォース・ドットコムといったネットサービスで頭角を現してきた企業、すなわち「クラウド・ネイティブ」な企業だ<br />
+クラウド・コンピューティングという言葉は2008年のIT業界最大のバズワードといってよいだろう。グーグル、アマゾン、セールスフォース・ドットコム等のネット企業に加えて<br />
+マイクロソフト、IBM、出る、サン・マイクロシステムズ、HPなど大手のITベンダーは揃って何かしらクラウド・コンピューティングを体現したサービスやビジョンを発表している<br />
+「クラウド・コンピューティング」という言葉は2006年に米グーグルのCEOであるエリック・シュミット氏が提唱した言葉だ。<br />
+拡張性に優れ、抽象化された巨大なITリソースをインターネットを通じてサービスとして提供するというコンピュータの形態である。<br />
+インターネット上に雲のように浮かぶ巨大なコンピュータ群から提供されるITリソースには様々なものが想定されている。<br />
+コンピュータのCPU能力、ストレージ、アプリケーションの実行環境となるプラットフォーム、アプリケーション・ソフトウェアなどだ<br />
+そしてこれらのITリソースには2つの大きな特徴がある。「高度なスケーラビリティ」を有し、「抽象化されたコンピュータ・リソース」であるということ<br />
+「高度なスケーラビリティ」とは急激なトランザクションの増加や利用ユーザー数の変化に対して迅速かつ柔軟に処理能力を増減できるコンピュータ・リソースを指す<br />
+例えばどんなにアクセスが集中しても決してダウンすることのないアマゾンのオンライン・ストアをイメージするとよいだろう
+例年クリスマスシーズンにはプレゼントを買い求める消費者でアマゾンのWebサイトがダウンしてつながらないという話はほとんど聞いたことがない
+これは同社が高度なスケーラビリティを有するコンピュータ・インフラを有し、優れた運用技術を駆使して負荷分散を行っているからだ。
+一方「抽象化されたコンピュータ・リソース」とは計算処理が具体的にどのような機種のコンピュータで行われ、そのコンピュータがどこのデータセンターに存在しているのかということを
+ユーザーは気にする必要がないということだ。我々は日々グーグルなどの検索エンジンを利用しているが自分が入力したキーワードの検索処理がどこのデータセンターのどのコンピュータ
+で実行されているかを気にすることはないだろう。
+
+サービスとして利用するという考え方の下では従来のようにハードウェアやソフトウェア・ライセンスを購入して所有するという考え方とは無縁になる
+このため大規模な初期投資なしにコンピュータ・システムを利用できる
+
+
+EV時代に向けて期待されている技術がeアクスル。モーター、インバーター、減速機を一体化したEV用駆動ユニット部品。
+「世界No.1の車載ハードウェア企業」を目指す日本電産が特に力を入れているのがこの分野だ。
+電動化が急進展する中国車向けを中心に21年12月には採用車種の月間販売数が前年同月比2倍超となる2万台を突破。累計では26万5000台の販売実績を上げている
+最初のCはインターネットでクルマを外部につなぐconnectedのC。続いてAは自動運転を意味するautonomousのA。Sはみんなで共有するシェアリング中心に多様なサービスを意味するShared&Services。最後のEは電気を意味するElectric
+2016年に閣議決定された「第五期科学技術基本計画」では「超スマート社会」の実現が目標とされた。
+超スマート社会としてSociety 5.0
+必要なもの・サービスを必要な人に必要な時に必要なだけ提供し、社会の様々なニーズにきめ細かに対応でき、あらゆる人が質の高いサービスを受けられ、年齢、性別、地域、言語といった様々な違いを乗り越え、活き活きと快適に暮らすことのできる社会
+IoTですべての人とモノがつながり、一般に「人口知能」であるAIにより必要な情報が必要な時に提供されるようになる。
+政府は第五期の研究開発への投資額をITやソフトウェア関連の技術開発を中心に5年間で26兆円と見込んでいる
+
+IOWNとはNTTが2024年の仕様確立、30年ごろの実用化に向けて推進している次世代通信基盤のこと
+Innovative Optical and Wireless Networkの略称でこれまで主にネットワークで使われてきた光技術を端末やサーバーなど情報処理装置にも適用することで高速大容量通信や膨大な計算処理を効率的に実現できるようになること。
+
+インターネットの急速な進展に伴い企業は製品をというものを販売するのではなくモノの本質であるサービスそのものを提供することができるようになってきた
+数年前だったらコンピューター関係のソフトウェアはCDやDVDなどのディスク媒体に記録された製品がパッケージとして販売され、私たちはそのソフトウェアをパソコンにインストールして利用するのが一般的だった。
+ところがインターネットの高速化に伴いクラウドを利用することでパソコンにソフトウェアをインストールすることなしにサービスを必要な時に必要なだけ利用することが可能となった
+

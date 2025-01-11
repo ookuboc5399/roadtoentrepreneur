@@ -1,4 +1,4 @@
-export default async (req, res) => {
+export const registerUser = async (req, res) => {
     if (req.method === 'POST') {
       const { name, email, password } = req.body
   

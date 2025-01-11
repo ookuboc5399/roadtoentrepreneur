@@ -42,7 +42,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     return () => {
       router.events.off('routeChangeStart', handleRouteChange);
     };
-  }, []);
+  }, [router.events]);
 
   // getLayoutを使用してページごとのレイアウトを適用
   const getLayout = Component.getLayout ?? ((page) => page);

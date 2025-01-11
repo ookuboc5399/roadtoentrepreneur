@@ -197,7 +197,7 @@ export default function Article() {
   return (
     <div className="min-h-screen">
       <Header_invester/>
-      <div className="pt-16">
+      <div className="">
         <div className="flex">
           <div className="w-64 flex-shrink-0 fixed h-[calc(100vh-4rem)]">
             <Chapterinvester />

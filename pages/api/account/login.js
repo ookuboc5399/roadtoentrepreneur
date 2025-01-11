@@ -1,6 +1,6 @@
 import cookie from 'cookie'
 
-export default async (req, res) => {
+export const login = async (req, res) => {
   if (req.method === 'POST') {
     const { email, password } = req.body
 

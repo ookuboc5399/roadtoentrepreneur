@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 import { register } from '../actions/auth'
-import Loader from 'react-loader-spinner'
+import { Audio } from 'react-loader-spinner';
 import Head from 'next/head'
 
 const Register = () => {
@@ -89,7 +89,15 @@ const Register = () => {
 
         <div className="flex justify-center">
           {loading ? (
-            <Loader type="Oval" color="#F59E00" width={50} height={50} />
+            <Audio
+            height="80"
+            width="80"
+            radius="9"
+            color="green"
+            ariaLabel="loading"
+            wrapperStyle
+            wrapperClass
+          />
           ) : (
             <button className="button-yellow" type="submit">
               送信

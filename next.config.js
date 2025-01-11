@@ -5,7 +5,9 @@ const nextConfig = {
     domains: [
       'ovkxytqxuxfbidxljhfc.supabase.co', // あなたのSupabaseプロジェクトのドメイン
     ],
+    unoptimized: true, // 静的エクスポート用
   },
+  trailingSlash: true, // Azure Static Web Apps用
   async redirects() {
     return [
       {

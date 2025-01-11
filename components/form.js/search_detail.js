@@ -60,7 +60,7 @@ export default function Home({ data }) {
         {itemData && itemData.map((data) => {
           console.log(data)
           return (
-            <div>
+            <div key={data.Item.itemCode}>
               <div>
                 <img src={data.Item.smallImageUrls[0].imageUrl} />
               </div>
@@ -78,6 +78,3 @@ export default function Home({ data }) {
     </div>
   );
 }
-
-
-

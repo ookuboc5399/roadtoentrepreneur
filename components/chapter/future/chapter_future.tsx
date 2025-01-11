@@ -13,13 +13,31 @@ import {
   Code
 } from 'lucide-react'
 
-function ChapterTemplate({ title, backLink, sections }) {
+interface Subsection {
+  title: string;
+  slug: string;
+}
+
+interface Section {
+  id: string;
+  title: string;
+  icon: React.ReactNode;
+  subsections: Subsection[];
+}
+
+interface ChapterTemplateProps {
+  title: string;
+  backLink: string;
+  sections: Section[];
+}
+
+function ChapterTemplate({ title, backLink, sections }: ChapterTemplateProps) {
   const router = useRouter()
-  const [openSection, setOpenSection] = useState(null)
+  const [openSection, setOpenSection] = useState<string | null>(null)
 
   useEffect(() => {
     const category = router.query.category
-    if (category) {
+    if (typeof category === 'string') {
       setOpenSection(category)
     }
   }, [router.query.category])

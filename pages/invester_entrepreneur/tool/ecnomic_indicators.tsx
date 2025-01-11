@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from '../../../components/header/header';
 import { Chapterinvester } from '../../../components/chapter/invester/chapter_invester';
-import { Calendar } from 'react-calendar';
+import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import type { Value } from 'react-calendar/dist/cjs/shared/types';
 
 interface EconomicEvent {
   time: string;
@@ -54,10 +55,15 @@ export default function EconomicIndicators() {
     }
   };
 
-  const handleDateChange = (date: Date) => {
-    setSelectedDate(date);
-    const dateStr = date.toISOString().split('T')[0];
-    updateFilteredEvents(dateStr);
+  const handleDateChange = (value: Value, event?: React.MouseEvent<HTMLButtonElement>) => {
+    if (value instanceof Date) {
+      setSelectedDate(value);
+      const dateStr = value.toISOString().split('T')[0];
+      updateFilteredEvents(dateStr);
+    } else if (Array.isArray(value) && value.length === 2) {
+      console.log('範囲選択', value);
+      // 必要に応じて範囲選択の処理を追加
+    }
   };
 
   const updateFilteredEvents = (dateStr: string) => {
@@ -131,7 +137,7 @@ export default function EconomicIndicators() {
           {/* カレンダー */}
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <Calendar
-              onChange={handleDateChange}
+              onChange={(value, event) => handleDateChange(value, event)}
               value={selectedDate}
               className="w-full"
               tileClassName={({ date }) => {

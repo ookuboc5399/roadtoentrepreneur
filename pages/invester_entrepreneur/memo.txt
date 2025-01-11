@@ -1,26 +1,4 @@
-import Link from 'next/link'
-import Image from 'next/image';
-import { Entrepreneurroad } from '../../components/layout/invester/invester';
-import { Openbusiness } from '../../components/Blog_comp';
 
-
-export default function Home() {
-    return (
-        <Entrepreneurroad>
-            <div className=''>
-                <div className='flex justify-center'>
-                    <Image
-                        src="/images/entre.png"
-                        alt=""
-                        width={960}
-                        height={503}
-                    />
-                </div>
-                <div >
-                    <div className='text-2xl text-center m-4'>はじめに</div>
-                    <div className=' text-center block' >
-                       
-                    </div>
                     <div className='text-2xl text-center m-4 border-b-4 border-blue-400'>個人事業にするか会社にするか</div>
                     <div className='' >
                         <p className=''>会社というのは法人登記さえすれば誰でも作ることができます。 </p>
@@ -292,55 +270,7 @@ export default function Home() {
                     <p>目標は長期目標と短期目標の両方を持ちましょう</p>
                     <p>短期目標は長期目標から逆算して決めていきます</p>
                     <p>いつまでに転職→</p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
+
                     <p>ここで紹介した方法をきっちりと実践すればあなたの事業は確実に成功すると断言してもいい</p>
                     <p>もう躊躇している場合ではない</p>
                     <p>今こそが実践の時である</p>
@@ -376,114 +306,7 @@ export default function Home() {
                             <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">Flowbite Library v1.2.2</h3>
                             <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Released on December 2nd, 2021</time>
                             <p class="text-base font-normal text-gray-500 dark:text-gray-400">Get started with dozens of web components and interactive elements built on top of Tailwind CSS.</p>
-                        </li>
-                    </ol>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                </div>
+                  
                 <div class="">
                     <p> これを読んだからと言ってみんなが一生のうちに1億円を手にできるわけではない </p>
                     <p>むしろ1億円なんて目標に手の届かない人がほとんどだ。 </p>
@@ -565,7 +388,6 @@ export default function Home() {
                     <p>多くの人が自由になれないのはお金がないからです。 </p>
                 </div>
                 <div className='text-2xl text-center m-4 border-b-4 border-blue-400'>税金</div>
-            </div>
-        </Entrepreneurroad>
+
     )
 }
