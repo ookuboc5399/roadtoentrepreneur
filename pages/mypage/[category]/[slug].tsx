@@ -47,8 +47,38 @@ function MypageContent() {
             // TODO: 目標作成のAPI呼び出し
           };
 
+          // 100歳までの残り日数を計算
+          const calculateDaysTo100 = () => {
+            if (!user?.birth_date) return null;
+            
+            const birthDate = new Date(user.birth_date);
+            const hundredthBirthday = new Date(birthDate);
+            hundredthBirthday.setFullYear(birthDate.getFullYear() + 100);
+            
+            const today = new Date();
+            const diffTime = hundredthBirthday.getTime() - today.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            return diffDays;
+          };
+
+          const daysTo100 = calculateDaysTo100();
+
           return (
-            <div className="max-w-3xl mx-auto">
+            <div className="max-w-3xl mx-auto space-y-8">
+              {daysTo100 !== null && (
+                <div className="bg-blue-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold text-blue-900 mb-2">
+                    100歳までの残り日数
+                  </h3>
+                  <p className="text-3xl font-bold text-blue-600">
+                    {daysTo100.toLocaleString()} 日
+                  </p>
+                  <p className="text-sm text-blue-700 mt-2">
+                    一日一日を大切に、目標に向かって進んでいきましょう。
+                  </p>
+                </div>
+              )}
               <GoalForm onSubmit={handleSubmit} />
             </div>
           );

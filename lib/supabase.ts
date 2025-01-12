@@ -27,6 +27,7 @@ export interface User {
   website?: string;
   twitter?: string;
   avatar_url?: string;
+  birth_date?: string;
   subscription?: {
     plan: string;
     status: 'active' | 'inactive';

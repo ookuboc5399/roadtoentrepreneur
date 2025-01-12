@@ -167,6 +167,7 @@ function ChapterTemplate({ title, backLink, sections }: ChapterTemplateProps) {
           { title: '口座開設', slug: 'account-support' },
           { title: 'ビットコイン', slug: 'btc' },
           { title: 'イーサリアム', slug: 'eth' },
+          { title: '仮想通貨リサーチ', slug: 'crypto-research' },
         ]
       },
       {
@@ -230,6 +231,7 @@ function ChapterTemplate({ title, backLink, sections }: ChapterTemplateProps) {
         subsections: [
           { title: '経済指標', slug: 'ecnomic_indicators' },
           { title: '自動売買', slug: 'auto_fx' },
+          { title: '企業分析', slug: 'company_analysis' }
         ]
       }
     ]

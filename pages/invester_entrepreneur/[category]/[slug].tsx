@@ -85,7 +85,11 @@ export default function Article() {
         .single()
 
       if (error) throw error
-      console.log('Article data:', data)
+      console.log('Article data:', JSON.stringify(data, null, 2))
+      if (!data) {
+        console.log('No article found for:', { category, slug })
+        return
+      }
       setArticle(data)
     } catch (error) {
       console.error('Error:', error)

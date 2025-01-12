@@ -15,6 +15,7 @@ interface AuthUser {
   website?: string;
   twitter?: string;
   avatar_url?: string;
+  birth_date?: string;
   subscription?: {
     plan: string;
     status: 'active' | 'inactive';
@@ -75,6 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               website: userData.website,
               twitter: userData.twitter,
               avatar_url: userData.avatar_url,
+              birth_date: userData.birth_date,
               subscription: userData.subscription,
             });
             setIsAuthenticated(true);
@@ -139,6 +141,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             website: userData.website,
             twitter: userData.twitter,
             avatar_url: userData.avatar_url,
+            birth_date: userData.birth_date,
             subscription: userData.subscription,
           });
           setIsAuthenticated(true);
@@ -274,6 +277,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           website: userData.website,
           twitter: userData.twitter,
           avatar_url: userData.avatar_url,
+          birth_date: userData.birth_date,
           subscription: userData.subscription,
         });
         setIsAuthenticated(true);
@@ -433,6 +437,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           website: updates.website,
           twitter: updates.twitter,
           avatar_url: updates.avatar_url,
+          birth_date: updates.birth_date,
           updated_at: new Date().toISOString(),
         })
         .eq('id', user.id)
@@ -458,6 +463,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         website: updatedUser.website,
         twitter: updatedUser.twitter,
         avatar_url: updatedUser.avatar_url,
+        birth_date: updatedUser.birth_date,
       });
 
       return {

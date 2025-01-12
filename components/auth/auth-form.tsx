@@ -98,13 +98,35 @@ export function AuthForm({ mode }: AuthFormProps) {
         if (result.success) {
           console.log('Login successful, preparing to redirect...');
           const returnTo = router.query.returnTo as string;
-          const redirectPath = returnTo || '/mypage/goals/goal-setting';
+          const redirectPath = returnTo || '/mypage/goals/goal-setting/';
           console.log('Redirecting to:', redirectPath);
           
-          // ログイン成功後、少し待ってからリダイレクト
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          await router.push(redirectPath);
-          return;
+          try {
+            console.log('Starting redirect process...');
+            console.log('Current path:', router.asPath);
+            console.log('Target path:', redirectPath);
+            
+            // ログイン成功後、少し待ってからリダイレクト
+            console.log('Waiting for timeout...');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            console.log('Timeout complete');
+            
+            console.log('Executing router.push...');
+            const pushResult = await router.push(redirectPath);
+            console.log('router.push result:', pushResult);
+            
+            console.log('Checking new path:', router.asPath);
+            return;
+          } catch (error: any) {
+            console.error('Redirect failed:', error);
+            if (error instanceof Error) {
+              console.error('Error details:', {
+                name: error.name,
+                message: error.message,
+                stack: error.stack
+              });
+            }
+          }
         } else {
           console.log('Login failed:', result.message);
           setError(result.message || 'メールアドレスまたはパスワードが正しくありません');

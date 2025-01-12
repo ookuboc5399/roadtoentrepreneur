@@ -22,6 +22,7 @@ export function ProfileForm({ onSubmit }: ProfileFormProps) {
     website: user?.website || '',
     twitter: user?.twitter || '',
     avatar_url: user?.avatar_url || null,
+    birthDate: user?.birth_date || '',
   });
 
   useEffect(() => {
@@ -36,6 +37,7 @@ export function ProfileForm({ onSubmit }: ProfileFormProps) {
         website: user.website || '',
         twitter: user.twitter || '',
         avatar_url: user.avatar_url || null,
+        birthDate: user.birth_date || '',
       });
     }
   }, [user]);
@@ -130,6 +132,7 @@ export function ProfileForm({ onSubmit }: ProfileFormProps) {
           location: formData.location,
           website: formData.website,
           twitter: formData.twitter,
+          birth_date: formData.birthDate,
         })
         .eq('id', user?.id);
 
@@ -280,6 +283,21 @@ export function ProfileForm({ onSubmit }: ProfileFormProps) {
           name="location"
           id="location"
           value={formData.location}
+          onChange={handleChange}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        />
+      </div>
+
+      {/* 誕生日 */}
+      <div>
+        <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">
+          誕生日
+        </label>
+        <input
+          type="date"
+          name="birthDate"
+          id="birthDate"
+          value={formData.birthDate}
           onChange={handleChange}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
         />
