@@ -1,215 +1,63 @@
 import { useState } from 'react'
-import { supabase } from '../../utils/supabaseClient'
 import { useRouter } from 'next/router'
-import { BookOpen, LineChart, PieChart, Brain, Target, Rocket, Bot, Globe, Headphones } from 'lucide-react'
+import { supabase } from '../../utils/supabaseClient'
+import { investerCategories, sidebusinessCategories, futureCategories, type Category } from './categories'
+import { ArrowUp, ArrowDown } from 'lucide-react'
 
-// 投資・起業のカテゴリー
-export const investerCategories = [
-  { 
-    id: 'stock', 
-    name: '株式投資',
-    icon: <LineChart className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: '株式投資とは', slug: 'stock-detail' },
-      { title: '株式投資の始め方', slug: 'stock-start' },
-      { title: '銘柄の選び方', slug: 'stock-pick' },
-      { title: 'チャート分析', slug: 'stock-chart' }
-    ]
-  },
-  { 
-    id: 'fx', 
-    name: 'FX',
-    icon: <LineChart className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: '株式投資とは', slug: 'stock-detail' },
-      { title: 'MT4の準備', slug: 'fx-start' },
-      { title: '銘柄の選び方', slug: 'stock-pick' },
-      { title: 'トレードサポート', slug: 'trade-support'  }
-    ]
-  },
-  { 
-    id: 'cryptocurrency', 
-    name: '仮想通貨',
-    icon: <LineChart className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: '仮想通貨とは', slug: 'cryptocurrency-detail' },
-      { title: '口座開設', slug: 'account-support' },
-      { title: 'ビットコイン', slug: 'btc' },
-      { title: 'イーサリアム', slug: 'eth' },
-    ]
-  },
-  { 
-    id: 'bond', 
-    name: '債権・コモディディ',
-    icon: <LineChart className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: '債権について', slug: 'bond-detail'},
-      { title: 'コモディティについて', slug: 'commodity-detail' },
-      { title: '金', slug: 'gold' },
-      { title: '銀', slug: 'silver' },
-      { title: '石油', slug: 'oil' },
-    ]
-  },
-  {
-    id: 'system',
-    name: 'システムトレード',
-    icon: <PieChart className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: 'システムトレードの基礎', slug: 'system-basic' },
-      { title: '自動売買の仕組み', slug: 'system-auto' },
-      { title: '戦略の構築', slug: 'system-strategy' },
-      { title: 'EA1(MACD・Moving Average)', slug: 'ea_macd_ma' },
-      { title: 'EA2(一目均衡表システム)', slug: 'ea_ichimoku' },
-      { title: 'EA3', slug: 'ea3' },
-      { title: 'EA4(平均足システム・NY_Box)', slug: 'ea4' },
-      { title: 'EA5(「早起きは5ピップの得」システム)', slug: 'ea5' },
-      { title: 'EA6(ボリンジャーバンドシステム)', slug: 'ea6' },
-      { title: 'EA7(定型文)', slug: 'ea7' }
-    ]
-  },
-  {
-    id: 'mind',
-    name: 'マインド',
-    icon: <Brain className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: 'お金持ちの思考法', slug: 'thinking-like-a-rich' },
-      { title: '勝つための準備', slug: 'preparing-to-win' },
-      { title: '他人に認めてもらう必要はない', slug: 'no-need-for-approval' },
-      { title: '品格を備える', slug: 'cultivating-dignity' },
-      { title: '孤独に耐える', slug: 'enduring-solitude' },
-      { title: 'トレードで大事なこと', slug: 'important-in-trade' },
-      { title: 'ビジョナリーカンパニー', slug: 'visionary-company' },
-      { title: 'お金持ちになるために', slug: 'becoming-rich' },
-      { title: '時代の潮流に乗る', slug: 'riding-the-trend' },
-      { title: 'やってのける', slug: 'getting-it-done' },
-      { title: '資金管理とリスクリワード', slug: 'fund-management-risk-reward' }
-    ]
+// Types
+interface ContentBlock {
+  id: string
+  type: 'text' | 'code' | 'image' | 'link-card'
+  content: string
+  metadata?: {
+    language?: string
+    alt?: string
+    title?: string
+    url?: string
+    description?: string
   }
-]
+}
 
-// サイドビジネスのカテゴリー
-export const sidebusinessCategories = [
-  {
-    id: 'movie',
-    name: '動画',
-    icon: <Target className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: '動画編集について', slug: 'movie-detail' },
-      { title: 'サムネイル', slug: 'thumbnail' }
-    ]
-  },
-  {
-    id: 'blog',
-    name: 'ブログ',
-    icon: <Target className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: 'キーワード調査', slug: 'blog-detail' },
-      { title: 'SEO対策', slug: 'blog-seo' },
-      { title: 'ライティング', slug: 'blog-writing' },
-      { title: '推敲', slug: 'blog-revision' },
-      { title: '考え方', slug: 'blog-think' },
-      { title: 'WordPress', slug: 'wordpress' }
-    ]
-  },
-  {
-    id: 'buppan',
-    name: '物販',
-    icon: <Target className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: '国内転売', slug: 'domestic-resale' },
-      { title: 'eBay', slug: 'ebay' },
-      { title: 'Shopify', slug: 'shopify' }
-    ]
-  },
-  {
-    id: 'excel',
-    name: 'Excel',
-    icon: <Target className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: '実務の表示形式', slug: 'excel-format' },
-      { title: '日付や時刻を表す関数', slug: 'excel-date' },
-      { title: '縦棒グラフ', slug: 'excel-bar-chart' },
-      { title: '折れ線グラフ', slug: 'excel-line-chart' }
-    ]
-  },
-  {
-    id: 'design',
-    name: 'デザイン',
-    icon: <Target className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: 'デザインの基礎', slug: 'design-basics' },
-      { title: 'カラー', slug: 'design-color' },
-      { title: 'レイアウト', slug: 'design-layout' }
-    ]
-  },
-  {
-    id: 'marketing',
-    name: 'マーケティング',
-    icon: <Target className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: 'SNSマーケティング', slug: 'sns-marketing' },
-      { title: 'Twitter', slug: 'twitter' },
-      { title: '進化論マーケティング', slug: 'evolution' }
-    ]
-  },
-  {
-    id: 'real_estate',
-    name: '不動産',
-    icon: <Target className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: '不動産投資', slug: 'real-estate-investment' },
-      { title: '収益物件', slug: 'income-property' }
-    ]
+// Utility functions
+function getBackgroundColor(section: string): string {
+  switch (section) {
+    case 'invester':
+      return 'bg-gradient-to-b from-blue-900 to-blue-950';
+    case 'sidebusiness':
+      return 'bg-gradient-to-b from-green-900 to-green-950';
+    case 'future':
+      return 'bg-gradient-to-b from-purple-900 to-purple-950';
+    default:
+      return 'bg-gradient-to-b from-blue-900 to-blue-950';
   }
-]
+}
 
-// 未来の世界のカテゴリー
-export const futureCategories = [
-  {
-    id: 'history',
-    name: '世界の変遷',
-    icon: <Bot className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: '世界の変遷', slug: 'history' }
-    ]
-  },
-  {
-    id: 'ai',
-    name: 'AI・人工知能',
-    icon: <Bot className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: 'AIの基礎知識', slug: 'ai-basics' },
-      { title: '機械学習入門', slug: 'machine-learning' },
-      { title: 'ディープラーニング', slug: 'deep-learning' },
-      { title: 'AIと倫理', slug: 'ai-ethics' }
-    ]
-  },
-  {
-    id: 'web3',
-    name: 'Web3.0',
-    icon: <Globe className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: 'ブロックチェーン基礎', slug: 'blockchain-basics' },
-      { title: 'DeFi入門', slug: 'defi-intro' },
-      { title: 'NFTの世界', slug: 'nft-world' },
-      { title: 'DAOについて', slug: 'dao-intro' },
-      { title: 'Fintech', slug: 'fintech' },
-      { title: 'Saas', slug: 'saas' }
-    ]
-  },
-  {
-    id: 'metaverse',
-    name: 'メタバース',
-    icon: <Headphones className="h-5 w-5 mr-3" />,
-    subsections: [
-      { title: 'メタバースとは', slug: 'metaverse-intro' },
-      { title: '仮想空間経済', slug: 'virtual-economy' },
-      { title: 'アバターと身分証明', slug: 'avatar-identity' }
-    ]
+function getFormColors(section: string): string {
+  switch (section) {
+    case 'invester':
+      return 'bg-blue-800/50 border border-blue-700';
+    case 'sidebusiness':
+      return 'bg-green-800/50 border border-green-700';
+    case 'future':
+      return 'bg-purple-800/50 border border-purple-700';
+    default:
+      return 'bg-blue-800/50 border border-blue-700';
   }
-]
+}
 
-// スラッグ生成関数を修正
+function getCurrentCategories(section: string): Category[] {
+  switch (section) {
+    case 'invester':
+      return investerCategories;
+    case 'sidebusiness':
+      return sidebusinessCategories;
+    case 'future':
+      return futureCategories;
+    default:
+      return investerCategories;
+  }
+}
+
 async function generateUniqueSlug(category: string, subCategory: string, section: string): Promise<string> {
   // セクションに基づいてカテゴリーリストを選択
   let categories;
@@ -224,13 +72,19 @@ async function generateUniqueSlug(category: string, subCategory: string, section
   // 選択されたカテゴリーを見つける
   const selectedCategory = categories.find(cat => cat.id === category);
   if (!selectedCategory) {
-    throw new Error('カテゴリーが見つかりません');
+    console.error('Category not found:', { category, availableCategories: categories.map(c => c.id) });
+    throw new Error(`カテゴリー「${category}」が見つかりません`);
   }
 
   // 選択されたサブカテゴリーを見つける
   const selectedSubCategory = selectedCategory.subsections.find(sub => sub.title === subCategory);
   if (!selectedSubCategory) {
-    throw new Error('サブカテゴリーが見つかりません');
+    console.error('Subcategory not found:', { 
+      subCategory, 
+      category: selectedCategory.name,
+      availableSubcategories: selectedCategory.subsections.map(s => s.title)
+    });
+    throw new Error(`サブカテゴリー「${subCategory}」が見つかりません`);
   }
 
   // 定義されたスラグを使用
@@ -242,16 +96,26 @@ async function generateUniqueSlug(category: string, subCategory: string, section
   let exists = true;
 
   while (exists) {
+    console.log('Checking slug availability:', slug);
     const { data, error } = await supabase
       .from('articles')
       .select('slug')
       .eq('slug', slug)
       .single();
 
-    if (error || !data) {
-      exists = false;
-    } else {
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // レコードが見つからない = スラグが使用可能
+        console.log('Slug is available:', slug);
+        exists = false;
+      } else {
+        // その他のエラー
+        console.error('Error checking slug:', error);
+        throw new Error(`スラグのチェックに失敗しました: ${error.message}`);
+      }
+    } else if (data) {
       // スラグが存在する場合、数字を追加
+      console.log('Slug exists, trying next number:', counter);
       slug = `${baseSlug}-${counter}`;
       counter++;
     }
@@ -260,49 +124,22 @@ async function generateUniqueSlug(category: string, subCategory: string, section
   return slug;
 }
 
-interface Reference {
-  title: string;
-  url: string;
-}
-
-type ContentBlock = {
-  type: 'text' | 'link-card' | 'image' | 'code'
-  content: string
-  metadata?: {
-    title?: string
-    url?: string
-    description?: string
-    language?: string
-  }
-}
-
 export default function NewArticle() {
   const router = useRouter()
   const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [section, setSection] = useState('invester') // 'invester', 'sidebusiness', or 'future'
+  const [section, setSection] = useState('invester')
   const [category, setCategory] = useState('stock')
   const [subCategory, setSubCategory] = useState('')
-
-  // 現在のセクションに基づいてカテゴリを取得
-  const getCurrentCategories = () => {
-    switch (section) {
-      case 'invester':
-        return investerCategories;
-      case 'sidebusiness':
-        return sidebusinessCategories;
-      case 'future':
-        return futureCategories;
-      default:
-        return investerCategories;
-    }
-  }
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [blocks, setBlocks] = useState<ContentBlock[]>([
+    { id: Date.now().toString(), type: 'text', content: '' }
+  ]);
 
   // セクション変更時の処理
   const handleSectionChange = (newSection: string) => {
     setSection(newSection)
     
-    // セクションごとの初期カテゴリを設定
     let initialCategory;
     switch (newSection) {
       case 'invester':
@@ -322,69 +159,59 @@ export default function NewArticle() {
     setSubCategory('')
   }
 
-  const [imageFile, setImageFile] = useState<File | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [references, setReferences] = useState<Reference[]>([])
-  const [blocks, setBlocks] = useState<ContentBlock[]>([
-    { type: 'text', content: '' }
-  ]);
+  // ブロックの追加
+  const addBlock = (type: ContentBlock['type']) => {
+    setBlocks([...blocks, {
+      id: Date.now().toString(),
+      type,
+      content: '',
+      metadata: type === 'link-card' ? { title: '', url: '', description: '' } : undefined
+    }]);
+  };
 
-  // Get background color based on section
-  const getBackgroundColor = () => {
-    switch (section) {
-      case 'invester':
-        return 'bg-gradient-to-b from-blue-900 to-blue-950';
-      case 'sidebusiness':
-        return 'bg-gradient-to-b from-green-900 to-green-950';
-      case 'future':
-        return 'bg-gradient-to-b from-purple-900 to-purple-950';
-      default:
-        return 'bg-gradient-to-b from-blue-900 to-blue-950';
-    }
-  }
+  // ブロックの更新
+  const updateBlock = (id: string, data: Partial<ContentBlock>) => {
+    setBlocks(blocks.map(block => 
+      block.id === id ? { ...block, ...data } : block
+    ));
+  };
 
-  // Get form element colors based on section
-  const getFormColors = () => {
-    switch (section) {
-      case 'invester':
-        return 'bg-blue-800/50 border border-blue-700';
-      case 'sidebusiness':
-        return 'bg-green-800/50 border border-green-700';
-      case 'future':
-        return 'bg-purple-800/50 border border-purple-700';
-      default:
-        return 'bg-blue-800/50 border border-blue-700';
+  // ブロックの削除
+  const removeBlock = (id: string) => {
+    setBlocks(blocks.filter(block => block.id !== id));
+  };
+
+  // ブロックの順序変更
+  const moveBlock = (id: string, direction: 'up' | 'down') => {
+    const index = blocks.findIndex(block => block.id === id);
+    if (
+      (direction === 'up' && index === 0) || 
+      (direction === 'down' && index === blocks.length - 1)
+    ) {
+      return;
     }
-  }
+
+    const newBlocks = [...blocks];
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    [newBlocks[index], newBlocks[newIndex]] = [newBlocks[newIndex], newBlocks[index]];
+    setBlocks(newBlocks);
+  };
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
 
     try {
-      console.log('Starting article creation process...')
-      console.log('Current section:', section)
-      console.log('Selected category:', category)
-      console.log('Selected subCategory:', subCategory)
-
-      // セッションチェック
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-      if (sessionError) {
-        console.error('Session error:', sessionError)
-        throw new Error('認証エラー: ' + sessionError.message)
-      }
-      if (!session) {
-        throw new Error('ログインが必要です')
-      }
-      console.log('Session check passed')
+      console.log('1. Starting article creation process...')
+      console.log('Current form state:', { title, category, subCategory, section })
+      
 
       let imageUrl = ''
-      
-      // 画像のアップロード
       if (imageFile) {
-        console.log('Starting image upload...')
+        console.log('2. Starting image upload process...')
         const fileExt = imageFile.name.split('.').pop()
         const fileName = `${Date.now()}.${fileExt}`
+        console.log('Image details:', { fileName, fileType: imageFile.type, fileSize: imageFile.size })
         
         const { error: uploadError, data } = await supabase.storage
           .from('article-images')
@@ -399,74 +226,119 @@ export default function NewArticle() {
         console.log('Image uploaded successfully:', imageUrl)
       }
 
-      // カテゴリーとセクションに基づいてスラグを生成
-      console.log('Generating unique slug...')
+      console.log('3. Generating unique slug...')
       const uniqueSlug = await generateUniqueSlug(category, subCategory, section)
       console.log('Generated slug:', uniqueSlug)
       
-      // 記事データの作成
+      // データのバリデーション
+      if (!title.trim()) {
+        throw new Error('タイトルを入力してください');
+      }
+      if (!subCategory) {
+        throw new Error('サブカテゴリを選択してください');
+      }
+      if (!blocks.some(block => block.content.trim())) {
+        throw new Error('少なくとも1つのブロックにコンテンツを入力してください');
+      }
+
+      console.log('4. Preparing blocks data...');
+      // ブロックの正規化とバリデーション
+      const blocksForDB = blocks
+        .filter(block => block.content.trim() || (block.type === 'link-card' && block.metadata?.url))
+        .map(({ id, ...block }) => {
+          // 各ブロックの型チェックと正規化
+          if (!['text', 'code', 'image', 'link-card'].includes(block.type)) {
+            console.warn('Invalid block type:', block.type);
+            return null;
+          }
+
+          const validBlock: ContentBlock = {
+            id: Date.now().toString(), // 一時的なIDを付与
+            type: block.type as ContentBlock['type'],
+            content: block.content.trim(),
+            ...(block.metadata && { metadata: block.metadata })
+          };
+
+          return validBlock;
+        })
+        .filter((block): block is ContentBlock => block !== null);
+
+      if (blocksForDB.length === 0) {
+        throw new Error('有効なコンテンツが入力されていません');
+      }
+
+      console.log('Normalized blocks:', {
+        count: blocksForDB.length,
+        types: blocksForDB.map(b => b.type),
+        contentLengths: blocksForDB.map(b => b.content.length)
+      });
+
+      // 記事データの準備
       const articleData = {
-        title,
-        content,
+        title: title.trim(),
         category,
         sub_category: subCategory,
-        image_url: imageUrl,
+        image_url: imageUrl || null,
         slug: uniqueSlug,
-        blocks: blocks,
-        section: section
-      }
-      console.log('Preparing to insert article:', articleData)
+        blocks: blocksForDB,
+        section,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        user_id: null
+      };
 
-      console.log('Inserting article into database...')
-      const insertResult = await supabase
+      console.log('5. Prepared article data:', {
+        ...articleData,
+        blocks: `${blocksForDB.length} blocks`
+      });
+
+      // データベースへの保存
+      console.log('6. Attempting to insert article into database...');
+      const { error: insertError, data: insertedData } = await supabase
         .from('articles')
         .insert([articleData])
         .select()
-        .single()
+        .single();
 
-      if (insertResult.error) {
-        console.error('Article insertion error:', insertResult.error)
-        throw new Error('記事の作成に失敗しました: ' + insertResult.error.message)
+      if (insertError) {
+        console.error('Database insert error:', {
+          code: insertError.code,
+          message: insertError.message,
+          details: insertError.details,
+          hint: insertError.hint,
+          data: articleData
+        });
+        throw new Error(`記事の作成に失敗しました: ${insertError.message}`);
       }
 
-      const insertedData = insertResult.data
       if (!insertedData) {
-        console.error('No data returned after insertion')
-        throw new Error('記事の作成に失敗しました: データが返されませんでした')
+        throw new Error('記事の作成に失敗しました: データが返されませんでした');
       }
 
-      console.log('Article created successfully:', insertedData)
-      
-      try {
-        // セクションに応じて遷移先を変更
-        let redirectPath = '/'
-        switch (section) {
-          case 'invester':
-            redirectPath = '/invester_entrepreneur'
-            break
-          case 'sidebusiness':
-            redirectPath = '/sidebusiness'
-            break
-          case 'future':
-            redirectPath = '/future_world'
-            break
-        }
+      console.log('7. Article inserted successfully:', {
+        id: insertedData.id,
+        title: insertedData.title,
+        slug: insertedData.slug,
+        blockCount: insertedData.blocks?.length || 0
+      });
 
-        console.log('Preparing to redirect to:', redirectPath)
-        
-        // 成功メッセージを表示
-        alert('記事が正常に作成されました！')
-        
-        // リダイレクト前にローディング状態を解除
-        setLoading(false)
-        
-        // リダイレクトを実行
-        window.location.href = redirectPath
-      } catch (redirectError) {
-        console.error('Redirect error:', redirectError)
-        // リダイレクトに失敗した場合でも、記事は作成されているのでエラーメッセージは表示しない
-        setLoading(false)
+      console.log('8. Determining redirect path...')
+      let redirectPath = '/'
+      switch (section) {
+        case 'invester':
+          redirectPath = '/invester_entrepreneur'
+          break
+        case 'sidebusiness':
+          redirectPath = '/sidebusiness'
+          break
+        case 'future':
+          redirectPath = '/future_world'
+          break
       }
+
+      alert('記事が正常に作成されました！')
+      window.location.href = redirectPath
+
     } catch (error: any) {
       console.error('Error in handleSubmit:', error)
       alert(error.message || '記事の作成中にエラーが発生しました')
@@ -475,32 +347,8 @@ export default function NewArticle() {
     }
   }
 
-  const addReference = () => {
-    setReferences([...references, { title: '', url: '' }])
-  }
-
-  const updateReference = (index: number, field: keyof Reference, value: string) => {
-    const newRefs = [...references]
-    newRefs[index][field] = value
-    setReferences(newRefs)
-  }
-
-  const addBlock = (type: ContentBlock['type']) => {
-    setBlocks([...blocks, {
-      type,
-      content: '',
-      metadata: type === 'link-card' ? { title: '', url: '', description: '' } : undefined
-    }]);
-  };
-
-  const updateBlock = (index: number, data: Partial<ContentBlock>) => {
-    const newBlocks = [...blocks];
-    newBlocks[index] = { ...newBlocks[index], ...data };
-    setBlocks(newBlocks);
-  };
-
   return (
-    <div className={`min-h-screen text-white ${getBackgroundColor()}`}>
+    <div className={`min-h-screen text-white ${getBackgroundColor(section)}`}>
       <div className="max-w-4xl mx-auto p-6">
         <h1 className="text-2xl font-bold mb-4">新規記事作成</h1>
         
@@ -550,9 +398,9 @@ export default function NewArticle() {
                 setCategory(e.target.value)
                 setSubCategory('')
               }}
-              className={`w-full p-2 rounded ${getFormColors()}`}
+              className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
             >
-              {getCurrentCategories().map((cat) => (
+              {getCurrentCategories(section).map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
                 </option>
@@ -565,10 +413,10 @@ export default function NewArticle() {
             <select
               value={subCategory}
               onChange={(e) => setSubCategory(e.target.value)}
-              className={`w-full p-2 rounded ${getFormColors()}`}
+              className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
             >
               <option value="">選択してください</option>
-              {getCurrentCategories().find(cat => cat.id === category)?.subsections.map((sub) => (
+              {getCurrentCategories(section).find(cat => cat.id === category)?.subsections.map((sub) => (
                 <option key={sub.slug} value={sub.title}>
                   {sub.title}
                 </option>
@@ -582,18 +430,7 @@ export default function NewArticle() {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className={`w-full p-2 rounded ${getFormColors()}`}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block mb-2">内容 (Markdown形式)</label>
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              rows={15}
-              className={`w-full p-2 rounded font-mono ${getFormColors()}`}
+              className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
               required
             />
           </div>
@@ -608,65 +445,52 @@ export default function NewArticle() {
             />
           </div>
 
-          <div className="mt-8">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium">参考サイト</h3>
-              <button
-                type="button"
-                onClick={addReference}
-                className="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200"
-              >
-                リンクを追加
-              </button>
-            </div>
-            
-            {references.map((ref, index) => (
-              <div key={index} className="space-y-4 mb-4">
-                <input
-                  type="text"
-                  placeholder="サイト名"
-                  value={ref.title}
-                  onChange={(e) => updateReference(index, 'title', e.target.value)}
-                  className="w-full p-2 border rounded"
-                />
-                <input
-                  type="url"
-                  placeholder="URL"
-                  value={ref.url}
-                  onChange={(e) => updateReference(index, 'url', e.target.value)}
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-            ))}
-          </div>
-
+          {/* ブロックエディタ */}
           <div className="space-y-6">
             {blocks.map((block, index) => (
-              <div key={index} className={`p-4 rounded-lg ${
+              <div key={block.id} className={`p-4 rounded-lg ${
                 section === 'invester' 
                   ? 'bg-blue-800/30'
                   : section === 'sidebusiness'
                   ? 'bg-green-800/30'
                   : 'bg-purple-800/30'
               }`}>
-                <div className="flex justify-between mb-4">
-                  <select
-                    value={block.type}
-                    onChange={(e) => updateBlock(index, { type: e.target.value as ContentBlock['type'] })}
-                    className={`rounded px-3 py-1 ${getFormColors()}`}
-                  >
-                    <option value="text">テキスト</option>
-                    <option value="link-card">リンクカード</option>
-                    <option value="image">画像</option>
-                    <option value="code">コード</option>
-                  </select>
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex items-center space-x-2">
+                    <select
+                      value={block.type}
+                      onChange={(e) => updateBlock(block.id, { type: e.target.value as ContentBlock['type'] })}
+                      className={`rounded px-3 py-1 text-gray-900 ${getFormColors(section)}`}
+                    >
+                      <option value="text">テキスト</option>
+                      <option value="link-card">リンクカード</option>
+                      <option value="image">画像</option>
+                      <option value="code">コード</option>
+                    </select>
+                    
+                    <div className="flex space-x-1">
+                      <button
+                        type="button"
+                        onClick={() => moveBlock(block.id, 'up')}
+                        disabled={index === 0}
+                        className="p-1 rounded bg-gray-700 hover:bg-gray-600 disabled:opacity-50"
+                      >
+                        <ArrowUp className="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => moveBlock(block.id, 'down')}
+                        disabled={index === blocks.length - 1}
+                        className="p-1 rounded bg-gray-700 hover:bg-gray-600 disabled:opacity-50"
+                      >
+                        <ArrowDown className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                  
                   <button
                     type="button"
-                    onClick={() => {
-                      const newBlocks = [...blocks];
-                      newBlocks.splice(index, 1);
-                      setBlocks(newBlocks);
-                    }}
+                    onClick={() => removeBlock(block.id)}
                     className="text-red-400 hover:text-red-300"
                   >
                     削除
@@ -676,9 +500,10 @@ export default function NewArticle() {
                 {block.type === 'text' && (
                   <textarea
                     value={block.content}
-                    onChange={(e) => updateBlock(index, { content: e.target.value })}
-                    className={`w-full p-2 rounded ${getFormColors()}`}
+                    onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                    className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
                     rows={4}
+                    placeholder="テキストを入力（Markdown形式で記述可能）"
                   />
                 )}
 
@@ -688,27 +513,27 @@ export default function NewArticle() {
                       type="text"
                       placeholder="タイトル"
                       value={block.metadata?.title || ''}
-                      onChange={(e) => updateBlock(index, {
+                      onChange={(e) => updateBlock(block.id, {
                         metadata: { ...block.metadata, title: e.target.value }
                       })}
-                      className={`w-full p-2 rounded ${getFormColors()}`}
+                      className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
                     />
                     <input
                       type="url"
                       placeholder="URL"
                       value={block.metadata?.url || ''}
-                      onChange={(e) => updateBlock(index, {
+                      onChange={(e) => updateBlock(block.id, {
                         metadata: { ...block.metadata, url: e.target.value }
                       })}
-                      className={`w-full p-2 rounded ${getFormColors()}`}
+                      className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
                     />
                     <textarea
                       placeholder="説明"
                       value={block.metadata?.description || ''}
-                      onChange={(e) => updateBlock(index, {
+                      onChange={(e) => updateBlock(block.id, {
                         metadata: { ...block.metadata, description: e.target.value }
                       })}
-                      className={`w-full p-2 rounded ${getFormColors()}`}
+                      className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
                       rows={2}
                     />
                   </div>
@@ -718,10 +543,10 @@ export default function NewArticle() {
                   <div className="space-y-3">
                     <select
                       value={block.metadata?.language || 'javascript'}
-                      onChange={(e) => updateBlock(index, {
+                      onChange={(e) => updateBlock(block.id, {
                         metadata: { ...block.metadata, language: e.target.value }
                       })}
-                      className={`w-full p-2 rounded ${getFormColors()}`}
+                      className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
                     >
                       <option value="javascript">JavaScript</option>
                       <option value="typescript">TypeScript</option>
@@ -732,10 +557,31 @@ export default function NewArticle() {
                     </select>
                     <textarea
                       value={block.content}
-                      onChange={(e) => updateBlock(index, { content: e.target.value })}
-                      className={`w-full p-2 rounded font-mono ${getFormColors()}`}
+                      onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                      className={`w-full p-2 rounded font-mono text-gray-900 ${getFormColors(section)}`}
                       rows={8}
                       placeholder="ここにコードを入力"
+                    />
+                  </div>
+                )}
+
+                {block.type === 'image' && (
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      placeholder="画像のURL"
+                      value={block.content}
+                      onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                      className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
+                    />
+                    <input
+                      type="text"
+                      placeholder="代替テキスト"
+                      value={block.metadata?.alt || ''}
+                      onChange={(e) => updateBlock(block.id, {
+                        metadata: { ...block.metadata, alt: e.target.value }
+                      })}
+                      className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
                     />
                   </div>
                 )}
@@ -781,6 +627,19 @@ export default function NewArticle() {
                 }`}
               >
                 コードを追加
+              </button>
+              <button
+                type="button"
+                onClick={() => addBlock('image')}
+                className={`px-4 py-2 rounded ${
+                  section === 'invester'
+                    ? 'bg-blue-600 hover:bg-blue-700'
+                    : section === 'sidebusiness'
+                    ? 'bg-green-600 hover:bg-green-700'
+                    : 'bg-purple-600 hover:bg-purple-700'
+                }`}
+              >
+                画像を追加
               </button>
             </div>
           </div>

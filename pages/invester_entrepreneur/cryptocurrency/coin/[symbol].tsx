@@ -1,6 +1,6 @@
 // import { withAuth } from '../../../../lib/auth'
 import Layout from '../../../../components/Layout'
-import { Header_invester } from '../../../../components/header/header'
+import { Header } from '../../../../components/header/header'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { TrendingUp, DollarSign, Clock, BarChart2 } from 'lucide-react'
@@ -97,7 +97,7 @@ function CoinDetail() {
 // getLayoutを定義してHeader_investerを使用
 CoinDetail.getLayout = function getLayout(page: React.ReactElement) {
   return (
-    <Layout header={<Header_invester />}>
+    <Layout header={<Header />}>
       {page}
     </Layout>
   )

@@ -14,7 +14,7 @@ import { GoalForm } from '../../../components/mypage/goals/goal-form'
 import { GoalProgress } from '../../../components/mypage/goals/goal-progress'
 import { ActionPlan } from '../../../components/mypage/goals/action-plan'
 import { withAuth } from '../../../lib/auth'
-import { Header_mypage } from '../../../components/header/header'
+import { Header } from '../../../components/header/header'
 import Layout from '../../../components/Layout'
 
 interface PageContent {
@@ -551,8 +551,9 @@ function MypageContent() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="flex">
-        <div className="fixed h-[calc(100vh-7rem)]">
+      <Header />
+      <div className="flex pt-8">
+        <div className="fixed h-[calc(100vh-4rem)]">
           {mounted && <ChapterMypage />}
         </div>
         <div className="flex-1 ml-64 p-8">
@@ -575,7 +576,7 @@ function MypageContent() {
 // getLayoutを定義してHeader_mypageを使用
 MypageContent.getLayout = function getLayout(page: React.ReactElement) {
   return (
-    <Layout header={<Header_mypage />}>
+    <Layout header={<Header />} title="マイページ">
       {page}
     </Layout>
   )

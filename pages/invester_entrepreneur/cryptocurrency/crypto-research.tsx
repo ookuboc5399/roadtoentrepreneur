@@ -1,6 +1,6 @@
 // import { withAuth } from '../../../lib/auth'
 import Layout from '../../../components/Layout'
-import { Header_invester } from '../../../components/header/header'
+import { Header } from '../../../components/header/header'
 import { useState, useEffect } from 'react'
 import { getTrendingCoins, getUpcomingCoins, getNewListings, searchCoins, Coin, UpcomingCoin, NewListing } from '../../../lib/crypto'
 import { Search, TrendingUp, Clock, Star } from 'lucide-react'
@@ -249,7 +249,7 @@ function CryptoResearch() {
 // getLayoutを定義してHeader_investerを使用
 CryptoResearch.getLayout = function getLayout(page: React.ReactElement) {
   return (
-    <Layout header={<Header_invester />}>
+    <Layout header={<Header />}>
       {page}
     </Layout>
   )
