@@ -110,3 +110,10 @@ const Register = () => {
 }
 
 export default Register
+
+// SSRを無効にしてクライアントサイドのみでレンダリング
+export const getServerSideProps = async () => {
+  return {
+    props: {}
+  }
+}

@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         )
         
         // レスポンスデータを整形
-        const formattedPosts = response.data.map((post: any) => ({
+        const formattedPosts = (response.data as any[]).map((post: any) => ({
           id: post.id,
           title: post.title.rendered,
           content: post.content.rendered,
@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         )
         
         // レスポンスデータを整形
-        const post = response.data
+        const post = response.data as any
         const formattedPost = {
           id: post.id,
           title: post.title.rendered,
@@ -101,7 +101,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       )
 
-      const formattedResults = response.data.map((post: any) => ({
+      const formattedResults = (response.data as any[]).map((post: any) => ({
         id: post.id,
         title: post.title.rendered,
         excerpt: post.excerpt.rendered,

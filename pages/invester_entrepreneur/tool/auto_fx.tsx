@@ -1,6 +1,6 @@
 import { withAuth } from '../../../lib/auth'
 import Layout from '../../../components/Layout'
-import { Header_invester } from '../../../components/header/header'
+import { Header } from '../../../components/header/header'
 import { useState } from 'react'
 
 function AutoFx() {
@@ -154,10 +154,10 @@ function AutoFx() {
   )
 }
 
-// getLayoutを定義してHeader_investerを使用
+// getLayoutを定義してHeaderを使用
 AutoFx.getLayout = function getLayout(page: React.ReactElement) {
   return (
-    <Layout header={<Header_invester />}>
+    <Layout header={<Header />}>
       {page}
     </Layout>
   )

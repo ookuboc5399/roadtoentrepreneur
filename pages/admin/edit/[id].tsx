@@ -78,8 +78,10 @@ function EditArticle({ user }: EditArticleProps) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (id) fetchArticle();
-  }, [id, fetchArticle]); // Added fetchArticle as a dependency
+    if (id) {
+      fetchArticle();
+    }
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function fetchArticle() {
     try {

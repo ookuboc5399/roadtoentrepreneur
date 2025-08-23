@@ -19,7 +19,7 @@ export default function Article({ category, subCategory }: { category: string, s
 
   useEffect(() => {
     fetchArticle()
-  }, [category, subCategory])
+  }, [category, subCategory]) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function fetchArticle() {
     try {

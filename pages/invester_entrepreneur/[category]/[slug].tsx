@@ -62,7 +62,7 @@ export default function Article() {
       fetchArticle()
       fetchWordPressPost()
     }
-  }, [category, slug])
+  }, [category, slug]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (article?.blocks?.some(block => block.type === 'code')) {

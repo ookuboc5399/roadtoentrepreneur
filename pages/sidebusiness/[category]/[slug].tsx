@@ -1,4 +1,4 @@
-import { Header_sidebusiness } from '../../../components/header/header'
+import { Header } from '../../../components/header/header'
 import { ChapterSidebusiness } from '../../../components/chapter/sidebusiness/chapter_sidebusiness'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -47,7 +47,7 @@ export default function SideBusinessContent() {
       fetchWordPressPost()
       fetchSupabaseArticle()
     }
-  }, [slug])
+  }, [slug]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchSupabaseArticle = async () => {
     try {
@@ -143,7 +143,7 @@ export default function SideBusinessContent() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Header_sidebusiness />
+      <Header />
       <div className="flex pt-16">
         <div className="fixed h-[calc(100vh-4rem)]">
           {mounted && <ChapterSidebusiness />}

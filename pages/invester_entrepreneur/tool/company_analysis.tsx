@@ -1,6 +1,6 @@
 import { withSubscription } from '../../../lib/auth'
 import Layout from '../../../components/Layout'
-import { Header_invester } from '../../../components/header/header'
+import { Header } from '../../../components/header/header'
 import { ChartBar, TrendingUp, Search, Database } from 'lucide-react'
 
 function CompanyAnalysis() {
@@ -83,10 +83,10 @@ function CompanyAnalysis() {
   )
 }
 
-// getLayoutを定義してHeader_investerを使用
+// getLayoutを定義してHeaderを使用
 CompanyAnalysis.getLayout = function getLayout(page: React.ReactElement) {
   return (
-    <Layout header={<Header_invester />}>
+    <Layout header={<Header />}>
       {page}
     </Layout>
   )

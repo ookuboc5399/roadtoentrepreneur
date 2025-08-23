@@ -20,7 +20,7 @@ export default function FutureWorldArticle() {
     if (slug) {
       fetchArticle()
     }
-  }, [slug])
+  }, [slug]) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function fetchArticle() {
     try {

@@ -565,7 +565,7 @@ export function withAuth<P extends object>(
         const currentPath = router.asPath;
         router.push(`/auth/login?returnTo=${encodeURIComponent(currentPath)}`);
       }
-    }, [isLoading, isAuthenticated]);
+    }, [isLoading, isAuthenticated, router]);
 
     if (isLoading || !isAuthenticated) {
       return null;
@@ -594,7 +594,7 @@ export function withSubscription<P extends object>(
           router.push('/auth/payment');
         }
       }
-    }, [isLoading, isAuthenticated, user]);
+    }, [isLoading, isAuthenticated, user, router]);
 
     if (isLoading || !isAuthenticated || !user?.subscription || user.subscription.status !== 'active') {
       return null;
@@ -659,7 +659,7 @@ export function withAdminAuth<P extends object>(
       }
 
       checkAdminAuth()
-    }, [router])
+    }, [router]) // eslint-disable-line react-hooks/exhaustive-deps
 
     if (loading) {
       return (

@@ -42,7 +42,7 @@ export default async function handler(req, res) {
         // usersテーブルにプロフィール情報を作成
         const userProfile = await createUserDebug({
           id: authData.user.id,
-          email: authData.user.email!,
+          email: authData.user.email,
           first_name,
           last_name,
           subscription: {

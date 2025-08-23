@@ -36,7 +36,7 @@ export default function EconomicIndicators() {
 
   useEffect(() => {
     fetchEconomicCalendar();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchEconomicCalendar = async () => {
     try {

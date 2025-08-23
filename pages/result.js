@@ -19,7 +19,7 @@ const Result = () => {
     if (session_id) {
       fn()
     }
-  }, [session_id])
+  }, [session_id, dispatch])
 
   return (
     <>
@@ -38,3 +38,10 @@ const Result = () => {
 }
 
 export default Result
+
+// SSRを無効にしてクライアントサイドのみでレンダリング
+export const getServerSideProps = async () => {
+  return {
+    props: {}
+  }
+}

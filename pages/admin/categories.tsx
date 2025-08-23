@@ -158,3 +158,19 @@ export const futureCategories: Category[] = [
     ]
   }
 ]
+
+// デフォルトエクスポートを追加
+export default function CategoriesPage() {
+  return (
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">カテゴリー管理</h1>
+        <div className="bg-white rounded-lg shadow p-6">
+          <p className="text-gray-600">
+            このページはカテゴリー定義のためのデータファイルです。
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}

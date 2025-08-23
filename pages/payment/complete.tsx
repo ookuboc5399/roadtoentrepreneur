@@ -79,7 +79,7 @@ export default function PaymentComplete() {
     if (router.isReady) {
       checkPaymentStatus();
     }
-  }, [router.isReady, router.query]);
+  }, [router.isReady, router.query, router, updateSubscription]);
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

@@ -246,7 +246,7 @@ function CryptoResearch() {
   )
 }
 
-// getLayoutを定義してHeader_investerを使用
+// getLayoutを定義してHeaderを使用
 CryptoResearch.getLayout = function getLayout(page: React.ReactElement) {
   return (
     <Layout header={<Header />}>
