@@ -24,7 +24,7 @@ const handleUpdate = async (email, customer_id, created) => {
   })
 
   try {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/subscription/`, {
+    await fetch('/api/account/subscription', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

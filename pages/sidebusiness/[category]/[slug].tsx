@@ -132,7 +132,7 @@ export default function SideBusinessContent() {
 
       if (postId) {
         const response = await axios.get<WordPressPost>(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/wordpress/posts/${postId}/`
+          `/api/wordpress-proxy?postId=${postId}`
         )
         setWpPost(response.data)
       }

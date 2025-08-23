@@ -1,5 +1,3 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-
 export interface Coin {
   symbol: string;
   name: string;
@@ -27,7 +25,7 @@ export interface NewListing {
 }
 
 export async function getCoinBySymbol(symbol: string): Promise<Coin> {
-  const response = await fetch(`${API_BASE_URL}/api/crypto/coins/${symbol}/`);
+  const response = await fetch(`/api/crypto/coins/${symbol}`);
   if (!response.ok) {
     throw new Error('Failed to fetch coin data');
   }
@@ -35,7 +33,7 @@ export async function getCoinBySymbol(symbol: string): Promise<Coin> {
 }
 
 export async function getTrendingCoins(): Promise<Coin[]> {
-  const response = await fetch(`${API_BASE_URL}/api/crypto/trending/`);
+  const response = await fetch('/api/crypto/trending');
   if (!response.ok) {
     throw new Error('Failed to fetch trending coins');
   }
@@ -43,7 +41,7 @@ export async function getTrendingCoins(): Promise<Coin[]> {
 }
 
 export async function searchCoins(query: string): Promise<Coin[]> {
-  const response = await fetch(`${API_BASE_URL}/api/crypto/search/?q=${encodeURIComponent(query)}`);
+  const response = await fetch(`/api/crypto/search?q=${encodeURIComponent(query)}`);
   if (!response.ok) {
     throw new Error('Failed to search coins');
   }
@@ -51,7 +49,7 @@ export async function searchCoins(query: string): Promise<Coin[]> {
 }
 
 export async function getUpcomingCoins(): Promise<UpcomingCoin[]> {
-  const response = await fetch(`${API_BASE_URL}/api/crypto/upcoming/`);
+  const response = await fetch('/api/crypto/upcoming');
   if (!response.ok) {
     throw new Error('Failed to fetch upcoming coins');
   }
@@ -59,7 +57,7 @@ export async function getUpcomingCoins(): Promise<UpcomingCoin[]> {
 }
 
 export async function getNewListings(): Promise<NewListing[]> {
-  const response = await fetch(`${API_BASE_URL}/api/crypto/new-listings/`);
+  const response = await fetch('/api/crypto/new-listings');
   if (!response.ok) {
     throw new Error('Failed to fetch new listings');
   }

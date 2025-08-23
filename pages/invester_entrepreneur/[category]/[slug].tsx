@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { supabase } from '../../../utils/supabaseClient'
+import { supabase } from '../../../lib/supabase'
 import { Header } from '../../../components/header/header'
 import ReactMarkdown from 'react-markdown'
 import Prism from 'prismjs'
@@ -11,7 +11,7 @@ import { Chapterinvester } from '../../../components/chapter/invester/chapter_in
 import axios from 'axios'
 
 interface Block {
-  type: 'text' | 'code' | 'image' | 'link-card'
+  type: 'text' | 'code' | 'image' | 'link-card' | 'youtube'
   content: string
   metadata?: {
     language?: string
@@ -85,7 +85,7 @@ export default function Article() {
 
       console.log('Starting article fetch:', { category, slug });
 
-      // Supabaseクエリの実行
+      // Supabaseクエリの実行（複数結果を許可）
       const { data, error: queryError } = await supabase
         .from('articles')
         .select(`
@@ -102,8 +102,7 @@ export default function Article() {
           section
         `)
         .eq('category', category)
-        .eq('slug', slug)
-        .single();
+        .eq('slug', slug);
 
       // エラーハンドリング
       if (queryError) {
@@ -116,28 +115,37 @@ export default function Article() {
         throw new Error(`Database error: ${queryError.message}`);
       }
 
-      // データの存在確認と構造の検証
-      if (!data) {
+      // 結果の確認
+      if (!data || data.length === 0) {
         console.error('No article found:', { category, slug });
         throw new Error('Article not found');
       }
 
-      if (!data.title || !data.category || !data.sub_category) {
-        console.error('Invalid article data:', data);
+      // 複数の結果がある場合は最初のものを使用
+      const articleData = Array.isArray(data) ? data[0] : data;
+
+      // データの存在確認と構造の検証
+      if (!articleData) {
+        console.error('No article data available:', { category, slug });
+        throw new Error('Article data not available');
+      }
+
+      if (!articleData.title || !articleData.category || !articleData.sub_category) {
+        console.error('Invalid article data:', articleData);
         throw new Error('Invalid article data structure');
       }
 
       // blocksの検証と正規化
       let normalizedBlocks: Block[] = [];
-      if (data.blocks && Array.isArray(data.blocks)) {
-        normalizedBlocks = data.blocks
+      if (articleData.blocks && Array.isArray(articleData.blocks)) {
+        normalizedBlocks = articleData.blocks
           .map(block => {
             if (
               !block ||
               typeof block !== 'object' || 
               !block.type || 
               !block.content || 
-              !['text', 'code', 'image', 'link-card'].includes(block.type)
+              !['text', 'code', 'image', 'link-card', 'youtube'].includes(block.type)
             ) {
               console.warn('Invalid block structure:', block);
               return null;
@@ -152,11 +160,11 @@ export default function Article() {
             return validBlock;
           })
           .filter((block): block is Block => block !== null);
-      } else if (data.content) {
+      } else if (articleData.content) {
         // 古い形式のcontentフィールドをblocksに変換
         normalizedBlocks = [{
           type: 'text',
-          content: data.content,
+          content: articleData.content,
           metadata: {}
         }];
       }
@@ -171,7 +179,7 @@ export default function Article() {
       }
 
       const normalizedData = {
-        ...data,
+        ...articleData,
         blocks: normalizedBlocks
       };
 
@@ -211,7 +219,7 @@ export default function Article() {
 
       if (postId) {
         const response = await axios.get<WordPressPost>(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/wordpress/posts/${postId}/`
+          `/api/wordpress-proxy?postId=${postId}`
         )
         setWpPost(response.data)
       }
@@ -237,6 +245,34 @@ export default function Article() {
             alt={block.metadata?.alt || ''}
             className="max-w-full h-auto rounded-lg"
           />
+        )
+      case 'youtube':
+        const videoId = block.content.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1]
+        return (
+          <div className="youtube-video-container">
+            {videoId ? (
+              <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                <iframe
+                  src={`https://www.youtube.com/embed/${videoId}`}
+                  title={block.metadata?.title || 'YouTube video'}
+                  className="absolute top-0 left-0 w-full h-full rounded-lg"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            ) : (
+              <div className="bg-gray-200 p-4 rounded-lg text-center">
+                <p className="text-gray-600">無効なYouTube URLです</p>
+              </div>
+            )}
+            {block.metadata?.title && (
+              <h3 className="text-lg font-semibold mt-2 mb-1">{block.metadata.title}</h3>
+            )}
+            {block.metadata?.description && (
+              <p className="text-gray-600 text-sm">{block.metadata.description}</p>
+            )}
+          </div>
         )
       case 'link-card':
         return (

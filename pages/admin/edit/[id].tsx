@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { supabase } from '../../../utils/supabaseClient'
+import { withAdminAuth } from '../../../lib/auth'
+import { User } from '../../../lib/supabase'
 
 interface Block {
   type: 'text' | 'code' | 'image'
@@ -61,7 +63,11 @@ const categories = [
   }
 ]
 
-export default function EditArticle() {
+interface EditArticleProps {
+  user?: User
+}
+
+function EditArticle({ user }: EditArticleProps) {
   const router = useRouter()
   const { id } = router.query
   const [title, setTitle] = useState('')
@@ -153,9 +159,10 @@ export default function EditArticle() {
   if (loading) return <div>Loading...</div>
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4">
-      <h1 className="text-2xl font-bold mb-6">記事の編集</h1>
-      <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="min-h-screen bg-blue-50">
+            <div className="max-w-4xl mx-auto py-8 px-4">
+        <h1 className="text-2xl font-bold mb-6 text-gray-800">記事の編集</h1>
+        <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-md">
         <div>
           <label className="block mb-2">タイトル</label>
           <input
@@ -303,6 +310,9 @@ export default function EditArticle() {
           更新
         </button>
       </form>
+      </div>
     </div>
   )
 }
+
+export default withAdminAuth(EditArticle)

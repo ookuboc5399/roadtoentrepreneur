@@ -1,4 +1,4 @@
-import { Header_sidebusiness } from '../../components/header/header'
+import { Header } from '../../components/header/header'
 import { ChapterSidebusiness } from '../../components/chapter/sidebusiness/chapter_sidebusiness'
 import { useState, useEffect } from 'react'
 
@@ -11,7 +11,7 @@ export default function Sidebusiness() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Header_sidebusiness />
+      <Header />
       <div className="flex pt-16">
         <div className="fixed h-[calc(100vh-4rem)]">
           {mounted && <ChapterSidebusiness />}

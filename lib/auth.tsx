@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useEffect, useState, createContext, useContext } from 'react';
 import type { ComponentType, FC, ReactElement } from 'react';
-import { supabase, type User, createUser, getUser, updateSubscription, updateUser } from './supabase';
+import { supabase, type User, createUser, createUserDebug, getUser, updateSubscription, updateUser } from './supabase';
 
 interface AuthUser {
   id: string;
@@ -302,9 +302,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (createError) {
         console.error('Error creating user:', createError);
+        console.error('Error details:', {
+          message: createError.message,
+          details: createError.details,
+          hint: createError.hint,
+          code: createError.code
+        });
         return {
           success: false,
-          message: 'ユーザーデータの作成に失敗しました',
+          message: `ユーザーデータの作成に失敗しました: ${createError.message}`,
         };
       }
 
@@ -381,19 +387,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         };
       }
 
-      console.log('Auth successful, creating user data');
-      const newUser = await createUser({
-        id: authData.user.id,
-        email: params.email,
-        first_name: params.firstName,
-        last_name: params.lastName,
-      });
+      console.log('Auth successful, user profile should be created automatically by trigger');
+      
+      // トリガーによってプロフィールが自動作成されるので、少し待ってから取得
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // ユーザーデータを取得
+      let newUser = await getUser(authData.user.id);
+      
+      // まだ作成されていない場合は手動で作成
+      if (!newUser) {
+        console.log('User profile not found, creating manually...');
+        newUser = await createUser({
+          id: authData.user.id,
+          email: params.email,
+          first_name: params.firstName,
+          last_name: params.lastName,
+        });
+      } else {
+        // 名前を更新
+        newUser = await updateUser(authData.user.id, {
+          first_name: params.firstName,
+          last_name: params.lastName,
+        });
+      }
 
       if (!newUser) {
         console.error('Failed to create user data');
         return {
           success: false,
-          message: 'ユーザーデータの作成に失敗しました',
+          message: 'ユーザーデータの作成に失敗しました（createUser関数でnullが返されました）',
         };
       }
 
@@ -582,6 +605,133 @@ export function withSubscription<P extends object>(
 
   WithSubscriptionComponent.displayName = `withSubscription(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
   return WithSubscriptionComponent;
+}
+
+// 管理者認証用のHOC
+export function withAdminAuth<P extends object>(
+  WrappedComponent: React.ComponentType<P>
+) {
+  return function WithAdminAuthComponent(props: P) {
+    const [user, setUser] = useState<User | null>(null)
+    const [loading, setLoading] = useState(true)
+    const [isAdmin, setIsAdmin] = useState(false)
+    const router = useRouter()
+
+    useEffect(() => {
+      const checkAdminAuth = async () => {
+        try {
+          const { data: { session }, error } = await supabase.auth.getSession()
+          
+          if (error || !session) {
+            router.push('/admin/login')
+            return
+          }
+
+          // ユーザー情報を取得
+          const { data: userData, error: userError } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', session.user.id)
+            .single()
+
+          if (userError || !userData) {
+            router.push('/admin/login')
+            return
+          }
+
+          // 管理者権限をチェック
+          const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',') || []
+          const isUserAdmin = adminEmails.includes(userData.email) || userData.role === 'admin'
+
+          if (!isUserAdmin) {
+            router.push('/admin/login?error=unauthorized')
+            return
+          }
+
+          setUser(userData)
+          setIsAdmin(true)
+        } catch (error) {
+          console.error('Admin auth error:', error)
+          router.push('/admin/login')
+        } finally {
+          setLoading(false)
+        }
+      }
+
+      checkAdminAuth()
+    }, [router])
+
+    if (loading) {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">認証中...</p>
+          </div>
+        </div>
+      )
+    }
+
+    if (!isAdmin) {
+      return null
+    }
+
+    return <WrappedComponent {...props} user={user} />
+  }
+}
+
+// 管理者認証用のフック
+export function useAdminAuth() {
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const router = useRouter()
+
+  useEffect(() => {
+    const checkAdminAuth = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession()
+        
+        if (error || !session) {
+          router.push('/admin/login')
+          return
+        }
+
+        // ユーザー情報を取得
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', session.user.id)
+          .single()
+
+        if (userError || !userData) {
+          router.push('/admin/login')
+          return
+        }
+
+        // 管理者権限をチェック
+        const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',') || []
+        const isUserAdmin = adminEmails.includes(userData.email) || userData.role === 'admin'
+
+        if (!isUserAdmin) {
+          router.push('/admin/login?error=unauthorized')
+          return
+        }
+
+        setUser(userData)
+        setIsAdmin(true)
+      } catch (error) {
+        console.error('Admin auth error:', error)
+        router.push('/admin/login')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    checkAdminAuth()
+  }, [router])
+
+  return { user, loading, isAdmin }
 }
 
 export default AuthProvider;

@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { supabase } from '../../utils/supabaseClient'
+import Link from 'next/link'
+import { supabase } from '../../lib/supabase'
 import { investerCategories, sidebusinessCategories, futureCategories, type Category } from './categories'
 import { ArrowUp, ArrowDown } from 'lucide-react'
+import { withAdminAuth } from '../../lib/auth'
+import { User } from '../../lib/supabase'
 
 // Types
 interface ContentBlock {
@@ -35,13 +38,13 @@ function getBackgroundColor(section: string): string {
 function getFormColors(section: string): string {
   switch (section) {
     case 'invester':
-      return 'bg-blue-800/50 border border-blue-700';
+      return 'bg-white border border-blue-300 text-gray-900';
     case 'sidebusiness':
-      return 'bg-green-800/50 border border-green-700';
+      return 'bg-white border border-green-300 text-gray-900';
     case 'future':
-      return 'bg-purple-800/50 border border-purple-700';
+      return 'bg-white border border-purple-300 text-gray-900';
     default:
-      return 'bg-blue-800/50 border border-blue-700';
+      return 'bg-white border border-blue-300 text-gray-900';
   }
 }
 
@@ -124,7 +127,11 @@ async function generateUniqueSlug(category: string, subCategory: string, section
   return slug;
 }
 
-export default function NewArticle() {
+interface NewArticleProps {
+  user?: User
+}
+
+function NewArticle({ user }: NewArticleProps) {
   const router = useRouter()
   const [title, setTitle] = useState('')
   const [section, setSection] = useState('invester')
@@ -135,6 +142,30 @@ export default function NewArticle() {
   const [blocks, setBlocks] = useState<ContentBlock[]>([
     { id: Date.now().toString(), type: 'text', content: '' }
   ]);
+
+  // URLパラメータから初期値を設定
+  useEffect(() => {
+    const { category: urlCategory, slug: urlSlug, title: urlTitle } = router.query
+    
+    if (urlCategory && typeof urlCategory === 'string') {
+      setCategory(urlCategory)
+    }
+    
+    if (urlTitle && typeof urlTitle === 'string') {
+      setTitle(decodeURIComponent(urlTitle))
+    }
+    
+    if (urlSlug && typeof urlSlug === 'string') {
+      // スラッグからサブカテゴリを特定
+      const investerCategory = investerCategories.find(cat => cat.id === urlCategory)
+      if (investerCategory) {
+        const subsection = investerCategory.subsections.find(sub => sub.slug === urlSlug)
+        if (subsection) {
+          setSubCategory(subsection.title)
+        }
+      }
+    }
+  }, [router.query])
 
   // セクション変更時の処理
   const handleSectionChange = (newSection: string) => {
@@ -273,9 +304,16 @@ export default function NewArticle() {
         contentLengths: blocksForDB.map(b => b.content.length)
       });
 
+      // blocksからcontentを生成
+      const content = blocksForDB
+        .filter(block => block.type === 'text')
+        .map(block => block.content)
+        .join('\n\n') || title.trim();
+
       // 記事データの準備
       const articleData = {
         title: title.trim(),
+        content: content,
         category,
         sub_category: subCategory,
         image_url: imageUrl || null,
@@ -283,8 +321,7 @@ export default function NewArticle() {
         blocks: blocksForDB,
         section,
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        user_id: null
+        updated_at: new Date().toISOString()
       };
 
       console.log('5. Prepared article data:', {
@@ -322,22 +359,8 @@ export default function NewArticle() {
         blockCount: insertedData.blocks?.length || 0
       });
 
-      console.log('8. Determining redirect path...')
-      let redirectPath = '/'
-      switch (section) {
-        case 'invester':
-          redirectPath = '/invester_entrepreneur'
-          break
-        case 'sidebusiness':
-          redirectPath = '/sidebusiness'
-          break
-        case 'future':
-          redirectPath = '/future_world'
-          break
-      }
-
       alert('記事が正常に作成されました！')
-      window.location.href = redirectPath
+      window.location.href = '/admin'
 
     } catch (error: any) {
       console.error('Error in handleSubmit:', error)
@@ -350,7 +373,19 @@ export default function NewArticle() {
   return (
     <div className={`min-h-screen text-white ${getBackgroundColor(section)}`}>
       <div className="max-w-4xl mx-auto p-6">
-        <h1 className="text-2xl font-bold mb-4">新規記事作成</h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">新規記事作成</h1>
+          <div className="flex items-center space-x-4">
+            <Link href="/admin" className="text-white/80 hover:text-white">
+              管理画面に戻る
+            </Link>
+            {user && (
+              <span className="text-sm text-white/60">
+                {user.email} ({user.first_name} {user.last_name})
+              </span>
+            )}
+          </div>
+        </div>
         
         {/* セクション切り替えボタン */}
         <div className="flex space-x-4 mb-8">
@@ -398,7 +433,7 @@ export default function NewArticle() {
                 setCategory(e.target.value)
                 setSubCategory('')
               }}
-              className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
+              className={`w-full p-2 rounded ${getFormColors(section)}`}
             >
               {getCurrentCategories(section).map((cat) => (
                 <option key={cat.id} value={cat.id}>
@@ -413,7 +448,7 @@ export default function NewArticle() {
             <select
               value={subCategory}
               onChange={(e) => setSubCategory(e.target.value)}
-              className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
+              className={`w-full p-2 rounded ${getFormColors(section)}`}
             >
               <option value="">選択してください</option>
               {getCurrentCategories(section).find(cat => cat.id === category)?.subsections.map((sub) => (
@@ -430,7 +465,7 @@ export default function NewArticle() {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
+              className={`w-full p-2 rounded ${getFormColors(section)}`}
               required
             />
           </div>
@@ -460,7 +495,7 @@ export default function NewArticle() {
                     <select
                       value={block.type}
                       onChange={(e) => updateBlock(block.id, { type: e.target.value as ContentBlock['type'] })}
-                      className={`rounded px-3 py-1 text-gray-900 ${getFormColors(section)}`}
+                      className={`rounded px-3 py-1 ${getFormColors(section)}`}
                     >
                       <option value="text">テキスト</option>
                       <option value="link-card">リンクカード</option>
@@ -501,7 +536,7 @@ export default function NewArticle() {
                   <textarea
                     value={block.content}
                     onChange={(e) => updateBlock(block.id, { content: e.target.value })}
-                    className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
+                    className={`w-full p-2 rounded ${getFormColors(section)}`}
                     rows={4}
                     placeholder="テキストを入力（Markdown形式で記述可能）"
                   />
@@ -516,7 +551,7 @@ export default function NewArticle() {
                       onChange={(e) => updateBlock(block.id, {
                         metadata: { ...block.metadata, title: e.target.value }
                       })}
-                      className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
+                      className={`w-full p-2 rounded ${getFormColors(section)}`}
                     />
                     <input
                       type="url"
@@ -525,7 +560,7 @@ export default function NewArticle() {
                       onChange={(e) => updateBlock(block.id, {
                         metadata: { ...block.metadata, url: e.target.value }
                       })}
-                      className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
+                      className={`w-full p-2 rounded ${getFormColors(section)}`}
                     />
                     <textarea
                       placeholder="説明"
@@ -533,7 +568,7 @@ export default function NewArticle() {
                       onChange={(e) => updateBlock(block.id, {
                         metadata: { ...block.metadata, description: e.target.value }
                       })}
-                      className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
+                      className={`w-full p-2 rounded ${getFormColors(section)}`}
                       rows={2}
                     />
                   </div>
@@ -546,7 +581,7 @@ export default function NewArticle() {
                       onChange={(e) => updateBlock(block.id, {
                         metadata: { ...block.metadata, language: e.target.value }
                       })}
-                      className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
+                      className={`w-full p-2 rounded ${getFormColors(section)}`}
                     >
                       <option value="javascript">JavaScript</option>
                       <option value="typescript">TypeScript</option>
@@ -558,7 +593,7 @@ export default function NewArticle() {
                     <textarea
                       value={block.content}
                       onChange={(e) => updateBlock(block.id, { content: e.target.value })}
-                      className={`w-full p-2 rounded font-mono text-gray-900 ${getFormColors(section)}`}
+                      className={`w-full p-2 rounded font-mono ${getFormColors(section)}`}
                       rows={8}
                       placeholder="ここにコードを入力"
                     />
@@ -572,7 +607,7 @@ export default function NewArticle() {
                       placeholder="画像のURL"
                       value={block.content}
                       onChange={(e) => updateBlock(block.id, { content: e.target.value })}
-                      className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
+                      className={`w-full p-2 rounded ${getFormColors(section)}`}
                     />
                     <input
                       type="text"
@@ -581,7 +616,7 @@ export default function NewArticle() {
                       onChange={(e) => updateBlock(block.id, {
                         metadata: { ...block.metadata, alt: e.target.value }
                       })}
-                      className={`w-full p-2 rounded text-gray-900 ${getFormColors(section)}`}
+                      className={`w-full p-2 rounded ${getFormColors(section)}`}
                     />
                   </div>
                 )}
@@ -662,3 +697,5 @@ export default function NewArticle() {
     </div>
   )
 }
+
+export default withAdminAuth(NewArticle)

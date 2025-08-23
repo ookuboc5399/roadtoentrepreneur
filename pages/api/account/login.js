@@ -1,58 +1,54 @@
-import cookie from 'cookie'
+import { supabase } from '../../../lib/supabase'
 
-export const login = async (req, res) => {
+export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { email, password } = req.body
 
-    const body = JSON.stringify({
-      email,
-      password,
-    })
+    if (!email || !password) {
+      return res.status(400).json({
+        error: 'メールアドレスとパスワードが必要です'
+      })
+    }
 
     try {
-      const apiRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/login/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: body,
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       })
 
-      const data = await apiRes.json()
+      if (error) {
+        console.error('Supabase auth error:', error)
+        return res.status(401).json({
+          error: 'ログインに失敗しました。メールアドレスまたはパスワードが正しくありません。'
+        })
+      }
 
-      if (apiRes.status === 200) {
-        res.setHeader('Set-Cookie', [
-          cookie.serialize('access', data.access, {
-            httpOnly: false,
-            secure: true,
-            sameSite: 'Lax',
-            path: '/',
-            maxAge: 60 * 60, // 1時間
-          }),
-          cookie.serialize('refresh', data.refresh, {
-            httpOnly: false,
-            secure: true,
-            sameSite: 'Lax',
-            path: '/',
-            maxAge: 60 * 60 * 24 * 3, // 3日
-          }),
-        ])
-
+      if (data.user && data.session) {
         return res.status(200).json({
           success: 'ログインに成功しました',
+          user: {
+            id: data.user.id,
+            email: data.user.email,
+          },
+          session: {
+            access_token: data.session.access_token,
+            refresh_token: data.session.refresh_token,
+            expires_at: data.session.expires_at,
+          }
         })
       } else {
-        return res.status(apiRes.status).json({
-          error: 'ログインに失敗しました',
+        return res.status(401).json({
+          error: 'ログインに失敗しました'
         })
       }
     } catch (err) {
+      console.error('Login error:', err)
       return res.status(500).json({
-        error: 'ログインに失敗しました',
+        error: 'サーバーエラーが発生しました'
       })
     }
   } else {
     res.setHeader('Allow', ['POST'])
-    return res.status(405).json({ error: `Method ${req.method} now allowed` })
+    return res.status(405).json({ error: `Method ${req.method} not allowed` })
   }
 }

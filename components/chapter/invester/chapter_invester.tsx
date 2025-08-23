@@ -152,9 +152,8 @@ function ChapterTemplate({ title, backLink, sections }: ChapterTemplateProps) {
         title: 'FX',
         icon: <LineChart className="h-5 w-5 mr-3" />,
         subsections: [
-          { title: '株式投資とは', slug: 'stock-detail' },
+          { title: 'FXとは', slug: 'fx-detail' },
           { title: 'MT4の準備', slug: 'fx-start' },
-          { title: '銘柄の選び方', slug: 'stock-pick' },
           { title: 'トレードサポート', slug: 'trade-support' }
         ]
       },

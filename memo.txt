@@ -1,0 +1,307 @@
+# Road to Entrepreneur NextJS プロジェクト仕様書
+
+## 📋 プロジェクト概要
+投資・起業家向けの学習プラットフォーム
+- 株式投資、FX、仮想通貨などの投資知識
+- ブログ、動画編集、物販などのサイドビジネス
+- AI、Web3.0などの未来技術に関する情報提供
+
+## 🏗️ 技術構成
+
+### フロントエンド
+- **フレームワーク**: Next.js (TypeScript)
+- **スタイリング**: Tailwind CSS
+- **UI コンポーネント**: Lucide React (アイコン)
+- **マークダウン**: ReactMarkdown
+- **シンタックスハイライト**: Prism.js
+- **アニメーション**: Framer Motion
+
+### バックエンド・インフラ
+- **メインデータベース**: Supabase (PostgreSQL)
+- **認証**: Supabase Auth
+- **ストレージ**: Supabase Storage
+- **外部API**: Django API (補助データ)
+- **ホスティング**: Azure Static Web Apps (推定)
+
+### データソース構成
+- **記事コンテンツ**: Supabase `articles`テーブル
+- **ユーザー管理**: Supabase `users`テーブル + Auth
+- **ニュースデータ**: Django API (`/api/posts/`)
+- **経済指標**: Django API (`/api2/economic-calendar/`)
+- **TradingView**: Django API (`/api2/tradingview-news/`)
+- **暗号通貨データ**: Django API (crypto関連)
+- **WordPress連携**: Django API (`/api/wordpress/`)
+
+## 🗄️ データベース設計
+
+### Supabase Tables
+
+#### `articles` テーブル
+```sql
+- id (UUID, PRIMARY KEY)
+- title (TEXT) - 記事タイトル
+- content (TEXT) - 旧形式のコンテンツ
+- blocks (JSONB) - 新形式の構造化コンテンツ
+- category (TEXT) - カテゴリ
+- sub_category (TEXT) - サブカテゴリ
+- slug (TEXT, UNIQUE) - URL用スラッグ
+- section (TEXT) - セクション
+- image_url (TEXT) - 画像URL
+- created_at (TIMESTAMPTZ)
+- updated_at (TIMESTAMPTZ)
+```
+
+#### `users` テーブル
+```sql
+- id (UUID, PRIMARY KEY, FK to auth.users)
+- email (TEXT, UNIQUE)
+- first_name (TEXT)
+- last_name (TEXT)
+- bio (TEXT)
+- occupation (TEXT)
+- location (TEXT)
+- website (TEXT)
+- twitter (TEXT)
+- avatar_url (TEXT)
+- birth_date (DATE)
+- subscription (JSONB) - サブスクリプション情報
+- created_at (TIMESTAMPTZ)
+- updated_at (TIMESTAMPTZ)
+```
+
+### 記事のブロック構造 (JSONB)
+```json
+[
+  {
+    "type": "text|code|image|link-card",
+    "content": "コンテンツ",
+    "metadata": {
+      "language": "プログラミング言語 (code用)",
+      "alt": "代替テキスト (image用)",
+      "title": "タイトル (link-card用)",
+      "url": "URL (link-card用)",
+      "description": "説明 (link-card用)"
+    }
+  }
+]
+```
+
+## 🎯 主要機能
+
+### 1. 認証システム
+- **プロバイダー**: Supabase Auth
+- **機能**: 
+  - メール/パスワード認証
+  - サインアップ・ログイン
+  - メール確認（設定可能）
+  - パスワードリセット
+  - プロフィール管理
+- **保護レベル**:
+  - 認証必須ページ (`withAuth`)
+  - サブスクリプション必須ページ (`withSubscription`)
+
+### 2. コンテンツ管理システム (CMS)
+
+#### 管理画面 (`/admin/`)
+- **記事管理**: `/admin/` - 記事一覧・削除
+- **記事作成**: `/admin/new` - 新規記事作成
+- **記事編集**: `/admin/edit/[id]` - 既存記事編集
+- **管理者ログイン**: `/admin/login`
+
+#### ブロックエディター機能
+- **テキストブロック**: マークダウン対応
+- **コードブロック**: シンタックスハイライト付き
+- **画像ブロック**: Supabase Storageにアップロード
+- **リンクカードブロック**: リッチなリンク表示
+- **ブロック操作**: 追加・削除・順序変更
+
+### 3. コンテンツセクション
+
+#### 投資・起業家 (`/invester_entrepreneur/`)
+- **株式投資**: 基礎知識・銘柄選択・チャート分析
+- **FX**: MT4準備・通貨ペア・トレードサポート
+- **仮想通貨**: 基礎知識・口座開設・主要通貨
+- **債券・コモディティ**: 債券・金・銀・石油
+- **システムトレード**: EA開発・自動売買戦略
+- **マインド**: 投資心理・リスク管理
+
+#### サイドビジネス (`/sidebusiness/`)
+- **動画**: 編集技術・サムネイル作成
+- **ブログ**: SEO・ライティング・WordPress
+- **物販**: 国内転売・eBay・Shopify
+
+#### 未来の世界 (`/future_world/`)
+- **AI・人工知能**: 機械学習・ディープラーニング
+- **Web3.0**: ブロックチェーン・DeFi・NFT・DAO
+
+### 4. ユーザー機能
+
+#### マイページ (`/mypage/`)
+- **ダッシュボード**: 学習進捗・統計
+- **プロフィール管理**: 個人情報・アバター
+- **セキュリティ設定**: パスワード変更
+- **通知設定**: メール通知の管理
+- **財務管理**: 資産チャート・予算管理・支出分析
+- **目標設定**: 目標設定・進捗管理・アクションプラン
+
+### 5. 決済システム
+- **プロバイダー**: Stripe
+- **機能**: サブスクリプション管理・決済処理
+- **ページ**: `/auth/payment` - 決済ページ
+- **完了ページ**: `/payment/complete` - 決済完了
+
+### 6. ツール・分析機能
+
+#### 投資ツール (`/invester_entrepreneur/tool/`)
+- **自動FX**: `/tool/auto_fx` - 自動トレードツール
+- **企業分析**: `/tool/company_analysis` - 財務分析
+- **経済指標**: `/tool/ecnomic_indicators` - 経済カレンダー
+
+#### 暗号通貨 (`/invester_entrepreneur/cryptocurrency/`)
+- **リサーチ**: `/cryptocurrency/crypto-research`
+- **個別通貨**: `/cryptocurrency/coin/[symbol]`
+
+## 🔗 主要なルーティング
+
+### パブリックページ
+- `/` - ホームページ
+- `/auth/login` - ログイン
+- `/auth/signup` - サインアップ
+- `/auth/callback` - 認証コールバック
+
+### 保護されたページ
+- `/invester_entrepreneur/[category]/[slug]` - 記事詳細
+- `/sidebusiness/[category]/[slug]` - サイドビジネス記事
+- `/future_world/[slug]` - 未来技術記事
+- `/mypage/` - ユーザーダッシュボード
+
+### 管理者ページ
+- `/admin/` - 管理ダッシュボード
+- `/admin/new` - 記事作成
+- `/admin/edit/[id]` - 記事編集
+
+## 🌐 API エンドポイント
+
+### 内部API (`/api/`)
+- `/api/account/login` - ログイン
+- `/api/account/register` - ユーザー登録
+- `/api/account/verify` - メール確認
+- `/api/stripe/create-payment-intent` - 決済Intent作成
+- `/api/webhooks/` - Webhook処理
+
+### 外部Django API
+- `${NEXT_PUBLIC_API_URL}/api/posts/` - ニュース一覧
+- `${NEXT_PUBLIC_API_URL}/api2/economic-calendar/` - 経済カレンダー
+- `${NEXT_PUBLIC_API_URL}/api2/tradingview-news/` - TradingViewニュース
+- `${NEXT_PUBLIC_API_URL}/api/wordpress/posts/` - WordPress連携
+
+## 🔐 セキュリティ・認証
+
+### Supabase RLS (Row Level Security)
+```sql
+-- users テーブルのポリシー
+- "Enable select for users": 認証済みユーザーは全ユーザー情報を参照可能
+- "Enable insert for authentication": 匿名・認証済みユーザーは挿入可能
+- "Enable update for users": 自分のデータのみ更新可能
+- "Enable delete for users": 自分のデータのみ削除可能
+
+-- articles テーブル: 現在RLS有効（記事は公開コンテンツ）
+```
+
+### 環境変数
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://ovkxytqxuxfbidxljhfc.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=[匿名キー]
+NEXT_PUBLIC_API_URL=[Django APIのURL]
+SUPABASE_SERVICE_ROLE_KEY=[サービスロールキー（サーバーサイド用）]
+```
+
+## 📊 既存データ状況
+
+### 記事数（カテゴリ別）
+- system: 13記事 (システムトレード関連)
+- mind: 8記事 (投資マインド)
+- bond: 6記事 (債券・コモディティ)
+- fx: 4記事 (FX関連)
+- cryptocurrency: 2記事 (仮想通貨)
+- future_world: 2記事 (未来技術)
+- その他: ea, web3, buppan, stock, blog 各1記事
+
+### ユーザー数
+- 5名のユーザーが登録済み
+- 全員メール確認完了済み
+
+## 🚀 デプロイメント
+
+### ホスティング
+- **Azure Static Web Apps** 対応設定あり
+- **設定ファイル**: `staticwebapp.config.json`
+- **Next.js設定**: `trailingSlash: true` (Azure用)
+
+### ビルド・開発
+```bash
+npm run dev    # 開発サーバー起動
+npm run build  # 本番ビルド
+npm start      # 本番サーバー起動
+```
+
+## 🔧 カスタマイズ・拡張ポイント
+
+### 1. 新しいカテゴリ追加
+- `pages/admin/categories.tsx` でカテゴリ定義を追加
+- 対応するページルーティングを作成
+
+### 2. 新しいブロックタイプ
+- ブロックタイプの型定義を拡張
+- エディターコンポーネントを追加
+- レンダリングロジックを実装
+
+### 3. 外部API連携
+- 新しい外部データソースとの連携
+- Django APIに新しいエンドポイント追加
+
+### 4. 認証プロバイダー追加
+- Supabase Authで他の認証プロバイダー（Google, GitHub等）を有効化
+- フロントエンドでの認証フロー実装
+
+## ⚠️ 既知の問題・制限事項
+
+### 1. メール確認機能
+- 現在、開発環境では全ユーザーのメール確認済み状態に設定
+- 本番環境ではSMTP設定が必要
+
+### 2. 画像ストレージ
+- Supabase Storageの容量制限に注意
+- 大量の画像アップロード時は圧縮機能の検討
+
+### 3. Django API依存
+- ニュースや経済データはDjango APIに依存
+- APIダウン時の代替データ表示機能が必要
+
+### 4. SEO最適化
+- 動的ルートのメタデータ生成の改善余地
+- サイトマップ自動生成の実装検討
+
+## 📝 開発・運用メモ
+
+### 開発時の注意点
+1. Supabaseの環境変数設定確認
+2. Django APIサーバーの起動状態確認
+3. 記事作成時は管理画面(`/admin/`)を使用
+4. RLSポリシーの変更は慎重に実施
+
+### パフォーマンス考慮事項
+1. 記事一覧の無限スクロール実装検討
+2. 画像の遅延読み込み最適化
+3. Supabaseクエリのインデックス最適化
+
+### バックアップ・運用
+1. Supabaseの自動バックアップ設定確認
+2. 記事データのエクスポート機能検討
+3. ユーザーデータのGDPR対応
+
+---
+
+最終更新日: 2024年1月
+作成者: AI Assistant
+プロジェクト: Road to Entrepreneur NextJS2

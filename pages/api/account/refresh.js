@@ -1,57 +1,47 @@
-import cookie from 'cookie'
+import { supabase } from '../../../lib/supabase'
 
-export const refresh = async (req, res) => {
-  if (req.method === 'GET') {
-    const cookies = cookie.parse(req.headers.cookie ?? '')
-    const refresh = cookies.refresh ?? false
+export default async function handler(req, res) {
+  if (req.method === 'POST') {
+    const { refresh_token } = req.body
 
-    if (refresh === false) {
-      return res.status(401).json({
-        error: 'リフレッシュトークンがありません',
+    if (!refresh_token) {
+      return res.status(400).json({
+        error: 'リフレッシュトークンが必要です',
       })
     }
 
-    const body = JSON.stringify({
-      refresh,
-    })
-
     try {
-      const apiRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/refresh/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: body,
+      // Supabaseでリフレッシュトークンを使用してセッションを更新
+      const { data, error } = await supabase.auth.refreshSession({
+        refresh_token: refresh_token
       })
 
-      const data = await apiRes.json()
-
-      if (apiRes.status === 200) {
-        res.setHeader('Set-Cookie', [
-          cookie.serialize('access', data.access, {
-            httpOnly: false,
-            secure: true,
-            sameSite: 'Lax',
-            path: '/',
-            maxAge: 60 * 60 * 24, // 1日
-          }),
-        ])
-
-        return res.status(200).json({
-          success: 'リフレッシュトークン取得に成功しました',
-        })
-      } else {
-        return res.status(apiRes.status).json({
-          error: 'リフレッシュトークン取得に失敗しました',
+      if (error || !data.session) {
+        return res.status(401).json({
+          error: 'リフレッシュトークンが無効です',
         })
       }
+
+      return res.status(200).json({
+        success: 'トークンの更新に成功しました',
+        session: {
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token,
+          expires_at: data.session.expires_at,
+        },
+        user: {
+          id: data.user.id,
+          email: data.user.email,
+        }
+      })
     } catch (err) {
+      console.error('Refresh token error:', err)
       return res.status(500).json({
-        error: 'リフレッシュトークン取得に失敗しました',
+        error: 'トークンの更新に失敗しました',
       })
     }
   } else {
-    res.setHeader('Allow', ['GET'])
+    res.setHeader('Allow', ['POST'])
     return res.status(405).json({ error: `Method ${req.method} not allowed` })
   }
 }

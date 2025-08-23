@@ -40,7 +40,7 @@ export default function EconomicIndicators() {
 
   const fetchEconomicCalendar = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api2/economic-calendar/`);
+      const response = await fetch('/api/external/economic-calendar');
       if (!response.ok) throw new Error('Failed to fetch economic calendar');
       const data = await response.json();
       setAllEvents(data);

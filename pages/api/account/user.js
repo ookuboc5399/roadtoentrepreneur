@@ -1,35 +1,46 @@
-import cookie from 'cookie'
+import { supabase, getUser } from '../../../lib/supabase'
 
-export const getUser = async (req, res) => {
+export default async function handler(req, res) {
   if (req.method === 'GET') {
-    const cookies = cookie.parse(req.headers.cookie ?? '')
-    const access = cookies.access ?? false
+    const token = req.headers.authorization?.replace('Bearer ', '')
 
-    if (access === false) {
+    if (!token) {
       return res.status(401).json({
         error: 'アクセストークンがありません',
       })
     }
 
     try {
-      const apiRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/user/`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${access}`,
-        },
-      })
-      const data = await apiRes.json()
+      // Supabaseでトークンを検証し、ユーザー情報を取得
+      const { data: { user }, error } = await supabase.auth.getUser(token)
 
-      if (apiRes.status === 200) {
-        return res.status(200).json({
-          user: data.user,
-        })
-      } else {
-        return res.status(apiRes.status).json({
-          error: 'ユーザー情報取得に失敗しました',
+      if (error || !user) {
+        return res.status(401).json({
+          error: '認証に失敗しました',
         })
       }
+
+      // usersテーブルからプロフィール情報を取得
+      const userProfile = await getUser(user.id)
+
+      if (!userProfile) {
+        // プロフィールが存在しない場合、基本情報のみ返す
+        return res.status(200).json({
+          user: {
+            id: user.id,
+            email: user.email,
+            first_name: user.user_metadata?.first_name || '',
+            last_name: user.user_metadata?.last_name || '',
+            subscription: { plan: 'free', status: 'inactive' }
+          }
+        })
+      }
+
+      return res.status(200).json({
+        user: userProfile
+      })
     } catch (err) {
+      console.error('Get user error:', err)
       return res.status(500).json({
         error: 'ユーザー情報取得に失敗しました',
       })

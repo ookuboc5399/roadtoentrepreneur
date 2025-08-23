@@ -1,45 +1,74 @@
-import cookie from 'cookie'
+import { supabase } from '../../../lib/supabase'
 
-export const verify = async (req, res) => {
-  if (req.method === 'GET') {
-    const cookies = cookie.parse(req.headers.cookie ?? '')
-    const access = cookies.access ?? false
+export default async function handler(req, res) {
+  if (req.method === 'POST') {
+    const { token } = req.body
 
-    if (access === false) {
-      return res.status(403).json({
+    if (!token) {
+      return res.status(400).json({
+        error: 'トークンが必要です',
+      })
+    }
+
+    try {
+      // Supabaseでトークンを検証
+      const { data: { user }, error } = await supabase.auth.getUser(token)
+
+      if (error || !user) {
+        return res.status(401).json({
+          error: '認証に失敗しました',
+        })
+      }
+
+      return res.status(200).json({
+        success: '認証に成功しました',
+        user: {
+          id: user.id,
+          email: user.email,
+          email_confirmed: user.email_confirmed_at !== null
+        }
+      })
+    } catch (err) {
+      console.error('Verify token error:', err)
+      return res.status(500).json({
+        error: '認証に失敗しました',
+      })
+    }
+  } else if (req.method === 'GET') {
+    // GET メソッドの場合、Authorizationヘッダーからトークンを取得
+    const token = req.headers.authorization?.replace('Bearer ', '')
+
+    if (!token) {
+      return res.status(401).json({
         error: 'アクセストークンがありません',
       })
     }
 
-    const body = JSON.stringify({
-      token: access,
-    })
-
     try {
-      const apiRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/verify/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: body,
-      })
+      const { data: { user }, error } = await supabase.auth.getUser(token)
 
-      if (apiRes.status === 200) {
-        return res.status(200).json({
-          success: '認証に成功しました',
-        })
-      } else {
-        return res.status(apiRes.status).json({
+      if (error || !user) {
+        return res.status(401).json({
           error: '認証に失敗しました',
         })
       }
+
+      return res.status(200).json({
+        success: '認証に成功しました',
+        user: {
+          id: user.id,
+          email: user.email,
+          email_confirmed: user.email_confirmed_at !== null
+        }
+      })
     } catch (err) {
+      console.error('Verify token error:', err)
       return res.status(500).json({
         error: '認証に失敗しました',
       })
     }
   } else {
-    res.setHeader('Allow', ['GET'])
+    res.setHeader('Allow', ['GET', 'POST'])
     return res.status(405).json({ error: `Method ${req.method} not allowed` })
   }
 }

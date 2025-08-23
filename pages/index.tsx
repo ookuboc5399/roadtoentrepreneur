@@ -333,9 +333,8 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   }
 
   try {
-    const response = await axios.get<TradingViewNewsItem[]>(
-      `${process.env.NEXT_PUBLIC_API_URL}/api2/tradingview-news/`
-    );
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const response = await axios.get<TradingViewNewsItem[]>(`${baseUrl}/api/external/tradingview-news`);
     if (response.data && Array.isArray(response.data)) {
       tradingViewNews = response.data;
     }

@@ -82,35 +82,102 @@ export async function getUser(userId: string): Promise<User | null> {
 
 export async function createUser(params: CreateUserParams): Promise<User | null> {
   try {
+    console.log('createUser called with params:', {
+      id: params.id,
+      email: params.email,
+      first_name: params.first_name,
+      last_name: params.last_name
+    });
+
     // セッションの確認
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
     if (sessionError) {
-      console.error('Session error:', sessionError);
+      console.error('Session error in createUser:', sessionError);
       return null;
     }
 
+    if (!session) {
+      console.error('No active session in createUser');
+      return null;
+    }
+
+    console.log('Session found, user ID:', session.user.id);
+
+    const insertData = {
+      id: params.id,
+      email: params.email,
+      first_name: params.first_name,
+      last_name: params.last_name,
+      subscription: params.subscription || { plan: 'free', status: 'inactive' },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+
+    console.log('Attempting to insert user data:', insertData);
+
     const { data, error } = await supabase
       .from('users')
-      .upsert({
-        id: params.id,
-        email: params.email,
-        first_name: params.first_name,
-        last_name: params.last_name,
-        subscription: params.subscription || { plan: 'free', status: 'inactive' },
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      })
+      .upsert(insertData)
       .select()
       .single();
 
     if (error) {
       console.error('Error creating user:', error);
+      console.error('Error details:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code
+      });
       return null;
     }
 
+    console.log('User created successfully:', data);
     return data;
   } catch (error) {
     console.error('Error in createUser:', error);
+    return null;
+  }
+}
+
+// デバッグ用：RLSポリシーをバイパスしてユーザーを作成
+export async function createUserDebug(params: CreateUserParams): Promise<User | null> {
+  try {
+    console.log('createUserDebug called with params:', params);
+
+    // サービスロールキーを使用してRLSをバイパス
+    const supabaseAdmin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
+    const insertData = {
+      id: params.id,
+      email: params.email,
+      first_name: params.first_name,
+      last_name: params.last_name,
+      subscription: params.subscription || { plan: 'free', status: 'inactive' },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+
+    console.log('Attempting to insert user data with admin client:', insertData);
+
+    const { data, error } = await supabaseAdmin
+      .from('users')
+      .upsert(insertData)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error in createUserDebug:', error);
+      return null;
+    }
+
+    console.log('User created successfully with admin client:', data);
+    return data;
+  } catch (error) {
+    console.error('Error in createUserDebug:', error);
     return null;
   }
 }
