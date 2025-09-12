@@ -27,7 +27,7 @@ const back_start = "/invester_entrepreneur/engel_investment_chapter"
 
 
 interface Subsection {
-  title: string;
+  title: string | React.ReactNode;
   slug: string;
 }
 
@@ -98,18 +98,30 @@ function ChapterTemplate({ title, backLink, sections }: ChapterTemplateProps) {
                     {openSection === section.id && (
                       <div className="ml-6 mt-1 space-y-1 max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-transparent">
                         {section.subsections.map((subsection) => (
-                          <Link 
-                            key={subsection.slug} 
-                            href={`/invester_entrepreneur/${section.id}/${subsection.slug}`}
-                          >
-                            <div className={`flex items-center px-4 py-2 rounded-lg transition-colors
-                              ${router.pathname === `/invester_entrepreneur/${section.id}/${subsection.slug}`
-                                ? 'bg-blue-800/50 text-white'
-                                : 'text-white/70 hover:bg-blue-800/30 hover:text-white'}`}
-                            >
-                              <span className="text-sm">{subsection.title}</span>
-                            </div>
-                          </Link>
+                          <React.Fragment key={subsection.slug}>
+                            {subsection.slug.startsWith('http') ? (
+                              <a
+                                href={subsection.slug}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={`flex items-center px-4 py-2 rounded-lg transition-colors text-white/70 hover:bg-blue-800/30 hover:text-white`}
+                              >
+                                <span className="text-sm">{subsection.title}</span>
+                              </a>
+                            ) : (
+                              <Link
+                                href={`/invester_entrepreneur/${section.id}/${subsection.slug}`}
+                              >
+                                <div className={`flex items-center px-4 py-2 rounded-lg transition-colors
+                                  ${router.pathname === `/invester_entrepreneur/${section.id}/${subsection.slug}`
+                                    ? 'bg-blue-800/50 text-white'
+                                    : 'text-white/70 hover:bg-blue-800/30 hover:text-white'}`}
+                                >
+                                  <span className="text-sm">{subsection.title}</span>
+                                </div>
+                              </Link>
+                            )}
+                          </React.Fragment>
                         ))}
                       </div>
                     )}
@@ -229,8 +241,38 @@ function ChapterTemplate({ title, backLink, sections }: ChapterTemplateProps) {
         icon: <Target className="h-5 w-5 mr-3" />,
         subsections: [
           { title: '経済指標', slug: 'ecnomic_indicators' },
-          { title: '自動売買', slug: 'auto_fx' },
-          { title: '企業分析', slug: 'company_analysis' }
+          { 
+            title: (
+              <div className="flex flex-col w-full">
+                <div className="flex items-center justify-between w-full">
+                  <span>自動売買（NeoAlgo）</span>
+                  <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded-md border border-red-600 shadow-lg transform hover:scale-105 transition-transform">
+                    FUTURE
+                  </span>
+                </div>
+                <div className="text-xs text-amber-600 font-medium mt-1 ml-1">
+                  ⚡ FUTURE プラン限定
+                </div>
+              </div>
+            ), 
+            slug: 'auto_fx' 
+          },
+          { 
+            title: (
+              <div className="flex flex-col w-full">
+                <div className="flex items-center justify-between w-full">
+                  <span>企業分析（BizLens）</span>
+                  <span className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white text-xs font-bold px-2 py-1 rounded-md border border-purple-600 shadow-lg transform hover:scale-105 transition-transform">
+                    PREMIUM
+                  </span>
+                </div>
+                <div className="text-xs text-amber-600 font-medium mt-1 ml-1">
+                  🚀 PREMIUM プラン限定
+                </div>
+              </div>
+            ), 
+            slug: 'https://biz-lens-frontend-c9q7.vercel.app/login' 
+          }
         ]
       }
     ]

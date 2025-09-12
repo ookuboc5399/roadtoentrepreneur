@@ -5,7 +5,8 @@ let stripePromise: Promise<Stripe | null> | null = null;
 
 export const getStripe = () => {
   if (!stripePromise) {
-    const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+    // 環境変数からStripeパブリックキーを取得（改行を除去）
+    const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.replace(/\n/g, '').replace(/\\n/g, '');
     if (!stripePublishableKey) {
       throw new Error('Stripe publishable key is not set');
     }

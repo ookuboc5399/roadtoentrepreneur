@@ -274,6 +274,7 @@ const Home: NextPageWithLayout<HomeProps> = ({ newss, tradingViewNews }) => {
               </motion.div>
             ))}
           </motion.div>
+          {/* 金融関連ニュースのみを表示 */}
           <motion.div
             variants={fadeInUp}
             className="mt-8 pt-4"
@@ -327,14 +328,16 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   let tradingViewNews: TradingViewNewsItem[] = [];
 
   try {
-    newss = await getAllPostsData();
+    const allNews = await getAllPostsData();
+    // 金融関連のニュースのみをフィルタリング
+    newss = allNews.filter(news => news.category === '金融');
   } catch (error) {
     console.error('Error fetching posts:', error);
   }
 
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const response = await axios.get<TradingViewNewsItem[]>(`${baseUrl}/api/external/tradingview-news`);
+    const response = await axios.get<TradingViewNewsItem[]>(`${baseUrl}/api/external/tradingview-news?limit=4`);
     if (response.data && Array.isArray(response.data)) {
       tradingViewNews = response.data;
     }

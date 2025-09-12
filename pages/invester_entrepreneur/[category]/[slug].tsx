@@ -85,6 +85,10 @@ export default function Article() {
 
       console.log('Starting article fetch:', { category, slug });
 
+      // Supabase接続の確認
+      console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+      console.log('Supabase Key exists:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+
       // Supabaseクエリの実行（複数結果を許可）
       const { data, error: queryError } = await supabase
         .from('articles')
@@ -118,6 +122,58 @@ export default function Article() {
       // 結果の確認
       if (!data || data.length === 0) {
         console.error('No article found:', { category, slug });
+        console.log('Creating fallback article for stock/stock-detail');
+        
+        // stock/stock-detailの場合のフォールバック記事を作成
+        if (category === 'stock' && slug === 'stock-detail') {
+          const fallbackArticle = {
+            id: 'fallback-stock-detail',
+            title: '株式投資の基礎知識',
+            category: 'stock',
+            sub_category: 'stock-detail',
+            blocks: [
+              {
+                type: 'text' as const,
+                content: `# 株式投資の基礎知識
+
+株式投資を始める前に、基本的な知識を身につけましょう。
+
+## 株式とは
+
+株式とは、株式会社が資金調達のために発行する証券のことです。株式を購入することで、その企業の「株主」となり、企業の成長に参加することができます。
+
+## 株式投資のメリット
+
+1. **高いリターン**: 長期的に見て、株式は他の資産クラスと比較して高いリターンを期待できます
+2. **配当金**: 多くの企業が株主に配当金を支払います
+3. **株主優待**: 企業によっては株主優待制度を提供しています
+
+## リスクについて
+
+株式投資には以下のリスクがあります：
+
+- **価格変動リスク**: 株価は常に変動します
+- **流動性リスク**: 売りたい時に売れない可能性があります
+- **信用リスク**: 企業が破綻する可能性があります
+
+## 投資を始める前に
+
+1. **投資方針の決定**: どのような投資スタイルを取るかを決めましょう
+2. **資金計画**: 余裕資金で投資を行いましょう
+3. **知識の習得**: 継続的に学習を続けましょう
+
+投資は自己責任で行ってください。`,
+                metadata: {}
+              }
+            ]
+          };
+          
+          console.log('Using fallback article:', fallbackArticle);
+          setArticle(fallbackArticle);
+          setLoading(false);
+          return;
+        }
+        
         throw new Error('Article not found');
       }
 

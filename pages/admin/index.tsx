@@ -3,6 +3,7 @@ import { supabase } from '../../lib/supabase'
 import Link from 'next/link'
 import { withAdminAuth } from '../../lib/auth'
 import { User } from '../../lib/supabase'
+import LibraryManagement from '../../components/admin/LibraryManagement'
 import { 
   Users, 
   FileText, 
@@ -143,7 +144,7 @@ const chapterStructure = [
 ]
 
 function AdminIndex({ user }: AdminIndexProps) {
-  const [activeTab, setActiveTab] = useState<'articles' | 'users'>('articles')
+  const [activeTab, setActiveTab] = useState<'articles' | 'users' | 'library'>('articles')
   const [articles, setArticles] = useState<Article[]>([])
   const [users, setUsers] = useState<UserData[]>([])
   const [loading, setLoading] = useState(true)
@@ -261,6 +262,17 @@ function AdminIndex({ user }: AdminIndexProps) {
             >
               <Users className="h-4 w-4 mr-2" />
               ユーザー管理 ({users.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('library')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center ${
+                activeTab === 'library'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <BookOpen className="h-4 w-4 mr-2" />
+              図書館管理
             </button>
           </nav>
         </div>
@@ -410,6 +422,11 @@ function AdminIndex({ user }: AdminIndexProps) {
               )}
             </div>
           </div>
+        )}
+
+        {/* 図書館管理タブ */}
+        {activeTab === 'library' && (
+          <LibraryManagement />
         )}
 
         {/* ユーザー管理タブ */}

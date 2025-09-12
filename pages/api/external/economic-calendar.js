@@ -1,86 +1,107 @@
-// 経済指標カレンダーAPI
-// Django APIから取得していた経済指標データをNext.jsで提供
+
+// fetch is available natively in Node.js 18+
+
+// FMPの国コードを日本語にマッピング
+const countryMap = {
+  "JP": "日本",
+  "US": "米国",
+  "EZ": "ユーロ圏",
+  "CN": "中国",
+  "GB": "英国",
+  "DE": "ドイツ",
+  "FR": "フランス",
+  "AU": "オーストラリア",
+  "CA": "カナダ",
+  "CH": "スイス",
+};
+
+// FMPの重要度を内部的な値にマッピング
+const impactMap = {
+  "High": "high",
+  "Medium": "medium",
+  "Low": "low",
+};
+
+// 日付をYYYY-MM-DD形式の文字列に変換するヘルパー関数
+const formatDate = (date) => {
+  return date.toISOString().split('T')[0];
+};
 
 export default async function handler(req, res) {
-  if (req.method === 'GET') {
-    try {
-      // 実際の実装では外部の経済指標APIやWebスクレイピングを使用
-      // ここでは模擬データを返す例を示します
-      
-      // 現在の日付を取得
-      const today = new Date()
-      const dateStr = today.toISOString().split('T')[0]
-      
-      // 模擬的な経済指標データ
-      const mockEconomicData = {
-        [dateStr]: [
-          {
-            id: 1,
-            time: "08:30",
-            country: "日本",
-            event: "消費者物価指数 (前年同月比)",
-            impact: "high",
-            forecast: "2.5%",
-            previous: "2.3%",
-            actual: null,
-            description: "インフレ率を示す重要な指標"
-          },
-          {
-            id: 2,
-            time: "21:30",
-            country: "米国",
-            event: "非農業部門雇用者数",
-            impact: "high",
-            forecast: "180K",
-            previous: "175K", 
-            actual: null,
-            description: "米国の雇用状況を示す最重要指標"
-          },
-          {
-            id: 3,
-            time: "16:00",
-            country: "ユーロ圏",
-            event: "GDP (前期比)",
-            impact: "medium",
-            forecast: "0.3%",
-            previous: "0.2%",
-            actual: null,
-            description: "経済成長率を示す指標"
-          }
-        ]
-      }
-      
-      // 未来の日付のデータも生成
-      for (let i = 1; i <= 7; i++) {
-        const futureDate = new Date(today)
-        futureDate.setDate(today.getDate() + i)
-        const futureDateStr = futureDate.toISOString().split('T')[0]
-        
-        mockEconomicData[futureDateStr] = [
-          {
-            id: i + 10,
-            time: "14:00",
-            country: "日本",
-            event: `経済指標${i}`,
-            impact: i % 3 === 0 ? "high" : i % 2 === 0 ? "medium" : "low",
-            forecast: `${(Math.random() * 5).toFixed(1)}%`,
-            previous: `${(Math.random() * 5).toFixed(1)}%`,
-            actual: null,
-            description: `模擬経済指標データ ${i}`
-          }
-        ]
-      }
+  if (req.method !== 'GET') {
+    res.setHeader('Allow', ['GET']);
+    return res.status(405).json({ error: `Method ${req.method} not allowed` });
+  }
 
-      res.status(200).json(mockEconomicData)
-    } catch (error) {
-      console.error('Economic calendar API error:', error)
-      res.status(500).json({ 
-        error: '経済指標データの取得に失敗しました',
-        details: error.message 
-      })
+  const apiKey = process.env.FMP_KEY;
+  if (!apiKey) {
+    console.error('FMP API key is not configured.');
+    return res.status(500).json({ error: 'APIキーが設定されていません。' });
+  }
+
+  try {
+    // 過去90日から未来90日までのデータを取得
+    const today = new Date();
+    const fromDate = new Date();
+    fromDate.setDate(today.getDate() - 90);
+    const toDate = new Date();
+    toDate.setDate(today.getDate() + 90);
+
+    const from = formatDate(fromDate);
+    const to = formatDate(toDate);
+
+    const url = `https://financialmodelingprep.com/stable/economic-calendar?from=${from}&to=${to}&apikey=${apiKey}`;
+
+    const apiRes = await fetch(url);
+
+    if (!apiRes.ok) {
+      const errorBody = await apiRes.text();
+      console.error('FMP API error:', apiRes.status, errorBody);
+      if (errorBody.includes("is not valid") || errorBody.includes("plan") || apiRes.status === 403) {
+        return res.status(403).json({
+          error: 'APIキーが無効か、この機能へのアクセス権がありません。FMPのプランを確認してください。',
+          details: errorBody
+        });
+      }
+      throw new Error(`Failed to fetch data from FMP API. Status: ${apiRes.status}`);
     }
-  } else {
-    res.setHeader('Allow', ['GET'])
-    res.status(405).json({ error: `Method ${req.method} not allowed` })
+
+    const data = await apiRes.json();
+
+    if (!Array.isArray(data)) {
+      console.error('Unexpected data format from FMP API:', data);
+      throw new Error('FMP APIから予期しない形式のデータが返されました。');
+    }
+
+    // フロントエンドが期待する形式にデータを整形
+    const formattedData = data.reduce((acc, event) => {
+      const eventDate = event.date.split(' ')[0];
+      if (!eventDate) return acc;
+
+      const formattedEvent = {
+        time: event.date.split(' ')[1]?.substring(0, 5) || 'N/A',
+        country: countryMap[event.country] || event.country,
+        event: event.eventName,
+        impact: impactMap[event.impact] || 'low',
+        actual: event.actual,
+        forecast: event.forecast,
+        previous: event.previous,
+      };
+
+      if (!acc[eventDate]) {
+        acc[eventDate] = [];
+      }
+      acc[eventDate].push(formattedEvent);
+      return acc;
+    }, {});
+
+    res.status(200).json(formattedData);
+
+  } catch (error) {
+    console.error('Economic calendar API error:', error);
+    res.status(500).json({
+      error: '経済指標データの取得に失敗しました。',
+      details: error.message
+    });
   }
 }

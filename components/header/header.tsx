@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
-import { Menu, User } from 'lucide-react'
+import { Menu, User, BarChart3 } from 'lucide-react'
 import { MarketTicker } from './market-ticker'
 import { useAuth } from '../../lib/auth';
 
@@ -94,6 +94,20 @@ export function Header() {
                                   </div>
                                 </Link>
                               </li>
+                              <li>
+                                <Link 
+                                  href="/library" 
+                                  className="group"
+                                  onClick={() => setIsOpen(false)}
+                                >
+                                  <div className='flex items-center text-gray-600 hover:text-blue-600 transition-colors whitespace-nowrap'>
+                                    <svg className="mr-3 w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span className="font-medium">図書館</span>
+                                  </div>
+                                </Link>
+                              </li>
                             </ul>
                           </div>
                           <div>
@@ -118,6 +132,13 @@ export function Header() {
                       </div>
                     )}
                   </div>
+
+                  <Link href="/dashboard" className="group">
+                    <div className="flex flex-col items-center">
+                      <BarChart3 className="w-6 h-6 text-gray-600 group-hover:text-blue-600 transition-colors" />
+                      <span className="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors">Dashboard</span>
+                    </div>
+                  </Link>
 
                   <Link href="/mypage/account/profile" className="group">
                     <div className="flex flex-col items-center">

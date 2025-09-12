@@ -1,4 +1,3 @@
-import { withSubscription } from '../../../lib/auth'
 import Layout from '../../../components/Layout'
 import { Header } from '../../../components/header/header'
 import { ChartBar, TrendingUp, Search, Database } from 'lucide-react'
@@ -92,4 +91,4 @@ CompanyAnalysis.getLayout = function getLayout(page: React.ReactElement) {
   )
 }
 
-export default withSubscription(CompanyAnalysis)
+export default CompanyAnalysis

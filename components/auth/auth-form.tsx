@@ -98,7 +98,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         if (result.success) {
           console.log('Login successful, preparing to redirect...');
           const returnTo = router.query.returnTo as string;
-          const redirectPath = returnTo || '/future_world/history/history/';
+          const redirectPath = returnTo || '/dashboard';
           console.log('Redirecting to:', redirectPath);
           
           try {
