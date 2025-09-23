@@ -2,7 +2,7 @@ import { Header } from '../../components/header/header'
 import { Chapterinvester } from '../../components/chapter/invester/chapter_invester'
 import YouTubeSection from '../../components/youtube/YouTubeSection'
 import { youtubeVideos } from '../../data/youtubeVideos'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { 
   ArrowLeftCircle, 
@@ -29,58 +29,100 @@ export default function InvesterEntrepreneur() {
 
   const sections = [
     {
-      id: 'stocks',
+      id: 'stock',
       title: '株式投資',
       icon: <TrendingUp className="h-5 w-5 mr-3" />,
       subsections: [
-        { title: '株式投資の基礎', slug: 'stock-basics' },
-        { title: '銘柄選び', slug: 'stock-selection' },
-        { title: 'テクニカル分析', slug: 'technical-analysis' },
-        { title: 'ファンダメンタル分析', slug: 'fundamental-analysis' },
+        { title: '株式投資とは', slug: 'stock-detail' },
+        { title: '株式投資の始め方', slug: 'stock-start' },
+        { title: '銘柄の選び方', slug: 'stock-pick' },
+        { title: 'チャート分析', slug: 'stock-chart' }
       ]
     },
     {
-      id: 'crypto',
-      title: '暗号通貨',
+      id: 'fx',
+      title: 'FX',
+      icon: <TrendingUp className="h-5 w-5 mr-3" />,
+      subsections: [
+        { title: 'FXとは', slug: 'fx-detail' },
+        { title: 'MT4の準備', slug: 'fx-start' },
+        { title: 'トレードサポート', slug: 'trade-support' }
+      ]
+    },
+    {
+      id: 'cryptocurrency',
+      title: '仮想通貨',
       icon: <DollarSign className="h-5 w-5 mr-3" />,
       subsections: [
-        { title: '暗号通貨の基礎', slug: 'crypto-basics' },
-        { title: 'DeFi入門', slug: 'defi-intro' },
-        { title: 'NFT投資', slug: 'nft-investment' },
-        { title: 'リスク管理', slug: 'risk-management' },
+        { title: '仮想通貨とは', slug: 'cryptocurrency-detail' },
+        { title: '口座開設', slug: 'account-support' },
+        { title: 'ビットコイン', slug: 'btc' },
+        { title: 'イーサリアム', slug: 'eth' },
+        { title: '仮想通貨リサーチ', slug: 'crypto-research' },
       ]
     },
     {
-      id: 'realestate',
-      title: '不動産投資',
+      id: 'bond',
+      title: '債権・コモディディ',
       icon: <Building className="h-5 w-5 mr-3" />,
       subsections: [
-        { title: '不動産投資の基礎', slug: 'realestate-basics' },
-        { title: '物件選び', slug: 'property-selection' },
-        { title: '融資・資金調達', slug: 'financing' },
-        { title: '管理・運営', slug: 'management' },
+        { title: '債権について', slug: 'bond-detail' },
+        { title: 'コモディティについて', slug: 'commodity-detail' },
+        { title: '金', slug: 'gold' },
+        { title: '銀', slug: 'silver' },
+        { title: '石油', slug: 'oil' },
       ]
     },
     {
-      id: 'business',
-      title: '起業',
+      id: 'management',
+      title: '経営',
       icon: <Target className="h-5 w-5 mr-3" />,
       subsections: [
-        { title: 'ビジネスプラン', slug: 'business-plan' },
-        { title: '資金調達', slug: 'fundraising' },
-        { title: 'マーケティング', slug: 'marketing' },
-        { title: 'チーム構築', slug: 'team-building' },
+        { title: '飲食店経営について', slug: 'restaurant-management' },
+        { title: 'FL比率', slug: 'fl-ratio' },
+        { title: 'プロダクトアウトとマーケットイン', slug: 'product-market' }
       ]
     },
     {
-      id: 'analysis',
-      title: '分析ツール',
+      id: 'mind',
+      title: 'マインド',
+      icon: <Target className="h-5 w-5 mr-3" />,
+      subsections: [
+        { title: 'お金持ちの思考法', slug: 'thinking-like-a-rich' },
+        { title: '勝つための準備', slug: 'preparing-to-win' },
+        { title: '他人に認めてもらう必要はない', slug: 'no-need-for-approval' },
+        { title: '品格を備える', slug: 'cultivating-dignity' },
+        { title: '孤独に耐える', slug: 'enduring-solitude' },
+        { title: 'トレードで大事なこと', slug: 'important-in-trade' },
+        { title: 'ビジョナリーカンパニー', slug: 'visionary-company' },
+        { title: 'お金持ちになるために', slug: 'becoming-rich' },
+        { title: '時代の潮流に乗る', slug: 'riding-the-trend' },
+        { title: 'やってのける', slug: 'getting-it-done' },
+        { title: '資金管理とリスクリワード', slug: 'fund-management-risk-reward' }
+      ]
+    },
+    {
+      id: 'ea',
+      title: 'EA',
       icon: <BarChart3 className="h-5 w-5 mr-3" />,
       subsections: [
-        { title: '財務分析', slug: 'financial-analysis' },
-        { title: '市場分析', slug: 'market-analysis' },
-        { title: 'リスク分析', slug: 'risk-analysis' },
-        { title: 'ポートフォリオ管理', slug: 'portfolio-management' },
+        { title: 'EA1(MACD・Moving Average)', slug: 'ea_macd_ma' },
+        { title: 'EA2(一目均衡表システム)', slug: 'ea_ichimoku' },
+        { title: 'EA3', slug: 'ea3' },
+        { title: 'EA4(平均足システム・NY_Box)', slug: 'ea4' },
+        { title: 'EA5(「早起きは5ピップの得」システム)', slug: 'ea5' },
+        { title: 'EA6(ボリンジャーバンドシステム)', slug: 'ea6' },
+        { title: 'EA7(定型文)', slug: 'ea7' }
+      ]
+    },
+    {
+      id: 'tool',
+      title: 'tool',
+      icon: <BarChart3 className="h-5 w-5 mr-3" />,
+      subsections: [
+        { title: '経済指標', slug: 'ecnomic_indicators' },
+        { title: '自動売買（NeoAlgo）', slug: 'https://neoalgo2.vercel.app/dashboard' },
+        { title: '企業分析（BizLens）', slug: 'https://biz-lens-frontend-c9q7.vercel.app/login' }
       ]
     }
   ]
@@ -194,15 +236,28 @@ export default function InvesterEntrepreneur() {
                   {openSection === section.id && (
                     <div className="ml-6 mt-1 space-y-1 max-h-48 overflow-y-auto">
                       {section.subsections.map((subsection) => (
-                        <Link 
-                          key={subsection.slug} 
-                          href={`/invester_entrepreneur/${section.id}/${subsection.slug}`}
-                          onClick={closeMobileMenu}
-                        >
-                          <div className="flex items-center px-4 py-3 rounded-lg transition-colors text-white/70 hover:bg-blue-800/30 hover:text-white">
-                            <span className="text-sm">{subsection.title}</span>
-                          </div>
-                        </Link>
+                        <React.Fragment key={subsection.slug}>
+                          {subsection.slug.startsWith('http') ? (
+                            <a
+                              href={subsection.slug}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={closeMobileMenu}
+                              className="flex items-center px-4 py-3 rounded-lg transition-colors text-white/70 hover:bg-blue-800/30 hover:text-white"
+                            >
+                              <span className="text-sm">{subsection.title}</span>
+                            </a>
+                          ) : (
+                            <Link 
+                              href={`/invester_entrepreneur/${section.id}/${subsection.slug}`}
+                              onClick={closeMobileMenu}
+                            >
+                              <div className="flex items-center px-4 py-3 rounded-lg transition-colors text-white/70 hover:bg-blue-800/30 hover:text-white">
+                                <span className="text-sm">{subsection.title}</span>
+                              </div>
+                            </Link>
+                          )}
+                        </React.Fragment>
                       ))}
                     </div>
                   )}
