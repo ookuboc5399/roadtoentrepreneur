@@ -65,7 +65,7 @@ function MypageContent() {
           const daysTo100 = calculateDaysTo100();
 
           return (
-            <div className="max-w-3xl mx-auto space-y-8">
+            <div className="w-full space-y-8">
               {daysTo100 !== null && (
                 <div className="bg-blue-50 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold text-blue-900 mb-2">
@@ -131,7 +131,7 @@ function MypageContent() {
           };
 
           return (
-            <div className="max-w-4xl mx-auto">
+            <div className="w-full">
               <GoalProgress goals={sampleGoals} onUpdateGoal={handleUpdateGoal} />
             </div>
           );
@@ -185,7 +185,7 @@ function MypageContent() {
           };
 
           return (
-            <div className="max-w-4xl mx-auto">
+            <div className="w-full">
               <ActionPlan
                 actions={sampleActions}
                 goals={sampleGoals}
@@ -413,7 +413,7 @@ function MypageContent() {
           };
 
           return (
-            <div className="max-w-3xl mx-auto">
+            <div className="w-full">
               <ProfileForm onSubmit={handleSubmit} />
             </div>
           );
@@ -457,7 +457,7 @@ function MypageContent() {
           };
 
           return (
-            <div className="max-w-3xl mx-auto">
+            <div className="w-full">
               <SecuritySettings
                 settings={sampleSettings}
                 onUpdateSettings={handleUpdateSettings}
@@ -526,7 +526,7 @@ function MypageContent() {
           };
 
           return (
-            <div className="max-w-3xl mx-auto">
+            <div className="w-full">
               <NotificationSettings
                 channels={channels}
                 categories={categories}
@@ -553,16 +553,19 @@ function MypageContent() {
     <div className="min-h-screen bg-gray-100">
       <Header />
       <div className="flex pt-8">
-        <div className="fixed h-[calc(100vh-4rem)]">
+        {/* デスクトップ用サイドバー */}
+        <div className="hidden lg:block fixed h-[calc(100vh-4rem)]">
           {mounted && <ChapterMypage />}
         </div>
-        <div className="flex-1 ml-64 p-8">
-          <div className="bg-white rounded-lg shadow-sm p-6">
+        
+        {/* メインコンテンツエリア */}
+        <div className="flex-1 lg:ml-64 p-4 lg:p-8">
+          <div className="bg-white rounded-lg shadow-sm p-4 lg:p-6">
             <div className="flex items-center mb-6">
               {pageContent.icon}
-              <h1 className="text-2xl font-bold ml-3">{pageContent.title}</h1>
+              <h1 className="text-xl lg:text-2xl font-bold ml-3">{pageContent.title}</h1>
             </div>
-            <p className="text-gray-600 mb-8">{pageContent.description}</p>
+            <p className="text-gray-600 mb-6 lg:mb-8 text-sm lg:text-base">{pageContent.description}</p>
             <div className="prose max-w-none">
               {pageContent.content}
             </div>

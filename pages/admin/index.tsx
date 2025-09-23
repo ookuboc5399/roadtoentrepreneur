@@ -196,7 +196,7 @@ function AdminIndex({ user }: AdminIndexProps) {
     <div className="min-h-screen bg-gray-50">
       {/* ヘッダー */}
       <div className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center space-x-4">
               <h1 className="text-2xl font-bold text-gray-900">管理者ダッシュボード</h1>
@@ -237,7 +237,7 @@ function AdminIndex({ user }: AdminIndexProps) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <div className="w-full py-6 px-4 sm:px-6 lg:px-8">
         {/* タブ */}
         <div className="mb-6">
           <nav className="flex space-x-8">

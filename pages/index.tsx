@@ -66,9 +66,9 @@ const Home: NextPageWithLayout<HomeProps> = ({ newss, tradingViewNews }) => {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       {/* ヒーローセクション */}
       <div className="relative overflow-hidden bg-white">
-        <div className="max-w-7xl mx-auto">
+        <div className="w-full">
           <div className="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-            <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 lg:mt-16 lg:px-8 xl:mt-20">
+            <main className="mt-10 mx-auto w-full px-4 sm:mt-12 sm:px-6 lg:mt-16 lg:px-8 xl:mt-20">
               <motion.div
                 initial="hidden"
                 animate="visible"
@@ -130,7 +130,7 @@ const Home: NextPageWithLayout<HomeProps> = ({ newss, tradingViewNews }) => {
 
       {/* 特徴セクション */}
       <div className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <motion.div
             ref={ref}
             initial="hidden"
@@ -205,7 +205,7 @@ const Home: NextPageWithLayout<HomeProps> = ({ newss, tradingViewNews }) => {
 
       {/* ニュースセクション */}
       <div className="py-12 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"
             animate={controls}
@@ -291,7 +291,7 @@ const Home: NextPageWithLayout<HomeProps> = ({ newss, tradingViewNews }) => {
         variants={fadeInUp}
         className="bg-blue-700"
       >
-        <div className="max-w-2xl mx-auto text-center py-16 px-4 sm:py-20 sm:px-6 lg:px-8">
+        <div className="w-full text-center py-16 px-4 sm:py-20 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
             <span className="block">投資の未来を始めましょう</span>
             <span className="block">今すぐ無料で始められます</span>

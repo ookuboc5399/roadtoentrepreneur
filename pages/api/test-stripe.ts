@@ -63,11 +63,10 @@ export default async function handler(
         cleanKeys: {
           secretKeyStartsWith: cleanSecretKey?.substring(0, 10) || 'NOT SET',
           publishableKeyStartsWith: cleanPublishableKey?.substring(0, 10) || 'NOT SET',
-        },
-           });
-   }
-   */
- } catch (error) {
+        }
+      });
+    }
+  } catch (error) {
     console.error('Stripe test error:', error);
     return res.status(500).json({
       success: false,

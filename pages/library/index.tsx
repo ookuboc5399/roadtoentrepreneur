@@ -159,7 +159,7 @@ export default function Library() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
         {/* ヘッダー */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">図書館</h1>
@@ -224,17 +224,17 @@ export default function Library() {
               {/* カバー画像 */}
               <div className="relative">
                 <img
-                  src={book.cover_image || '/images/book.png'}
+                  src={book.coverImage || '/images/book.png'}
                   alt={book.title}
                   className="w-full h-48 object-cover"
                 />
                 <div className="absolute top-2 right-2 flex gap-1">
-                  {book.has_audio && (
+                  {book.hasAudio && (
                     <div className="bg-blue-500 text-white p-1 rounded-full">
                       <Headphones className="w-4 h-4" />
                     </div>
                   )}
-                  {book.has_video && (
+                  {book.hasVideo && (
                     <div className="bg-red-500 text-white p-1 rounded-full">
                       <Play className="w-4 h-4" />
                     </div>
@@ -293,12 +293,12 @@ export default function Library() {
                       要約を読む
                     </button>
                   </Link>
-                  {book.has_audio && (
+                  {book.hasAudio && (
                     <button className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-700 transition-colors">
                       <Headphones className="w-4 h-4" />
                     </button>
                   )}
-                  {book.has_video && (
+                  {book.hasVideo && (
                     <button className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors">
                       <Play className="w-4 h-4" />
                     </button>

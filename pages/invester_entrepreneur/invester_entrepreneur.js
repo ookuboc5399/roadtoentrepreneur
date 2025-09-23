@@ -3,27 +3,121 @@ import { Chapterinvester } from '../../components/chapter/invester/chapter_inves
 import YouTubeSection from '../../components/youtube/YouTubeSection'
 import { youtubeVideos } from '../../data/youtubeVideos'
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { 
+  ArrowLeftCircle, 
+  ChevronDown,
+  ChevronRight,
+  TrendingUp,
+  Building,
+  DollarSign,
+  BarChart3,
+  PieChart,
+  Target,
+  Menu,
+  X
+} from 'lucide-react'
 
 export default function InvesterEntrepreneur() {
   const [mounted, setMounted] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [openSection, setOpenSection] = useState(null)
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
+  const sections = [
+    {
+      id: 'stocks',
+      title: '株式投資',
+      icon: <TrendingUp className="h-5 w-5 mr-3" />,
+      subsections: [
+        { title: '株式投資の基礎', slug: 'stock-basics' },
+        { title: '銘柄選び', slug: 'stock-selection' },
+        { title: 'テクニカル分析', slug: 'technical-analysis' },
+        { title: 'ファンダメンタル分析', slug: 'fundamental-analysis' },
+      ]
+    },
+    {
+      id: 'crypto',
+      title: '暗号通貨',
+      icon: <DollarSign className="h-5 w-5 mr-3" />,
+      subsections: [
+        { title: '暗号通貨の基礎', slug: 'crypto-basics' },
+        { title: 'DeFi入門', slug: 'defi-intro' },
+        { title: 'NFT投資', slug: 'nft-investment' },
+        { title: 'リスク管理', slug: 'risk-management' },
+      ]
+    },
+    {
+      id: 'realestate',
+      title: '不動産投資',
+      icon: <Building className="h-5 w-5 mr-3" />,
+      subsections: [
+        { title: '不動産投資の基礎', slug: 'realestate-basics' },
+        { title: '物件選び', slug: 'property-selection' },
+        { title: '融資・資金調達', slug: 'financing' },
+        { title: '管理・運営', slug: 'management' },
+      ]
+    },
+    {
+      id: 'business',
+      title: '起業',
+      icon: <Target className="h-5 w-5 mr-3" />,
+      subsections: [
+        { title: 'ビジネスプラン', slug: 'business-plan' },
+        { title: '資金調達', slug: 'fundraising' },
+        { title: 'マーケティング', slug: 'marketing' },
+        { title: 'チーム構築', slug: 'team-building' },
+      ]
+    },
+    {
+      id: 'analysis',
+      title: '分析ツール',
+      icon: <BarChart3 className="h-5 w-5 mr-3" />,
+      subsections: [
+        { title: '財務分析', slug: 'financial-analysis' },
+        { title: '市場分析', slug: 'market-analysis' },
+        { title: 'リスク分析', slug: 'risk-analysis' },
+        { title: 'ポートフォリオ管理', slug: 'portfolio-management' },
+      ]
+    }
+  ]
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false)
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       <div className="flex">
-        <div className="w-64 flex-shrink-0">
+        {/* デスクトップ用サイドバー */}
+        <div className="hidden lg:block w-64 flex-shrink-0">
           {mounted && <Chapterinvester />}
         </div>
-        <div className="flex-1">
+        
+        {/* メインコンテンツエリア */}
+        <div className="flex-1 lg:ml-0">
+          {/* モバイル用チャプター選択ボタン */}
+          <div className="lg:hidden p-4 bg-white border-b">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              <span>チャプターを選択</span>
+            </button>
+          </div>
+          
           {/* メインコンテンツエリア */}
-          <div className="p-8 bg-white">
-            <h1 className="text-3xl font-bold mb-4 text-gray-900">投資・起業コンテンツへようこそ</h1>
+          <div className="p-4 sm:p-6 lg:p-8 bg-white">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-900">投資・起業コンテンツへようこそ</h1>
             <div className="prose max-w-none text-gray-600">
-              <p className="text-lg leading-relaxed">
+              <p className="text-base sm:text-lg leading-relaxed">
                 このセクションでは、投資や起業に関する重要な知識や
                 実践的なアプローチについて探求します。
                 専門家による教育動画で、あなたの投資・起業スキルを向上させましょう。
@@ -35,25 +129,25 @@ export default function InvesterEntrepreneur() {
           <YouTubeSection videos={youtubeVideos} />
           
           {/* 追加情報セクション */}
-          <div className="p-8 bg-white border-t">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900">学習のポイント</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-blue-50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-3 text-blue-900">基礎から応用まで</h3>
-                  <p className="text-blue-700">
+          <div className="p-4 sm:p-6 lg:p-8 bg-white border-t">
+            <div className="w-full">
+              <h2 className="text-xl sm:text-2xl font-bold mb-6 text-gray-900">学習のポイント</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                <div className="bg-blue-50 p-4 sm:p-6 rounded-lg">
+                  <h3 className="text-base sm:text-lg font-semibold mb-3 text-blue-900">基礎から応用まで</h3>
+                  <p className="text-sm sm:text-base text-blue-700">
                     初心者向けの基本概念から、上級者向けの高度な戦略まで、段階的に学習できます。
                   </p>
                 </div>
-                <div className="bg-green-50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-3 text-green-900">実践的な内容</h3>
-                  <p className="text-green-700">
+                <div className="bg-green-50 p-4 sm:p-6 rounded-lg">
+                  <h3 className="text-base sm:text-lg font-semibold mb-3 text-green-900">実践的な内容</h3>
+                  <p className="text-sm sm:text-base text-green-700">
                     理論だけでなく、実際の投資・起業に役立つ実践的なノウハウを提供します。
                   </p>
                 </div>
-                <div className="bg-purple-50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-3 text-purple-900">最新トレンド</h3>
-                  <p className="text-purple-700">
+                <div className="bg-purple-50 p-4 sm:p-6 rounded-lg">
+                  <h3 className="text-base sm:text-lg font-semibold mb-3 text-purple-900">最新トレンド</h3>
+                  <p className="text-sm sm:text-base text-purple-700">
                     暗号通貨、DeFi、最新の投資手法など、時代の先端を行く情報を提供します。
                   </p>
                 </div>
@@ -62,6 +156,62 @@ export default function InvesterEntrepreneur() {
           </div>
         </div>
       </div>
+
+      {/* モバイル用メニュー */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden fixed inset-0 z-50 bg-black/50" onClick={closeMobileMenu}>
+          <div className="fixed left-0 top-0 h-full w-80 max-w-[85vw] bg-gradient-to-b from-blue-900 to-blue-950 border-r border-blue-800/50 flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="p-4 flex-shrink-0">
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-lg font-medium text-white/90">投資・起業</span>
+                <button
+                  onClick={closeMobileMenu}
+                  className="p-2 rounded-full hover:bg-blue-800/50 transition-colors"
+                >
+                  <X className="h-6 w-6 text-white/70" />
+                </button>
+              </div>
+            </div>
+
+            <nav className="flex-1 overflow-y-auto px-4 pb-4 space-y-1">
+              {sections.map((section) => (
+                <div key={section.id}>
+                  <button
+                    onClick={() => setOpenSection(openSection === section.id ? null : section.id)}
+                    className={`w-full flex items-center justify-between px-4 py-4 rounded-lg transition-colors
+                      ${openSection === section.id ? 'bg-blue-800/50 text-white' : 'text-white/70 hover:bg-blue-800/30 hover:text-white'}`}
+                  >
+                    <div className="flex items-center">
+                      {section.icon}
+                      <span className="text-base font-medium ml-3">{section.title}</span>
+                    </div>
+                    {openSection === section.id ? 
+                      <ChevronDown className="h-5 w-5" /> : 
+                      <ChevronRight className="h-5 w-5" />
+                    }
+                  </button>
+                  
+                  {openSection === section.id && (
+                    <div className="ml-6 mt-1 space-y-1 max-h-48 overflow-y-auto">
+                      {section.subsections.map((subsection) => (
+                        <Link 
+                          key={subsection.slug} 
+                          href={`/invester_entrepreneur/${section.id}/${subsection.slug}`}
+                          onClick={closeMobileMenu}
+                        >
+                          <div className="flex items-center px-4 py-3 rounded-lg transition-colors text-white/70 hover:bg-blue-800/30 hover:text-white">
+                            <span className="text-sm">{subsection.title}</span>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </nav>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

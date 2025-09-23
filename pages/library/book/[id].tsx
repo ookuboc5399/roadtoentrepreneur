@@ -246,7 +246,7 @@ export default function BookDetail() {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header />
-        <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="w-full px-4 py-8">
           <div className="text-center">
             <p className="text-gray-600">本が見つかりませんでした</p>
             <Link href="/library">
@@ -264,7 +264,7 @@ export default function BookDetail() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
         {/* 戻るボタン */}
         <Link href="/library">
           <button className="flex items-center gap-2 text-gray-600 hover:text-blue-600 mb-6">
@@ -280,7 +280,7 @@ export default function BookDetail() {
               {/* カバー画像 */}
               <div className="mb-6">
                 <img
-                  src={book.cover_image || '/images/book.png'}
+                  src={book.coverImage || '/images/book.png'}
                   alt={book.title}
                   className="w-full rounded-lg shadow-md"
                 />
@@ -354,7 +354,7 @@ export default function BookDetail() {
                     <BookOpen className="w-4 h-4 inline mr-2" />
                     要約
                   </button>
-                  {book.has_video && (
+                  {book.hasVideo && (
                     <button
                       onClick={() => setActiveTab('video')}
                       className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
@@ -367,7 +367,7 @@ export default function BookDetail() {
                       動画
                     </button>
                   )}
-                  {book.has_audio && (
+                  {book.hasAudio && (
                     <button
                       onClick={() => setActiveTab('audio')}
                       className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
@@ -388,17 +388,17 @@ export default function BookDetail() {
                 {activeTab === 'summary' && (
                   <div>
                     <div className="prose max-w-none">
-                      <div dangerouslySetInnerHTML={{ __html: (book.full_summary || book.summary).replace(/\n/g, '<br>') }} />
+                      <div dangerouslySetInnerHTML={{ __html: (book.fullSummary || book.summary).replace(/\n/g, '<br>') }} />
                     </div>
                   </div>
                 )}
 
-                {activeTab === 'video' && book.has_video && (
+                {activeTab === 'video' && book.hasVideo && (
                   <div>
                     <h3 className="text-lg font-semibold mb-4">動画解説</h3>
                     <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
                       <iframe
-                        src={book.video_url}
+                        src={book.videoUrl}
                         title={book.title}
                         className="w-full h-full"
                         allowFullScreen
@@ -407,7 +407,7 @@ export default function BookDetail() {
                   </div>
                 )}
 
-                {activeTab === 'audio' && book.has_audio && (
+                {activeTab === 'audio' && book.hasAudio && (
                   <div>
                     <h3 className="text-lg font-semibold mb-4">オーディオブック</h3>
                     

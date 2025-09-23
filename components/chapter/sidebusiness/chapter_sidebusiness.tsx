@@ -12,7 +12,9 @@ import {
   PenTool,
   Megaphone,
   Building,
-  Target
+  Target,
+  Menu,
+  X
 } from 'lucide-react'
 
 interface Section {
@@ -34,6 +36,7 @@ interface ChapterTemplateProps {
 function ChapterTemplate({ title, backLink, sections }: ChapterTemplateProps) {
   const router = useRouter()
   const [openSection, setOpenSection] = useState<string | null>(null)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const category = router.query.category
@@ -42,9 +45,38 @@ function ChapterTemplate({ title, backLink, sections }: ChapterTemplateProps) {
     }
   }, [router.query.category])
 
+  // モバイルメニューを閉じる
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false)
+  }
+
   return (
     <div className="h-screen bg-gradient-to-b from-green-900 to-green-950">
-      <div className="h-full w-64 border-r border-green-800/50 flex flex-col">
+      {/* モバイル用ヘッダー */}
+      <div className="lg:hidden flex items-center justify-between p-4 border-b border-green-800/50">
+        <div className="flex items-center space-x-3">
+          <Link href={backLink}>
+            <div className="p-2 rounded-full hover:bg-green-800/50 transition-colors">
+              <ArrowLeftCircle className="h-6 w-6 text-white/70" />
+            </div>
+          </Link>
+          <span className="text-lg font-medium text-white/90">{title}</span>
+        </div>
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="p-2 rounded-full hover:bg-green-800/50 transition-colors"
+          data-mobile-menu-trigger
+        >
+          {isMobileMenuOpen ? (
+            <X className="h-6 w-6 text-white/70" />
+          ) : (
+            <Menu className="h-6 w-6 text-white/70" />
+          )}
+        </button>
+      </div>
+
+      {/* デスクトップ用サイドバー */}
+      <div className="hidden lg:flex h-full w-64 border-r border-green-800/50 flex-col">
         <div className="p-4 flex-shrink-0">
           <div className="flex items-center space-x-3 mb-6">
             <Link href={backLink}>
@@ -98,6 +130,66 @@ function ChapterTemplate({ title, backLink, sections }: ChapterTemplateProps) {
           ))}
         </nav>
       </div>
+
+      {/* モバイル用メニュー */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden fixed inset-0 z-50 bg-black/50" onClick={closeMobileMenu}>
+          <div className="fixed left-0 top-0 h-full w-80 max-w-[85vw] bg-gradient-to-b from-green-900 to-green-950 border-r border-green-800/50 flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="p-4 flex-shrink-0">
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-lg font-medium text-white/90">{title}</span>
+                <button
+                  onClick={closeMobileMenu}
+                  className="p-2 rounded-full hover:bg-green-800/50 transition-colors"
+                >
+                  <X className="h-6 w-6 text-white/70" />
+                </button>
+              </div>
+            </div>
+
+            <nav className="flex-1 overflow-y-auto px-4 pb-4 space-y-1">
+              {sections.map((section) => (
+                <div key={section.id}>
+                  <button
+                    onClick={() => setOpenSection(openSection === section.id ? null : section.id)}
+                    className={`w-full flex items-center justify-between px-4 py-4 rounded-lg transition-colors
+                      ${openSection === section.id ? 'bg-green-800/50 text-white' : 'text-white/70 hover:bg-green-800/30 hover:text-white'}`}
+                  >
+                    <div className="flex items-center">
+                      {section.icon}
+                      <span className="text-base font-medium ml-3">{section.title}</span>
+                    </div>
+                    {openSection === section.id ? 
+                      <ChevronDown className="h-5 w-5" /> : 
+                      <ChevronRight className="h-5 w-5" />
+                    }
+                  </button>
+                  
+                  {openSection === section.id && (
+                    <div className="ml-6 mt-1 space-y-1 max-h-48 overflow-y-auto">
+                      {section.subsections.map((subsection) => (
+                        <Link 
+                          key={subsection.slug} 
+                          href={`/sidebusiness/${section.id}/${subsection.slug}`}
+                          onClick={closeMobileMenu}
+                        >
+                          <div className={`flex items-center px-4 py-3 rounded-lg transition-colors
+                            ${router.pathname === `/sidebusiness/${section.id}/${subsection.slug}`
+                              ? 'bg-green-800/50 text-white'
+                              : 'text-white/70 hover:bg-green-800/30 hover:text-white'}`}
+                          >
+                            <span className="text-sm">{subsection.title}</span>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </nav>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

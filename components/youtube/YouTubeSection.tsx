@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-
-interface YouTubeVideo {
-  id: string;
-  title: string;
-  description: string;
-  thumbnail: string;
-  duration: string;
-  views: string;
-  publishedAt: string;
-  category: '投資' | '起業' | '経済' | '暗号通貨';
-}
+import { YouTubeVideo } from '../../data/youtubeVideos';
 
 interface YouTubeSectionProps {
   videos: YouTubeVideo[];

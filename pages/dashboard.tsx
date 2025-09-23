@@ -173,25 +173,25 @@ function Dashboard() {
   return (
     <Layout header={<Header />}>
       <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <div className="w-full py-6 px-4 sm:px-6 lg:px-8">
           {/* ヘッダー */}
           <div className="mb-8">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
                   おかえりなさい、{user?.first_name || 'ユーザー'}さん
                 </h1>
-                <p className="mt-2 text-gray-600">
+                <p className="mt-2 text-sm sm:text-base text-gray-600">
                   今日の市場動向とあなたの投資状況を確認しましょう
                 </p>
               </div>
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center justify-between sm:justify-end space-x-4">
                 <button className="p-2 text-gray-400 hover:text-gray-600">
-                  <Bell className="h-6 w-6" />
+                  <Bell className="h-5 w-5 sm:h-6 sm:w-6" />
                 </button>
-                <div className="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow-sm">
+                <div className="flex items-center space-x-2 bg-white px-3 sm:px-4 py-2 rounded-lg shadow-sm">
                   <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <span className="text-sm text-gray-600">オンライン</span>
+                  <span className="text-xs sm:text-sm text-gray-600 whitespace-nowrap">オンライン</span>
                 </div>
               </div>
             </div>

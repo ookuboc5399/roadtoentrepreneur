@@ -29,7 +29,7 @@ export function Header() {
   return (
     <header className="sticky top-0 bg-white z-50 shadow-sm">
       <div className='h-16'>
-        <div className="max-w-7xl mx-auto px-6 h-full">
+        <div className="w-full px-4 sm:px-6 h-full">
           <div className="flex items-center justify-between h-full">
             <div className="flex-shrink-0">
               <Link href="/">
@@ -43,11 +43,12 @@ export function Header() {
               </Link>
             </div>
 
-            <div className="flex-1 px-8">
+            {/* デスクトップ用MarketTicker */}
+            <div className="hidden lg:flex flex-1 px-8">
               <MarketTicker />
             </div>
 
-            <div className="flex items-center space-x-8">
+            <div className="flex items-center space-x-2 sm:space-x-4 lg:space-x-8">
               {isAuthenticated ? (
                 // 認証済みの場合
                 <>
@@ -57,13 +58,13 @@ export function Header() {
                       onClick={() => setIsOpen(!isOpen)}
                       className="group flex flex-col items-center"
                     >
-                      <Menu className="w-6 h-6 text-gray-600 group-hover:text-blue-600 transition-colors" />
-                      <span className="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors">Contents</span>
+                      <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 group-hover:text-blue-600 transition-colors" />
+                      <span className="text-xs sm:text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors hidden sm:block">Contents</span>
                     </button>
 
                     {isOpen && (
-                      <div id="dropdown-menu" className="absolute right-0 mt-2 w-[480px] bg-white rounded-lg shadow-xl z-20 border border-gray-100">
-                        <div className="grid grid-cols-2 gap-6 p-6">
+                      <div id="dropdown-menu" className="absolute right-0 mt-2 w-[320px] sm:w-[480px] bg-white rounded-lg shadow-xl z-20 border border-gray-100">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 p-4 sm:p-6">
                           <div>
                             <ul className="space-y-4">
                               <li>
@@ -135,15 +136,15 @@ export function Header() {
 
                   <Link href="/dashboard" className="group">
                     <div className="flex flex-col items-center">
-                      <BarChart3 className="w-6 h-6 text-gray-600 group-hover:text-blue-600 transition-colors" />
-                      <span className="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors">Dashboard</span>
+                      <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 group-hover:text-blue-600 transition-colors" />
+                      <span className="text-xs sm:text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors hidden sm:block">Dashboard</span>
                     </div>
                   </Link>
 
                   <Link href="/mypage/account/profile" className="group">
                     <div className="flex flex-col items-center">
-                      <User className="w-6 h-6 text-gray-600 group-hover:text-blue-600 transition-colors" />
-                      <span className="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors">Mypage</span>
+                      <User className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 group-hover:text-blue-600 transition-colors" />
+                      <span className="text-xs sm:text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors hidden sm:block">Mypage</span>
                     </div>
                   </Link>
 
@@ -152,24 +153,24 @@ export function Header() {
                       <Image
                         src="/svg/slack.svg"
                         alt="Slack"
-                        width={24}
-                        height={24}
-                        className="group-hover:opacity-80 transition-opacity"
+                        width={20}
+                        height={20}
+                        className="sm:w-6 sm:h-6 group-hover:opacity-80 transition-opacity"
                       />
-                      <span className="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors">Slack</span>
+                      <span className="text-xs sm:text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors hidden sm:block">Slack</span>
                     </div>
                   </Link>
                 </>
               ) : (
                 // 未認証の場合
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2 sm:space-x-4">
                   <Link href="/auth/login">
-                    <button className="px-4 py-2 text-gray-600 hover:text-blue-600 transition-colors">
+                    <button className="px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-gray-600 hover:text-blue-600 transition-colors">
                       サインイン
                     </button>
                   </Link>
                   <Link href="/auth/signup">
-                    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    <button className="px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                       サインアップ
                     </button>
                   </Link>
