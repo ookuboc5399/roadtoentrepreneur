@@ -67,7 +67,27 @@ export default function LibraryManagement() {
 
   useEffect(() => {
     fetchBooks();
+    testStorageConnection();
   }, []);
+
+  const testStorageConnection = async () => {
+    try {
+      console.log('Testing book-covers bucket...');
+      const { data, error } = await supabase.storage.from('book-covers').list();
+      if (error) {
+        console.error('book-covers bucket error:', error);
+        if (error.message.includes('not found') || error.message.includes('does not exist')) {
+          alert('book-coversバケットが存在しません。Supabaseダッシュボードで作成してください。');
+        } else {
+          alert(`ストレージ接続エラー: ${error.message}`);
+        }
+      } else {
+        console.log('book-covers bucket connection successful:', data);
+      }
+    } catch (error) {
+      console.error('Storage test failed:', error);
+    }
+  };
 
   const fetchBooks = async () => {
     try {
@@ -83,6 +103,53 @@ export default function LibraryManagement() {
       console.error('Error fetching books:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCoverImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      if (!e.target.files || !e.target.files[0]) return;
+
+      const file = e.target.files[0];
+      console.log('Selected file:', file.name, file.size, file.type);
+
+      // ファイルサイズチェック（10MB以下）
+      if (file.size > 10 * 1024 * 1024) {
+        alert('ファイルサイズは10MB以下にしてください');
+        return;
+      }
+
+      // 許可する拡張子をチェック
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+      if (!allowedTypes.includes(file.type)) {
+        alert('画像形式は jpg, jpeg, png, gif のみ対応しています');
+        return;
+      }
+
+      const fileExt = file.name.split('.').pop();
+      const fileName = `book-cover-${Date.now()}.${fileExt}`;
+      console.log('Uploading file:', fileName);
+
+      const { error: uploadError } = await supabase.storage
+        .from('book-covers')
+        .upload(fileName, file);
+
+      if (uploadError) {
+        console.error('Upload error details:', uploadError);
+        throw uploadError;
+      }
+
+      console.log('Upload successful, getting public URL...');
+      const { data: { publicUrl } } = supabase.storage
+        .from('book-covers')
+        .getPublicUrl(fileName);
+
+      console.log('Public URL:', publicUrl);
+      setFormData({ ...formData, cover_image: publicUrl });
+      alert('画像のアップロードが完了しました');
+    } catch (error) {
+      console.error('Error uploading cover image:', error);
+      alert(`画像のアップロードに失敗しました: ${error.message || error}`);
     }
   };
 
@@ -325,15 +392,23 @@ export default function LibraryManagement() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                カバー画像URL
+                カバー画像
               </label>
               <input
-                type="url"
-                value={formData.cover_image}
-                onChange={(e) => setFormData({ ...formData, cover_image: e.target.value })}
+                type="file"
+                accept="image/*"
+                onChange={handleCoverImageUpload}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="https://example.com/image.jpg"
               />
+              {formData.cover_image && (
+                <div className="mt-2">
+                  <img 
+                    src={formData.cover_image} 
+                    alt="Preview" 
+                    className="w-20 h-20 object-cover rounded"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -3,14 +3,22 @@ import Layout from '../../../../components/Layout'
 import { Header } from '../../../../components/header/header'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
-import { TrendingUp, DollarSign, Clock, BarChart2 } from 'lucide-react'
+import { TrendingUp, DollarSign, Clock, BarChart2, ArrowLeft } from 'lucide-react'
 import { getCoinBySymbol, Coin } from '../../../../lib/crypto'
+import TradingViewWidget from '../../../../components/TradingViewWidget'
 
 function CoinDetail() {
   const router = useRouter()
   const { symbol } = router.query
   const [coinData, setCoinData] = useState<Coin | null>(null)
   const [error, setError] = useState<string | null>(null)
+
+  // TradingView用のシンボルを生成（例: BTC -> BINANCE:BTCUSDT）
+  const getTradingViewSymbol = (symbol: string | string[] | undefined): string => {
+    if (!symbol || typeof symbol !== 'string') return 'BINANCE:BTCUSDT'
+    const upperSymbol = symbol.toUpperCase()
+    return `BINANCE:${upperSymbol}USDT`
+  }
 
   useEffect(() => {
     async function fetchCoinData() {
@@ -40,6 +48,15 @@ function CoinDetail() {
     <div className="min-h-screen bg-gray-100">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
+          {/* 戻るボタン */}
+          <button
+            onClick={() => router.back()}
+            className="flex items-center text-gray-600 hover:text-gray-900 mb-4 transition-colors"
+          >
+            <ArrowLeft className="h-5 w-5 mr-2" />
+            <span className="text-sm sm:text-base">戻る</span>
+          </button>
+
           {/* ヘッダー情報 */}
           <div className="bg-white rounded-lg shadow p-6 mb-6">
             <div className="flex items-center justify-between">
@@ -53,6 +70,14 @@ function CoinDetail() {
                   {coinData.price_change_24h}
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* TradingViewチャート */}
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">価格チャート</h2>
+            <div className="w-full" style={{ height: '400px', minHeight: '400px' }}>
+              <TradingViewWidget symbol={getTradingViewSymbol(symbol)} />
             </div>
           </div>
 

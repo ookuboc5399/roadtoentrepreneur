@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Header } from '../../../components/header/header';
 import { supabase } from '../../../lib/supabase';
+import { useAuth } from '../../../lib/auth';
 import { 
   BookOpen, 
   Play, 
@@ -193,14 +194,34 @@ const mockBooks: Book[] = [
   }
 ];
 
+// 画像URLを取得するヘルパー関数
+const getImageUrl = (coverImage: string | null | undefined): string => {
+  if (!coverImage) return '/images/book.png';
+  
+  // 既に完全なURLの場合はそのまま返す
+  if (coverImage.startsWith('http')) return coverImage;
+  
+  // SupabaseのストレージURLを構築
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (supabaseUrl) {
+    return `${supabaseUrl}/storage/v1/object/public/${coverImage}`;
+  }
+  
+  // フォールバック
+  return '/images/book.png';
+};
+
 export default function BookDetail() {
   const router = useRouter();
   const { id } = router.query;
+  const { user } = useAuth();
   const [book, setBook] = useState<Book | null>(null);
   const [activeTab, setActiveTab] = useState<'summary' | 'video' | 'audio'>('summary');
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [bookmarkLoading, setBookmarkLoading] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -208,8 +229,86 @@ export default function BookDetail() {
     }
   }, [id]);
 
+  useEffect(() => {
+    if (user && id) {
+      checkBookmarkStatus();
+    }
+  }, [user, id]);
+
+  const checkBookmarkStatus = async () => {
+    if (!user || !id) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('user_bookmarks')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('book_id', id)
+        .single();
+
+      if (error && error.code !== 'PGRST116') { // PGRST116 = no rows found
+        console.error('Error checking bookmark status:', error);
+        return;
+      }
+
+      setIsBookmarked(!!data);
+    } catch (error) {
+      console.error('Error checking bookmark status:', error);
+    }
+  };
+
+  const handleBookmark = async () => {
+    if (!user) {
+      alert('ブックマークするにはログインが必要です');
+      return;
+    }
+
+    if (!id) return;
+
+    setBookmarkLoading(true);
+    try {
+      if (isBookmarked) {
+        // ブックマークを削除
+        const { error } = await supabase
+          .from('user_bookmarks')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('book_id', id);
+
+        if (error) {
+          throw error;
+        }
+
+        setIsBookmarked(false);
+        alert('ブックマークを削除しました');
+      } else {
+        // ブックマークを追加
+        const { error } = await supabase
+          .from('user_bookmarks')
+          .insert([{ user_id: user.id, book_id: id }]);
+
+        if (error) {
+          if (error.code === '23505') {
+            alert('既にブックマークされています');
+            return;
+          }
+          throw error;
+        }
+
+        setIsBookmarked(true);
+        alert('ブックマークに追加しました');
+      }
+    } catch (error) {
+      console.error('Error handling bookmark:', error);
+      alert('ブックマークの操作に失敗しました');
+    } finally {
+      setBookmarkLoading(false);
+    }
+  };
+
   const fetchBook = async () => {
     try {
+      console.log('Fetching book with ID:', id);
       const { data, error } = await supabase
         .from('library_books')
         .select('*')
@@ -217,11 +316,15 @@ export default function BookDetail() {
         .single();
 
       if (error) {
+        console.error('Database error:', error);
         // フォールバックとしてモックデータを使用
         const foundBook = mockBooks.find(b => b.id === id);
+        console.log('Using mock data:', foundBook);
         setBook(foundBook || null);
         return;
       }
+
+      console.log('Book data from database:', data);
 
       // チャプターも取得
       const { data: chapters } = await supabase
@@ -230,14 +333,28 @@ export default function BookDetail() {
         .eq('book_id', id)
         .order('order_index');
 
-      setBook({
+      console.log('Chapters data:', chapters);
+
+      // データベースのフィールド名をフロントエンドのプロパティ名に変換
+      const transformedBook = {
         ...data,
+        coverImage: data.cover_image,
+        readTime: data.read_time,
+        hasAudio: data.has_audio,
+        hasVideo: data.has_video,
+        videoUrl: data.video_url,
+        audioUrl: data.audio_url,
+        fullSummary: data.full_summary,
         chapters: chapters || []
-      });
+      };
+
+      console.log('Transformed book:', transformedBook);
+      setBook(transformedBook);
     } catch (error) {
       console.error('Error fetching book:', error);
       // フォールバックとしてモックデータを使用
       const foundBook = mockBooks.find(b => b.id === id);
+      console.log('Using mock data as fallback:', foundBook);
       setBook(foundBook || null);
     }
   };
@@ -276,14 +393,19 @@ export default function BookDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* 左側：本の基本情報 */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-6 sticky top-24">
+            <div className="bg-white rounded-lg shadow-sm p-4 lg:p-6 sticky top-24">
               {/* カバー画像 */}
-              <div className="mb-6">
-                <img
-                  src={book.coverImage || '/images/book.png'}
-                  alt={book.title}
-                  className="w-full rounded-lg shadow-md"
-                />
+              <div className="mb-6 flex justify-center">
+                <div className="relative max-w-xs sm:max-w-sm w-full">
+                  <img
+                    src={getImageUrl(book.coverImage)}
+                    alt={book.title}
+                    className="w-full h-auto max-h-80 sm:max-h-96 object-contain rounded-lg shadow-md mx-auto"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/images/book.png';
+                    }}
+                  />
+                </div>
               </div>
 
               {/* 基本情報 */}
@@ -325,9 +447,17 @@ export default function BookDetail() {
 
                 {/* アクションボタン */}
                 <div className="flex gap-2 mb-4">
-                  <button className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-                    <Bookmark className="w-4 h-4" />
-                    ブックマーク
+                  <button 
+                    onClick={handleBookmark}
+                    disabled={bookmarkLoading}
+                    className={`flex-1 py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 ${
+                      isBookmarked 
+                        ? 'bg-yellow-600 hover:bg-yellow-700 text-white' 
+                        : 'bg-blue-600 hover:bg-blue-700 text-white'
+                    } ${bookmarkLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
+                    {bookmarkLoading ? '処理中...' : isBookmarked ? 'ブックマーク済み' : 'ブックマーク'}
                   </button>
                   <button className="bg-gray-600 text-white p-2 rounded-lg hover:bg-gray-700 transition-colors">
                     <Share2 className="w-4 h-4" />
@@ -397,12 +527,18 @@ export default function BookDetail() {
                   <div>
                     <h3 className="text-lg font-semibold mb-4">動画解説</h3>
                     <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                      <iframe
-                        src={book.videoUrl}
-                        title={book.title}
-                        className="w-full h-full"
-                        allowFullScreen
-                      />
+                      {book.videoUrl ? (
+                        <iframe
+                          src={book.videoUrl}
+                          title={book.title}
+                          className="w-full h-full"
+                          allowFullScreen
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-gray-500">
+                          動画URLが設定されていません
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}

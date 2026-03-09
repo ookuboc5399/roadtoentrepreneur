@@ -104,6 +104,23 @@ const categories = [
   'リーダーシップ'
 ];
 
+// 画像URLを取得するヘルパー関数
+const getImageUrl = (coverImage: string | null | undefined): string => {
+  if (!coverImage) return '/images/book.png';
+  
+  // 既に完全なURLの場合はそのまま返す
+  if (coverImage.startsWith('http')) return coverImage;
+  
+  // SupabaseのストレージURLを構築
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (supabaseUrl) {
+    return `${supabaseUrl}/storage/v1/object/public/${coverImage}`;
+  }
+  
+  // フォールバック
+  return '/images/book.png';
+};
+
 export default function Library() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
@@ -118,15 +135,36 @@ export default function Library() {
   const fetchBooks = async () => {
     try {
       setLoading(true);
+      console.log('Fetching books from database...');
       const { data, error } = await supabase
         .from('library_books')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setBooks(data || []);
+      if (error) {
+        console.error('Database error:', error);
+        throw error;
+      }
+      
+      console.log('Books fetched from database:', data);
+      
+      // データベースのフィールド名をフロントエンドのプロパティ名に変換
+      const transformedBooks = (data || []).map(book => ({
+        ...book,
+        coverImage: book.cover_image,
+        readTime: book.read_time,
+        hasAudio: book.has_audio,
+        hasVideo: book.has_video,
+        videoUrl: book.video_url,
+        audioUrl: book.audio_url,
+        fullSummary: book.full_summary
+      }));
+      
+      console.log('Transformed books:', transformedBooks);
+      setBooks(transformedBooks);
     } catch (error) {
       console.error('Error fetching books:', error);
+      console.log('Using mock data as fallback');
       // フォールバックとしてモックデータを使用
       setBooks(mockBooks);
     } finally {
@@ -222,11 +260,14 @@ export default function Library() {
             {sortedBooks.map(book => (
             <div key={book.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
               {/* カバー画像 */}
-              <div className="relative">
+              <div className="relative h-48 bg-gray-100 flex items-center justify-center">
                 <img
-                  src={book.coverImage || '/images/book.png'}
+                  src={getImageUrl(book.coverImage)}
                   alt={book.title}
-                  className="w-full h-48 object-cover"
+                  className="max-w-full max-h-full object-contain"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/images/book.png';
+                  }}
                 />
                 <div className="absolute top-2 right-2 flex gap-1">
                   {book.hasAudio && (

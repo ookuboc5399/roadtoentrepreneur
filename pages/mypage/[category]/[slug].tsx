@@ -8,6 +8,7 @@ import { ExpenseChart, ExpenseList } from '../../../components/mypage/finance/ex
 import { BudgetPieChart, BudgetProgress, BudgetForm } from '../../../components/mypage/finance/budget-chart'
 import { AssetTrendChart, AssetBreakdownChart, AssetSummary } from '../../../components/mypage/finance/assets-chart'
 import { ProfileForm } from '../../../components/mypage/account/profile-form'
+import { HealthTracker } from '../../../components/mypage/account/health-tracker'
 import { SecuritySettings } from '../../../components/mypage/account/security-settings'
 import { NotificationSettings } from '../../../components/mypage/account/notification-settings'
 import { GoalForm } from '../../../components/mypage/goals/goal-form'
@@ -390,7 +391,7 @@ function MypageContent() {
       'profile': {
         title: 'プロフィール',
         icon: <UserCog className="h-6 w-6" />,
-        description: 'プロフィール情報の確認と編集ができます。',
+        description: 'プロフィール情報の確認・編集と、健康管理の記録ができます。',
         content: (() => {
           const handleSubmit = async (profile: any) => {
             const result = await updateProfile({
@@ -413,8 +414,9 @@ function MypageContent() {
           };
 
           return (
-            <div className="w-full">
+            <div className="w-full space-y-10">
               <ProfileForm onSubmit={handleSubmit} />
+              <HealthTracker />
             </div>
           );
         })()
