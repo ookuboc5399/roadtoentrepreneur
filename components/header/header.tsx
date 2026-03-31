@@ -28,9 +28,9 @@ export function Header() {
 
   return (
     <header className="sticky top-0 bg-white z-50 shadow-sm">
-      <div className='h-16'>
-        <div className="w-full px-4 sm:px-6 h-full">
-          <div className="flex items-center justify-between h-full">
+      <div className="py-1 sm:py-2">
+        <div className="w-full px-4 sm:px-6">
+          <div className="flex items-center justify-between">
             <div className="flex-shrink-0">
               <Link href="/">
                 <Image

@@ -84,7 +84,7 @@ export default function LibraryManagement() {
       } else {
         console.log('book-covers bucket connection successful:', data);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Storage test failed:', error);
     }
   };
@@ -99,7 +99,7 @@ export default function LibraryManagement() {
 
       if (error) throw error;
       setBooks(data || []);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching books:', error);
     } finally {
       setLoading(false);
@@ -147,7 +147,7 @@ export default function LibraryManagement() {
       console.log('Public URL:', publicUrl);
       setFormData({ ...formData, cover_image: publicUrl });
       alert('画像のアップロードが完了しました');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading cover image:', error);
       alert(`画像のアップロードに失敗しました: ${error.message || error}`);
     }
@@ -198,7 +198,7 @@ export default function LibraryManagement() {
       setShowForm(false);
       setEditingBook(null);
       fetchBooks();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving book:', error);
       alert('本の保存に失敗しました');
     }
@@ -235,7 +235,7 @@ export default function LibraryManagement() {
 
       if (error) throw error;
       fetchBooks();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error deleting book:', error);
       alert('本の削除に失敗しました');
     }

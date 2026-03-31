@@ -39,11 +39,28 @@ function ChapterTemplate({ title, backLink, sections }: ChapterTemplateProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
-    const category = router.query.category
-    if (typeof category === 'string') {
-      setOpenSection(category)
+    let normalizedCategory: string | null = null
+
+    const categoryParam = router.query.category
+    if (typeof categoryParam === 'string') {
+      normalizedCategory =
+        categoryParam === 'realestate' || categoryParam === 'real_estate'
+          ? 'real_estate'
+          : categoryParam
+    } else {
+      // asPath から /sidebusiness/{category}/... を推測
+      const match = router.asPath.match(/^\/sidebusiness\/([^/]+)/)
+      if (match && match[1]) {
+        const raw = match[1]
+        normalizedCategory =
+          raw === 'realestate' || raw === 'real_estate' ? 'real_estate' : raw
+      }
     }
-  }, [router.query.category])
+
+    if (normalizedCategory) {
+      setOpenSection(normalizedCategory)
+    }
+  }, [router.asPath, router.query.category])
 
   // モバイルメニューを閉じる
   const closeMobileMenu = () => {
@@ -76,9 +93,9 @@ function ChapterTemplate({ title, backLink, sections }: ChapterTemplateProps) {
       </div>
 
       {/* デスクトップ用サイドバー */}
-      <div className="hidden lg:flex h-full w-64 border-r border-green-800/50 flex-col">
-        <div className="p-4 flex-shrink-0">
-          <div className="flex items-center space-x-3 mb-6">
+      <div className="hidden lg:flex h-full w-72 border-r border-green-800/50 flex-col">
+        <div className="px-5 pt-4 pb-2 flex-shrink-0">
+          <div className="flex items-center space-x-3 mb-5">
             <Link href={backLink}>
               <div className="p-2 rounded-full hover:bg-green-800/50 transition-colors">
                 <ArrowLeftCircle className="h-5 w-5 text-white/70" />
@@ -219,6 +236,22 @@ export function ChapterSidebusiness() {
       ]
     },
     {
+      id: 'note',
+      title: '有料note',
+      icon: <Target className="h-5 w-5 mr-3" />,
+      subsections: [
+        { title: '有料noteの自動生成', slug: 'paid-note' }
+      ]
+    },
+    {
+      id: 'overseas',
+      title: '海外案件',
+      icon: <Target className="h-5 w-5 mr-3" />,
+      subsections: [
+        { title: 'LinkedIn海外案件の取り方', slug: 'overseas-linkedin' }
+      ]
+    },
+    {
       id: 'buppan',
       title: '物販',
       icon: <ShoppingBag className="h-5 w-5 mr-3" />,
@@ -264,8 +297,13 @@ export function ChapterSidebusiness() {
       title: '不動産',
       icon: <Building className="h-5 w-5 mr-3" />,
       subsections: [
-        { title: '不動産投資', slug: 'real-estate-investment' },
-        { title: '収益物件', slug: 'income-property' }
+        { title: '不動産投資の基礎', slug: 'real-estate-investment' },
+        { title: '物件選びの極意', slug: 'income-property' },
+        { title: '融資と資金調達', slug: 'real-estate-loan' },
+        { title: '管理・運営の実際', slug: 'real-estate-management' },
+        { title: '出口戦略と税務', slug: 'real-estate-exit-tax' },
+        { title: 'ツール・資料室', slug: 'real-estate-tools' },
+        { title: '事例・インタビュー', slug: 'real-estate-cases' }
       ]
     }
   ]

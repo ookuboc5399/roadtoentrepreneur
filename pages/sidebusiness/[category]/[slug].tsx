@@ -2,61 +2,72 @@ import { Header } from '../../../components/header/header'
 import { ChapterSidebusiness } from '../../../components/chapter/sidebusiness/chapter_sidebusiness'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import axios from 'axios'
+import Link from 'next/link'
 import { supabase } from '../../../utils/supabaseClient'
+import ReactMarkdown from 'react-markdown'
+import { sidebusinessFallbackContent } from '../../../data/sidebusinessContent'
+
+interface Block {
+  type: 'text' | 'code' | 'image' | 'link-card' | 'youtube';
+  content: string;
+  metadata?: {
+    language?: string;
+    alt?: string;
+    title?: string;
+    url?: string;
+    description?: string;
+  };
+}
 
 interface Article {
   title: string;
-  content: string;
-  blocks?: any[];
-  section: string;
-}
-
-interface WordPressPost {
-  id: number;
-  title: {
-    rendered: string
-  }
-  content: {
-    rendered: string
-  }
-  excerpt?: {
-    rendered: string
-  }
-  featured_media_url?: string
-  yoast_head_json?: {
-    og_image?: [{
-      url: string
-    }]
-  }
+  content?: string;
+  blocks?: Block[];
+  section?: string;
 }
 
 export default function SideBusinessContent() {
   const [mounted, setMounted] = useState(false)
   const router = useRouter()
   const { category, slug } = router.query
-  const [wpPost, setWpPost] = useState<WordPressPost | null>(null)
   const [article, setArticle] = useState<Article | null>(null)
+
+  // URL と実際のコンテンツスラッグの対応表（エイリアス）
+  const rawCategory = typeof category === 'string' ? category : undefined
+  const rawSlug = typeof slug === 'string' ? slug : undefined
+
+  const aliasMap: Record<string, { category: string; slug: string }> = {
+    // /sidebusiness/realestate/realestate-basics -> /sidebusiness/real_estate/real-estate-investment
+    'realestate/realestate-basics': {
+      category: 'real_estate',
+      slug: 'real-estate-investment',
+    },
+  }
+
+  const aliasKey = rawCategory && rawSlug ? `${rawCategory}/${rawSlug}` : undefined
+  const alias = aliasKey ? aliasMap[aliasKey] : undefined
+
+  const effectiveCategory = alias?.category ?? rawCategory
+  const effectiveSlug = alias?.slug ?? rawSlug
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
   useEffect(() => {
-    if (slug) {
-      fetchWordPressPost()
+    if (effectiveSlug) {
       fetchSupabaseArticle()
     }
-  }, [slug]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [effectiveSlug]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchSupabaseArticle = async () => {
     try {
-      if (typeof slug !== 'string') return;
+      if (!effectiveSlug) return;
 
       const { data, error } = await supabase
         .from('articles')
         .select('*')
-        .eq('slug', slug)
+        .eq('slug', effectiveSlug)
         .single()
 
       if (error) {
@@ -72,153 +83,129 @@ export default function SideBusinessContent() {
     }
   }
 
-  const fetchWordPressPost = async () => {
-    try {
-      type PostSlug = 
-        | 'movie-detail' | 'thumbnail'
-        | 'blog-detail' | 'blog-seo' | 'blog-writing' | 'blog-revision' | 'blog-think' | 'wordpress'
-        | 'domestic-resale' | 'ebay' | 'shopify'
-        | 'excel-format' | 'excel-date' | 'excel-bar-chart' | 'excel-line-chart'
-        | 'design-basics' | 'design-color' | 'design-layout'
-        | 'sns-marketing' | 'twitter' | 'evolution'
-        | 'real-estate-investment' | 'income-property';
+  const getFallbackArticle = (): Article | null => {
+    if (!effectiveSlug) return null;
+    const fallback = sidebusinessFallbackContent[effectiveSlug];
+    if (!fallback) return null;
+    return {
+      title: fallback.title,
+      blocks: fallback.blocks
+    };
+  }
 
-      // 各slugに対応するWordPressの記事IDをマッピング
-      const postIdMap: Record<PostSlug, string> = {
-        // 動画カテゴリ
-        'movie-detail': '501',
-        'thumbnail': '502',
-        
-        // ブログカテゴリ
-        'blog-detail': '503',
-        'blog-seo': '504',
-        'blog-writing': '505',
-        'blog-revision': '506',
-        'blog-think': '507',
-        'wordpress': '508',
-        
-        // 物販カテゴリ
-        'domestic-resale': '509',
-        'ebay': '510',
-        'shopify': '511',
-        
-        // Excelカテゴリ
-        'excel-format': '512',
-        'excel-date': '513',
-        'excel-bar-chart': '514',
-        'excel-line-chart': '515',
-        
-        // デザインカテゴリ
-        'design-basics': '516',
-        'design-color': '517',
-        'design-layout': '518',
-        
-        // マーケティングカテゴリ
-        'sns-marketing': '519',
-        'twitter': '520',
-        'evolution': '521',
-        
-        // 不動産カテゴリ
-        'real-estate-investment': '522',
-        'income-property': '523'
-      }
-
-      // Type guard function to check if a string is a valid PostSlug
-      const isValidPostSlug = (slug: string): slug is PostSlug => {
-        return Object.keys(postIdMap).includes(slug);
-      }
-
-      const postId = typeof slug === 'string' && isValidPostSlug(slug) ? postIdMap[slug] : undefined
-
-      if (postId) {
-        const response = await axios.get<WordPressPost>(
-          `/api/wordpress-proxy?postId=${postId}`
+  const renderBlock = (block: Block) => {
+    switch (block.type) {
+      case 'code':
+        return (
+          <pre className="bg-gray-800 p-4 rounded-lg overflow-x-auto">
+            <code className={`language-${block.metadata?.language || 'javascript'} text-white`}>
+              {block.content}
+            </code>
+          </pre>
         )
-        setWpPost(response.data)
-      }
-    } catch (error) {
-      console.error('Error fetching WordPress post:', error)
+      case 'image':
+        return (
+          <img
+            src={block.content}
+            alt={block.metadata?.alt || ''}
+            className="max-w-full h-auto rounded-lg"
+          />
+        )
+      case 'youtube':
+        const videoId = block.content.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1]
+        return (
+          <div>
+            {videoId ? (
+              <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                <iframe
+                  src={`https://www.youtube.com/embed/${videoId}`}
+                  title={block.metadata?.title || 'YouTube video'}
+                  className="absolute top-0 left-0 w-full h-full rounded-lg"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            ) : (
+              <div className="bg-gray-200 p-4 rounded-lg text-center">
+                <p className="text-gray-600">無効なYouTube URLです</p>
+              </div>
+            )}
+          </div>
+        )
+      case 'link-card':
+        return (
+          <a
+            href={block.metadata?.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow no-underline"
+          >
+            <h3 className="text-lg font-semibold mb-2 text-gray-900">{block.metadata?.title}</h3>
+            <p className="text-gray-600 text-sm">{block.metadata?.description}</p>
+          </a>
+        )
+      case 'text':
+      default:
+        return (
+          <div className="prose prose-green max-w-none">
+            <ReactMarkdown>{block.content}</ReactMarkdown>
+          </div>
+        )
     }
   }
+
+  const displayArticle = article || getFallbackArticle();
+
+  const slugLabel = typeof slug === 'string'
+    ? slug.replace(/-/g, ' ')
+    : '';
 
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
-      <div className="flex pt-16">
-        <div className="fixed h-[calc(100vh-4rem)]">
+      <div className="flex flex-col lg:flex-row pt-0 lg:pt-0">
+        <div className="lg:flex-shrink-0">
           {mounted && <ChapterSidebusiness />}
         </div>
-        <div className="flex-1 ml-64 p-8">
+        <div className="flex-1 p-4 lg:p-8">
           <div className="flex">
             <div className="flex-grow max-w-4xl px-4 sm:px-6 lg:px-8 py-12 bg-white">
               <h1 className="text-3xl font-bold mb-6">
-                {wpPost ? wpPost.title.rendered : article ? article.title : category && slug ? `${category}/${slug}` : 'Loading...'}
+                {displayArticle ? displayArticle.title : category && slug ? `${category}/${slug}` : 'Loading...'}
               </h1>
-              {wpPost && (
-                <div 
-                  className="prose max-w-none"
-                  dangerouslySetInnerHTML={{ __html: wpPost.content.rendered }}
-                />
-              )}
-              {!wpPost && article && (
-                <div className="prose max-w-none">
-                  {article.blocks ? (
-                    <div>
-                      {article.blocks.map((block, index) => (
-                        <div key={index} className="mb-4">
-                          {block.type === 'text' && (
-                            <div>{block.content}</div>
-                          )}
-                          {block.type === 'code' && (
-                            <pre className="bg-gray-100 p-4 rounded">
-                              <code>{block.content}</code>
-                            </pre>
-                          )}
-                        </div>
-                      ))}
+              {displayArticle && (
+                <div className="space-y-6">
+                  {displayArticle.blocks ? (
+                    displayArticle.blocks.map((block, index) => (
+                      <div key={index}>
+                        {renderBlock(block as Block)}
+                      </div>
+                    ))
+                  ) : displayArticle.content ? (
+                    <div className="prose max-w-none">
+                      <ReactMarkdown>{displayArticle.content}</ReactMarkdown>
                     </div>
-                  ) : (
-                    <div>{article.content}</div>
-                  )}
+                  ) : null}
                 </div>
               )}
-              {!wpPost && !article && (
+              {!displayArticle && (
                 <div className="prose max-w-none">
-                  <p>このページのコンテンツは準備中です。</p>
+                  <h2 className="text-xl font-semibold mb-4">
+                    {slugLabel ? `${slugLabel} のコンテンツは準備中です` : 'コンテンツ準備中'}
+                  </h2>
+                  <p className="text-gray-600 mb-6">
+                    現在このページのコンテンツを準備しています。しばらくお待ちください。
+                  </p>
+                  <Link
+                    href="/sidebusiness"
+                    className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors no-underline"
+                  >
+                    副業トップへ戻る
+                  </Link>
                 </div>
               )}
             </div>
-            
-            {/* サイドバー */}
-            {wpPost && wpPost.yoast_head_json?.og_image && (
-              <div className="w-80 flex-shrink-0 p-4 bg-gray-50">
-                <div className="sticky top-24">
-                  <h2 className="text-xl font-bold mb-4">関連情報</h2>
-                  <div className="prose max-w-none">
-                    <img 
-                      src={wpPost.yoast_head_json.og_image[0].url} 
-                      alt={wpPost.title.rendered}
-                      className="w-full h-40 object-cover rounded-lg mb-4"
-                    />
-                    <div className="text-sm text-gray-600 mb-4">
-                      {wpPost.excerpt?.rendered && (
-                        <div dangerouslySetInnerHTML={{ 
-                          __html: wpPost.excerpt.rendered.split(' ').slice(0, 30).join(' ') + '...'
-                        }} />
-                      )}
-                    </div>
-                    <a 
-                      href={`https://perpetualtravelerchoja.com/?p=${wpPost.id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                    >
-                      詳細を見る
-                    </a>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>

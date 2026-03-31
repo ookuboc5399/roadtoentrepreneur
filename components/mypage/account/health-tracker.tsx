@@ -31,6 +31,20 @@ type LogFormState = {
   workoutUnit: WorkoutUnit;
 };
 
+const formatDateJST = (date: Date): string => {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Tokyo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(date);
+
+  const year = parts.find((p) => p.type === 'year')?.value ?? '';
+  const month = parts.find((p) => p.type === 'month')?.value ?? '';
+  const day = parts.find((p) => p.type === 'day')?.value ?? '';
+  return `${year}-${month}-${day}`;
+};
+
 const parseMeals = (
   meal: string | null | undefined
 ): Pick<LogFormState, 'breakfast' | 'lunch' | 'dinner'> => {
@@ -71,7 +85,7 @@ export const HealthTracker: React.FC = () => {
   const [logsByDate, setLogsByDate] = useState<Record<string, HealthLog>>({});
   const [form, setForm] = useState<LogFormState>(() => {
     const today = new Date();
-    const dateStr = today.toISOString().split('T')[0];
+    const dateStr = formatDateJST(today);
     return {
       date: dateStr,
       breakfast: '',
@@ -89,7 +103,7 @@ export const HealthTracker: React.FC = () => {
 
   // 選択中の日付の文字列表現（YYYY-MM-DD）
   const selectedDateStr = useMemo(() => {
-    return selectedDate.toISOString().split('T')[0];
+    return formatDateJST(selectedDate);
   }, [selectedDate]);
 
   const currentLog: HealthLog | undefined = logsByDate[selectedDateStr];
@@ -109,11 +123,11 @@ export const HealthTracker: React.FC = () => {
       const past = new Date();
       past.setMonth(past.getMonth() - 3); // 過去3ヶ月分を取得
 
-      const from = past.toISOString().split('T')[0];
-      const to = today.toISOString().split('T')[0];
+      const from = formatDateJST(past);
+      const to = formatDateJST(today);
 
       const { data, error } = await supabase
-        .from<HealthLog>('health_logs')
+        .from('health_logs')
         .select('*')
         .eq('user_id', user.id)
         .gte('date', from)
@@ -133,7 +147,7 @@ export const HealthTracker: React.FC = () => {
       setLogsByDate(map);
 
       // もし今日のログがあればフォームに反映
-      const todayStr = new Date().toISOString().split('T')[0];
+      const todayStr = formatDateJST(new Date());
       const todayLog = map[todayStr];
       if (todayLog) {
         const meals = parseMeals(todayLog.meal);
@@ -159,7 +173,7 @@ export const HealthTracker: React.FC = () => {
   const handleCalendarChange = (value: CalendarValue, event?: React.MouseEvent<HTMLButtonElement>) => {
     if (value instanceof Date) {
       setSelectedDate(value);
-      const dateStr = value.toISOString().split('T')[0];
+      const dateStr = formatDateJST(value);
       const log = logsByDate[dateStr];
       const meals = parseMeals(log?.meal);
       setForm((prev) => ({
@@ -226,7 +240,7 @@ export const HealthTracker: React.FC = () => {
       let error;
       if (existing) {
         const { error: updateError } = await supabase
-          .from<HealthLog>('health_logs')
+          .from('health_logs')
           .update({
             meal: payload.meal,
             workout: payload.workout,
@@ -238,7 +252,7 @@ export const HealthTracker: React.FC = () => {
         error = updateError;
       } else {
         const { error: insertError } = await supabase
-          .from<HealthLog>('health_logs')
+          .from('health_logs')
           .insert([
             {
               ...payload,
@@ -266,7 +280,7 @@ export const HealthTracker: React.FC = () => {
   };
 
   const hasLogOnDate = (date: Date) => {
-    const dateStr = date.toISOString().split('T')[0];
+    const dateStr = formatDateJST(date);
     return !!logsByDate[dateStr];
   };
 

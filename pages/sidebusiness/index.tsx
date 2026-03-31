@@ -106,7 +106,7 @@ export default function Sidebusiness() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
-      <div className="flex pt-16">
+      <div className="flex pt-0">
         {/* デスクトップ用サイドバー */}
         <div className="hidden lg:block fixed h-[calc(100vh-4rem)]">
           {mounted && <ChapterSidebusiness />}
@@ -127,13 +127,17 @@ export default function Sidebusiness() {
             </button>
           </div>
           
-          <div className="p-4 sm:p-6 lg:p-8">
-            <h1 className="text-2xl sm:text-3xl font-bold mb-6 lg:mb-8">副業の世界へようこそ</h1>
-            <div className="prose max-w-none">
-              <p className="text-sm sm:text-base">
-                このセクションでは、動画制作、ブログ、物販、Excel、デザイン、マーケティング、不動産など、
-                様々な副業の可能性について探求します。
-              </p>
+          <div className="p-4 sm:p-6 lg:p-8 flex justify-center">
+            <div className="max-w-2xl text-center">
+              <h1 className="text-2xl sm:text-3xl font-bold mb-6 lg:mb-8">
+                副業の世界へようこそ
+              </h1>
+              <div className="prose max-w-none">
+                <p className="text-sm sm:text-base">
+                  このセクションでは、動画制作、ブログ、物販、Excel、デザイン、マーケティング、不動産など、
+                  様々な副業の可能性について探求します。
+                </p>
+              </div>
             </div>
           </div>
         </div>
